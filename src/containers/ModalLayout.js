@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
 import { MODAL_BODY_TYPES } from '../utils/globalConstantUtil'
 import { useSelector, useDispatch } from 'react-redux'
 import { closeModal } from '../features/common/modalSlice'
-import AddLeadModalBody from '../features/leads/components/AddLeadModalBody'
+import AddCategoryModalBody from '../features/categories/components/AddCategoryModalBody'
 import ConfirmationModalBody from '../features/common/components/ConfirmationModalBody'
+import AddProductModalBody from '../features/products/components/AddProductModalBody'
 
 
 function ModalLayout(){
@@ -24,7 +24,7 @@ function ModalLayout(){
 
             {/* Put this part before </body> tag */}
             <div className={`modal ${isOpen ? "modal-open" : ""}`}>
-            <div className={`modal-box  ${size === 'lg' ? 'max-w-5xl' : ''}`}>
+            <div className={`modal-box   ${size === 'lg' ? 'max-w-6xl' : ''}`}>
                 <button className="btn btn-sm btn-circle absolute right-2 top-2" onClick={() => close()}>✕</button>
                 <h3 className="font-semibold text-2xl pb-6 text-center">{title}</h3>
 
@@ -32,7 +32,8 @@ function ModalLayout(){
                 {/* Loading modal body according to different modal type */}
                 {
                     {
-                             [MODAL_BODY_TYPES.LEAD_ADD_NEW] : <AddLeadModalBody closeModal={close} extraObject={extraObject}/>,
+                             [MODAL_BODY_TYPES.CATEGORY_ADD_NEW] : <AddCategoryModalBody closeModal={close} size={size} extraObject={extraObject}/>,
+                             [MODAL_BODY_TYPES.PRODUCT_ADD_NEW] : <AddProductModalBody size={size} closeModal={close} extraObject={extraObject}/>,
                              [MODAL_BODY_TYPES.CONFIRMATION] : <ConfirmationModalBody extraObject={extraObject} closeModal={close}/>,
                              [MODAL_BODY_TYPES.DEFAULT] : <div></div>
                     }[bodyType]

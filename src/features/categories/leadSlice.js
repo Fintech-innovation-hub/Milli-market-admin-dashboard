@@ -1,30 +1,30 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import {baseUrl} from "../../constants"
 
 
-
-export const getLeadsContent = createAsyncThunk('/leads/content', async () => {
+export const getLeadsContent = createAsyncThunk('/categories/content', async () => {
 	const response = await axios.get('/api/users?page=2', {})
 	return response.data;
 })
 
-export const leadsSlice = createSlice({
-    name: 'leads',
+export const categoriesSlice = createSlice({
+    name: 'category',
     initialState: {
         isLoading: false,
-        leads : []
+        categories : []
     },
     reducers: {
 
 
         addNewLead: (state, action) => {
             let {newLeadObj} = action.payload
-            state.leads = [...state.leads, newLeadObj]
+            state.categories = [...state.categories, newLeadObj]
         },
 
         deleteLead: (state, action) => {
             let {index} = action.payload
-            state.leads.splice(index, 1)
+            state.categories.splice(index, 1)
         }
     },
 
@@ -33,7 +33,7 @@ export const leadsSlice = createSlice({
 			state.isLoading = true
 		},
 		[getLeadsContent.fulfilled]: (state, action) => {
-			state.leads = action.payload.data
+			state.categories = action.payload.data
 			state.isLoading = false
 		},
 		[getLeadsContent.rejected]: state => {
@@ -42,6 +42,6 @@ export const leadsSlice = createSlice({
     }
 })
 
-export const { addNewLead, deleteLead } = leadsSlice.actions
+export const { addNewLead, deleteLead } = categoriesSlice.actions
 
-export default leadsSlice.reducer
+export default categoriesSlice.reducer

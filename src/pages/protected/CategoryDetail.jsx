@@ -1,19 +1,19 @@
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setPageTitle } from '../../features/common/headerSlice'
-import Leads from '../../features/leads'
+import CategoryDetail from '../../features/categoryDetail'
 
-function InternalPage(){
+function CategoryDetailPage(){
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(setPageTitle({ title : "Leads"}))
+        dispatch(setPageTitle({ title : "Category detail"}))
       }, [])
 
 
     return(
-        <Leads />
+        <CategoryDetail />
     )
 }
 
-export default InternalPage
+export default CategoryDetailPage

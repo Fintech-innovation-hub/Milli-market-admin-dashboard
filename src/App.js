@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { themeChange } from 'theme-change'
 import checkAuth from './app/auth';
 import initializeApp from './app/init';
+import ProtectedRoutes from './routes/protectedRoutes';
 
 // Importing pages
 const Layout = lazy(() => import('./containers/Layout'))
@@ -19,7 +20,7 @@ initializeApp()
 
 // Check for login and initialize axios
 const token = checkAuth()
-
+// const token = true
 
 function App() {
 
@@ -34,14 +35,15 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/documentation" element={<Documentation />} />
-          
-          {/* Place new routes over this */}
-          <Route path="/app/*" element={<Layout />} />
+          {/* <Route path="/register" element={<Register />} /> */}
+          {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+          <Route element={<ProtectedRoutes />}>
 
-          <Route path="*" element={<Navigate to={token ? "/app/welcome" : "/login"} replace />}/>
+            <Route path="/documentation" element={<Documentation />} />
+            {/* Place new routes over this */}
+            <Route path="/app/*" element={<Layout />} />
+          </Route>
+          <Route path="*" element={<Navigate to={token ? "/app/dashboard" : "/login"} replace />} />
 
         </Routes>
       </Router>
