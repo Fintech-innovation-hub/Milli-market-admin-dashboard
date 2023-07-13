@@ -20,7 +20,6 @@ initializeApp()
 
 // Check for login and initialize axios
 const token = checkAuth()
-// const token = true
 
 function App() {
 
@@ -38,9 +37,7 @@ function App() {
           {/* <Route path="/register" element={<Register />} /> */}
           {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
           <Route element={<ProtectedRoutes />}>
-
             <Route path="/documentation" element={<Documentation />} />
-            {/* Place new routes over this */}
             <Route path="/app/*" element={<Layout />} />
           </Route>
           <Route path="*" element={<Navigate to={token ? "/app/dashboard" : "/login"} replace />} />

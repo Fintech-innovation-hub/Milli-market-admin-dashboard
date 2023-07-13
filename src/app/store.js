@@ -4,6 +4,7 @@ import modalSlice from '../features/common/modalSlice'
 import rightDrawerSlice from '../features/common/rightDrawerSlice'
 // import leadsSlice from '../features/leads/leadSlice'
 import { categoryApi } from '../services/categoryApi'
+import { productApi } from '../services/productApi'
 
 
 const combinedReducer = {
@@ -12,12 +13,12 @@ const combinedReducer = {
   modal: modalSlice,
   // category: leadsSlice,
   [categoryApi.reducerPath]: categoryApi.reducer,
+  [productApi.reducerPath]: productApi.reducer,
 
 }
 
 export default configureStore({
   reducer: combinedReducer,
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(categoryApi.middleware),
-
+    getDefaultMiddleware().concat(categoryApi.middleware, productApi.middleware),
 })

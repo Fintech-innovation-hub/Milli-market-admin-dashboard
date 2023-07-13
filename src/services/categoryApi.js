@@ -34,7 +34,6 @@ export const categoryApi = createApi({
     }),
 
     addCategory: builder.mutation({
-
       query: category => ({
         url: '/v1/product/category/',
         method: 'POST',
@@ -78,6 +77,9 @@ export const categoryApi = createApi({
           category_id: id
         },
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer  ${JSON.parse(localStorage.getItem("access-token"))}`
+        },
       }),
       invalidatesTags: ['Category'],
     }),
