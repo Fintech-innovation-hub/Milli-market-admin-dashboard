@@ -1,41 +1,47 @@
-import { useReducer, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import InputText from '../../../components/Input/InputText';
-import ErrorText from '../../../components/Typography/ErrorText';
-import { useAddCategoryMutation } from '../../../services/categoryApi';
-import { useAddProductMutation } from '../../../services/productApi';
-import { showNotification } from '../../common/headerSlice';
-import AttributeInput from './AttributeInput';
+import { useReducer, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import InputText from "../../../components/Input/InputText";
+import ErrorText from "../../../components/Typography/ErrorText";
+import {
+  useAddCategoryMutation,
+  useCategoriesQuery,
+} from "../../../services/categoryApi";
+import { useAddProductMutation } from "../../../services/productApi";
+import { showNotification } from "../../common/headerSlice";
+import AttributeInput from "./AttributeInput";
+import CategorySelected from "./CategorySelected";
+import Editor from "./Editor";
+import { useCountriesQuery } from "../../../services/countryApi";
 // import { addNewLead } from "../leadSlice"
 
 const INITIAL_PRODUCT_TITLE_OBJ = {
-  title_ln: '',
-  title_kr: '',
-  title_ru: '',
-  title_en: '',
+  title_ln: "",
+  title_kr: "",
+  title_ru: "",
+  title_en: "",
 };
 
 const initialValue = {
-  title_ln: 'tel',
-  title_kr: 'тел',
-  title_ru: 'тел',
-  title_en: 'phone',
-  attributes_ln: { 0: 'samsung chotki' },
-  attributes_kr: { 0: 'sam zor' },
-  attributes_ru: { 0: 'sam chotkiyy' },
-  attributes_en: { 0: 'samsung best' },
-  description_ln: 'batafsil',
-  description_kr: 'hello batafsil',
-  description_en: 'batafsils',
-  description_ru: 'podrobni info',
+  title_ln: "tel",
+  title_kr: "тел",
+  title_ru: "тел",
+  title_en: "phone",
+  attributes_ln: { 0: "samsung chotki" },
+  attributes_kr: { 0: "sam zor" },
+  attributes_ru: { 0: "sam chotkiyy" },
+  attributes_en: { 0: "samsung best" },
+  description_ln: "batafsil",
+  description_kr: "hello batafsil",
+  description_en: "batafsils",
+  description_ru: "podrobni info",
   category: 1515,
   country: 1,
   brand: 1,
-  seller:2
+  seller: 2,
 };
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'attribute':
+    case "attribute":
       const updated = Object.keys(action.payload).reduce((st, attr) => {
         st[attr][Object.keys(st[attr]).length] = action.payload[attr];
         return st;
@@ -46,7 +52,7 @@ const reducer = (state, action) => {
         ...state,
         ...updated,
       };
-    case 'title':
+    case "title":
       return {
         ...state,
         [action.payload.name]: action.payload.value,
@@ -65,10 +71,10 @@ const reducer = (state, action) => {
 
 function AddProductModalBody({ closeModal, extraObject, size }) {
   const [attributesObj, setAttributesObj] = useState({
-    attributes_ln: '',
-    attributes_kr: '',
-    attributes_ru: '',
-    attributes_en: '',
+    attributes_ln: "",
+    attributes_kr: "",
+    attributes_ru: "",
+    attributes_en: "",
   });
   // const [ln, setLn] = useState('');
   // const [kr, setKr] = useState('');
@@ -94,21 +100,21 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
 
   const addAttributesHandler = (e) => {
     dispatch({
-      type: 'attribute',
+      type: "attribute",
       payload: {
-        attributes_ln: attributesObj['attributes_ln'],
-        attributes_kr: attributesObj['attributes_kr'],
-        attributes_ru: attributesObj['attributes_ru'],
-        attributes_en: attributesObj['attributes_en'],
+        attributes_ln: attributesObj["attributes_ln"],
+        attributes_kr: attributesObj["attributes_kr"],
+        attributes_ru: attributesObj["attributes_ru"],
+        attributes_en: attributesObj["attributes_en"],
       },
     });
 
     // sets.forEach((fn) => fn(''));
     setAttributesObj({
-      attributes_ln: '',
-      attributes_kr: '',
-      attributes_ru: '',
-      attributes_en: '',
+      attributes_ln: "",
+      attributes_kr: "",
+      attributes_ru: "",
+      attributes_en: "",
     });
     console.log(state);
   };
@@ -149,48 +155,115 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
   //   // dispatch(addNewLead({newLeadObj}))
   // };
 
+  // const {data, isSuccess} = useCategoriesQuery();
+  const { data, isLoading, isSuccess } = useCategoriesQuery();
+  const { data: country, isSuccess: isSuccessCountry } = useCountriesQuery()
+  console.log(country?.data, "DATA 11");
+  const [value, setValue] = useState("");
+  const getValue = (value) => {
+    setValue(value);
+  };
+
+  const [selectId, setSelectId] = useState()
+
   return (
-    <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-2">
+    <div className="bg-white rounded-xl py-7 px-14 ">
+      <div className="grid grid-cols-1 gap-x-5 gap-y-2 w-full">
         {/* title inputs of product */}
+        <h2 className="text-2xl font-semibold">Категория товара</h2>
+        <CategorySelected dataSelect={data?.data} isSuccessSelect={isSuccess} />
+        <div className="flex w-full gap-x-5">
+          <div className="w-2/3">
+            <InputText
+              type="text"
+              defaultValue={productTitleObj.title_ln || ""}
+              updateType="title_ln"
+              containerStyle="mt-3"
+              labelTitle="Title uz"
+              updateFormValue={updateProductTitleFormValue}
+            />
 
-        <InputText
-          type="text"
-          defaultValue={productTitleObj.title_ln || ''}
-          updateType="title_ln"
-          containerStyle="mt-3"
-          labelTitle="Title uz"
-          updateFormValue={updateProductTitleFormValue}
-        />
+            <InputText
+              type="text"
+              defaultValue={productTitleObj.title_kr || ""}
+              updateType="title_ru"
+              containerStyle="mt-3"
+              labelTitle="Title ru"
+              updateFormValue={updateProductTitleFormValue}
+            />
+          </div>
+          <div className="w-1/3">
+            <div className="">
+              <h2 className="text-base my-3 font-semibold uppercase">
+                Страна производства
+              </h2>
+              <select
+                onChange={(e) => setSelectId(e.target.value)}
+                className="w-full border-2 border-inherit p-2 text-base outline-0"
+                placeholder="Выбрать категорию"
+                data-te-select-init
+                data-te-select-visible-options="3"
+              >
+                {isSuccessCountry &&
+                  country?.data?.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.title.title_ln}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div className="">
+              <h2 className="text-base my-3 font-semibold uppercase">Бранд</h2>
+              <select
+                onChange={(e) => setSelectId(e.target.value)}
+                className="w-full border-2 border-inherit p-2 text-base outline-0"
+                placeholder="Выбрать категорию"
+                data-te-select-init
+                data-te-select-visible-options="3"
+              >
+                {/* {isSuccessSelect &&
+                  dataSelect.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.title.title_ln}
+                    </option>
+                  ))} */}
+              </select>
+            </div>
+          </div>
+        </div>
+        <div className="">
+          <h2 className="text-base my-3 font-semibold uppercase">
+            PRODUCT DESCRIPTION IN UZBEK
+          </h2>
+          <Editor initialValue="" getValue={getValue} />
+        </div>
+        <div className="">
+          <h2 className="text-base my-3 font-semibold uppercase">
+            Описание товара на русском
+          </h2>
+          <Editor initialValue="" getValue={getValue} />
+        </div>
+        <div className="flex gap-x-5">
+          <InputText
+            type="text"
+            defaultValue={productTitleObj.title_ln || ""}
+            updateType="title_ln"
+            containerStyle="mt-3"
+            labelTitle="Attributes uz"
+            updateFormValue={updateProductTitleFormValue}
+          />
 
-        <InputText
-          type="text"
-          defaultValue={productTitleObj.title_kr || ''}
-          updateType="title_kr"
-          containerStyle="mt-3"
-          labelTitle="Title kr"
-          updateFormValue={updateProductTitleFormValue}
-        />
-
-        <InputText
-          type="text"
-          defaultValue={productTitleObj.title_ru || ''}
-          updateType="title_ru"
-          containerStyle="mt-3"
-          labelTitle="Title ru"
-          updateFormValue={updateProductTitleFormValue}
-        />
-        <InputText
-          type="text"
-          defaultValue={productTitleObj.title_en || ''}
-          updateType="title_en"
-          containerStyle="mt-3"
-          labelTitle="Title en"
-          updateFormValue={updateProductTitleFormValue}
-        />
-
+          <InputText
+            type="text"
+            defaultValue={productTitleObj.title_kr || ""}
+            updateType="title_ru"
+            containerStyle="mt-3"
+            labelTitle="Attributes ru"
+            updateFormValue={updateProductTitleFormValue}
+          />
+        </div>
         {/*-------- atributs inputs of product----------- */}
-        <div className="flex items-end gap-8 my-2 justify-between w-full col-span-4">
+        {/* <div className="flex items-end gap-8 my-2 justify-between w-full col-span-4">
           <label htmlFor="attribute_ln">Latin attribute</label>
           <input
             defaultValue={attributesObj.attributes_ln}
@@ -241,8 +314,8 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             className="bg-sky-500 p-2 text-lg rounded text-white flex-1 "
           >
             add
-          </button>
-        </div>
+          </button> 
+        </div> */}
         {/* <div className="flex items-end gap-8 my-2 justify-between w-full col-span-4">
           {attributeInputs.map((item, index) => (
             <AttributeInput key={item.id} {...item} />
@@ -269,7 +342,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
           Save
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

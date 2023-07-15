@@ -19,6 +19,7 @@ const ProfileSettings = lazy(() => import('../pages/protected/ProfileSettings'))
 const GettingStarted = lazy(() => import('../pages/GettingStarted'))
 const DocFeatures = lazy(() => import('../pages/DocFeatures'))
 const DocComponents = lazy(() => import('../pages/DocComponents'))
+const AddProducts = lazy(() => import('../pages/AddProducts'))
 
 
 const routes = [
@@ -35,8 +36,12 @@ const routes = [
     component: CategoryDetail,
   },
   {
-    path: '/products',
+    path: '/products/all',
     component: Products,
+  },
+  {
+    path: '/products/add',
+    component: AddProducts,
   },
   // {
   //   path: '/products/:productId',

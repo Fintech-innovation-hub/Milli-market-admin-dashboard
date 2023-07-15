@@ -32,6 +32,20 @@ export const categoryApi = createApi({
       }),
 
     }),
+    categoryItemChildDetails: builder.query({
+      // query: categoryId => `/v1/product/category/${categoryId}`,
+      query: id => ({
+        url: `/v1/product/category/`,
+        params: {
+          parent_id: id
+        },
+        headers: {
+          'Authorization': `Bearer  ${JSON.parse(localStorage.getItem("access-token"))}`
+        },
+        method: 'GET',
+      }),
+
+    }),
 
     addCategory: builder.mutation({
       query: category => ({
@@ -88,6 +102,7 @@ export const categoryApi = createApi({
 export const {
   useCategoriesQuery,
   useCategoryItemDetailsQuery,
+  useCategoryItemChildDetailsQuery,
   useAddCategoryMutation,
   useAddCategoryChildMutation,
   useUpdateCategoryMutation,
