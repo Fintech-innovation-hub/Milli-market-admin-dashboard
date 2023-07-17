@@ -21,7 +21,7 @@ const CategorySelected = ({ dataSelect, isSuccessSelect }) => {
     useCategoryItemChildDetailsQuery(selectChildId);
 
   // console.log(categoryItem?.data, 11);
-  console.log(categoryChildItem)
+  // console.log(categoryChildItem)
 
   return (
     <div className="">

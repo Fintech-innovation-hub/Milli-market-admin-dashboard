@@ -6,6 +6,7 @@ import rightDrawerSlice from '../features/common/rightDrawerSlice'
 import { categoryApi } from '../services/categoryApi'
 import { productApi } from '../services/productApi'
 import { countryApi } from '../services/countryApi'
+import { brandApi } from '../services/brandApi'
 
 
 const combinedReducer = {
@@ -16,10 +17,11 @@ const combinedReducer = {
   [categoryApi.reducerPath]: categoryApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
   [countryApi.reducerPath]: countryApi.reducer,
+  [brandApi.reducerPath]: brandApi.reducer,
 }
 
 export default configureStore({
   reducer: combinedReducer,
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(categoryApi.middleware, productApi.middleware, countryApi.middleware),
+    getDefaultMiddleware().concat(categoryApi.middleware, productApi.middleware, countryApi.middleware, brandApi.middleware),
 })

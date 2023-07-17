@@ -12,6 +12,7 @@ import AttributeInput from "./AttributeInput";
 import CategorySelected from "./CategorySelected";
 import Editor from "./Editor";
 import { useCountriesQuery } from "../../../services/countryApi";
+import { useBrandsQuery } from "../../../services/brandApi";
 // import { addNewLead } from "../leadSlice"
 
 const INITIAL_PRODUCT_TITLE_OBJ = {
@@ -157,14 +158,43 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
 
   // const {data, isSuccess} = useCategoriesQuery();
   const { data, isLoading, isSuccess } = useCategoriesQuery();
-  const { data: country, isSuccess: isSuccessCountry } = useCountriesQuery()
-  console.log(country?.data, "DATA 11");
-  const [value, setValue] = useState("");
-  const getValue = (value) => {
-    setValue(value);
+  const { data: country, isSuccess: isSuccessCountry } = useCountriesQuery();
+  const { data: brand, isSuccess: isSuccessBrand } = useBrandsQuery();
+  // console.log(brand.data[0].id, "DATA 11");
+
+  // Add Product Info
+  const [productMainInfo, setProductMainInfo] = useState({
+    category: "",
+    titleUz: "",
+    titleRu: "",
+    country: country?.data[0]?.id,
+    brand: brand?.data[0]?.id,
+    descUz: "",
+    descRu: "",
+    attributUz: "",
+    attributRu: "",
+  });
+  const { titleUz, titleRu, attributUz, attributRu, descUz, descRu } =
+    productMainInfo;
+
+  const [title, setTitle] = useState("");
+
+  const productInfo = (e) => {
+    setProductMainInfo((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
   };
 
-  const [selectId, setSelectId] = useState()
+  console.log(productMainInfo, "Info");
+  // const [value, setValue] = useState("");
+  // const getValue = (value) => {
+  //   setValue(value);
+  // };
+
+  const [selectId, setSelectId] = useState();
 
   return (
     <div className="bg-white rounded-xl py-7 px-14 ">
@@ -174,9 +204,42 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
         <CategorySelected dataSelect={data?.data} isSuccessSelect={isSuccess} />
         <div className="flex w-full gap-x-5">
           <div className="w-2/3">
-            <InputText
+            <div className={`form-control w-full mt-3`}>
+              <label className="label">
+                <span className={"label-text text-base-content font-bold "}>
+                  Title_uz
+                </span>
+              </label>
+              <input
+                required
+                type="text"
+                value={titleUz}
+                // placeholder="title_uz"
+                onChange={productInfo}
+                name="titleUz"
+                className="border border-solid border-gray-400 rounded p-2 outline-none  input-bordered w-full  "
+              />
+            </div>
+            <div className={`form-control w-full mt-3`}>
+              <label className="label">
+                <span className={"label-text text-base-content font-bold "}>
+                  Title_ru
+                </span>
+              </label>
+              <input
+                required
+                type="text"
+                value={titleRu}
+                // placeholder="title_uz"
+                onChange={productInfo}
+                name="titleRu"
+                className="border border-solid border-gray-400 rounded p-2 outline-none  input-bordered w-full  "
+              />
+            </div>
+            {/* <InputText
+              name="title_uz"
               type="text"
-              defaultValue={productTitleObj.title_ln || ""}
+              defaultValue={titleUz || ""}
               updateType="title_ln"
               containerStyle="mt-3"
               labelTitle="Title uz"
@@ -184,13 +247,14 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             />
 
             <InputText
+              name="title_ru"
               type="text"
               defaultValue={productTitleObj.title_kr || ""}
               updateType="title_ru"
               containerStyle="mt-3"
               labelTitle="Title ru"
               updateFormValue={updateProductTitleFormValue}
-            />
+            /> */}
           </div>
           <div className="w-1/3">
             <div className="">
@@ -198,7 +262,8 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
                 Страна производства
               </h2>
               <select
-                onChange={(e) => setSelectId(e.target.value)}
+                onChange={productInfo}
+                name="country"
                 className="w-full border-2 border-inherit p-2 text-base outline-0"
                 placeholder="Выбрать категорию"
                 data-te-select-init
@@ -207,7 +272,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
                 {isSuccessCountry &&
                   country?.data?.map((item) => (
                     <option key={item.id} value={item.id}>
-                      {item.title.title_ln}
+                      {item.title}
                     </option>
                   ))}
               </select>
@@ -215,18 +280,19 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             <div className="">
               <h2 className="text-base my-3 font-semibold uppercase">Бранд</h2>
               <select
-                onChange={(e) => setSelectId(e.target.value)}
+                onChange={productInfo}
+                name="brand"
                 className="w-full border-2 border-inherit p-2 text-base outline-0"
                 placeholder="Выбрать категорию"
                 data-te-select-init
                 data-te-select-visible-options="3"
               >
-                {/* {isSuccessSelect &&
-                  dataSelect.map((item) => (
+                {isSuccessBrand &&
+                  brand?.data?.map((item) => (
                     <option key={item.id} value={item.id}>
-                      {item.title.title_ln}
+                      {item.title}
                     </option>
-                  ))} */}
+                  ))}
               </select>
             </div>
           </div>
@@ -235,16 +301,58 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
           <h2 className="text-base my-3 font-semibold uppercase">
             PRODUCT DESCRIPTION IN UZBEK
           </h2>
-          <Editor initialValue="" getValue={getValue} />
+          <Editor
+            initialValue={descUz}
+            productInfo={productInfo}
+            // name="descUz"
+          />
         </div>
         <div className="">
           <h2 className="text-base my-3 font-semibold uppercase">
             Описание товара на русском
           </h2>
-          <Editor initialValue="" getValue={getValue} />
+          <Editor
+            initialValue={descRu}
+            productInfo={productInfo}
+            // name="descRu"
+          />
+          {/* getValue={getValue} */}
         </div>
         <div className="flex gap-x-5">
-          <InputText
+          <div className={`form-control w-full mt-3`}>
+            <label className="label">
+              <span className={"label-text text-base-content font-bold "}>
+                Attribut_uz
+              </span>
+            </label>
+            <input
+              required
+              type="text"
+              value={attributUz}
+              // placeholder="title_uz"
+              onChange={productInfo}
+              name="attributUz"
+              className="border border-solid border-gray-400 rounded p-2 outline-none  input-bordered w-full  "
+            />
+          </div>
+          <div className={`form-control w-full mt-3`}>
+            <label className="label">
+              <span className={"label-text text-base-content font-bold "}>
+                Attribut_ru
+              </span>
+            </label>
+            <input
+              required
+              type="text"
+              value={attributRu}
+              // placeholder="title_uz"
+              onChange={productInfo}
+              name="attributRu"
+              className="border border-solid border-gray-400 rounded p-2 outline-none  input-bordered w-full  "
+            />
+          </div>
+          {/* <InputText
+            name="attribut_uz"
             type="text"
             defaultValue={productTitleObj.title_ln || ""}
             updateType="title_ln"
@@ -254,13 +362,14 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
           />
 
           <InputText
+            name="attribut_uz"
             type="text"
             defaultValue={productTitleObj.title_kr || ""}
             updateType="title_ru"
             containerStyle="mt-3"
             labelTitle="Attributes ru"
             updateFormValue={updateProductTitleFormValue}
-          />
+          /> */}
         </div>
         {/*-------- atributs inputs of product----------- */}
         {/* <div className="flex items-end gap-8 my-2 justify-between w-full col-span-4">

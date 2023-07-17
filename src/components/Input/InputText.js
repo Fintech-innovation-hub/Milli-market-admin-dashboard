@@ -17,6 +17,7 @@ function InputText({ labelTitle, labelStyle, type, isRequired = false,name, cont
             </label>
             <input   required={isRequired} type={type || "text"} value={value} placeholder={placeholder || ""}
                 onChange={(e) => updateInputValue(e.target.value)}
+                name={name}
                 className="border border-solid border-gray-400 rounded p-2 outline-none  input-bordered w-full  " />
         </div>
     )
