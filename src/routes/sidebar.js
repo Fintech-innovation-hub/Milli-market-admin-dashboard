@@ -36,7 +36,7 @@ const routes = [
     name: 'Categories', // name that appear in Sidebar
   },
   {
-    path: '/app/products', // url
+    path: '/app/products/all', // url
     icon: <ShoppingBagIcon className={iconClasses} />, // icon component
     name: 'Products', // name that appear in Sidebar
   },
