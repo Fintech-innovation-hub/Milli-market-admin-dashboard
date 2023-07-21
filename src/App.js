@@ -19,8 +19,8 @@ initializeApp()
 
 
 // Check for login and initialize axios
-const token = checkAuth()
-
+// const token = checkAuth();
+const token = JSON.parse(localStorage.getItem('access-token'));
 function App() {
 
   useEffect(() => {

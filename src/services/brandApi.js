@@ -1,23 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "../constants";
 
-export const countryApi = createApi({
-  reducerPath: "countryApi",
+export const brandApi = createApi({
+  reducerPath: "brandApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}`,
   }),
-  tagTypes: ["Country"],
+  tagTypes: ["Brand"],
   endpoints: (builder) => ({
-    countries: builder.query({
+    brands: builder.query({
       query: () => ({
-        url: "/v1/product/country/",
+        url: "/v1/product/brand/",
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`,
         },
       }),
-      providesTags: ["Country"],
+      providesTags: ["Brand"],
     }),
   }),
 });
 
-export const { useCountriesQuery } = countryApi;
+export const { useBrandsQuery } = brandApi;

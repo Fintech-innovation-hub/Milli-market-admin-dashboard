@@ -22,12 +22,11 @@ function Login() {
         e.preventDefault()
         axios.post(`${baseUrl}/v1/user/token/`, loginObj)
             .then(res => {
-                if (res.status) {
-                    localStorage.setItem("access-token", JSON.stringify(res.data.access))
-                    localStorage.setItem("refresh-token", JSON.stringify(res.data.refresh))
-                    localStorage.setItem("role", JSON.stringify(res.data.role))
-                    navigate('/app/dashboard')
-                }
+                localStorage.setItem("access-token", JSON.stringify(res.data.access))
+                localStorage.setItem("refresh-token", JSON.stringify(res.data.refresh))
+                localStorage.setItem("role", JSON.stringify(res.data.role))
+                navigate('/app/dashboard')
+
             })
         // setErrorMessage("")
 
