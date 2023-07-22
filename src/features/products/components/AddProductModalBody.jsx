@@ -13,6 +13,7 @@ import CategorySelected from "./CategorySelected";
 import Editor from "./Editor";
 import { useCountriesQuery } from "../../../services/countryApi";
 import { useBrandsQuery } from "../../../services/brandApi";
+import Steps from "./Steps";
 // import { addNewLead } from "../leadSlice"
 
 const INITIAL_PRODUCT_TITLE_OBJ = {
@@ -200,6 +201,20 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
     <div className="bg-white rounded-xl py-7 px-14 ">
       <div className="grid grid-cols-1 gap-x-5 gap-y-2 w-full">
         {/* title inputs of product */}
+        <div className="flex">
+          <Steps />
+          <div className="modal-action">
+            <button className="btn btn-ghost" onClick={() => closeModal()}>
+              Cancel
+            </button>
+            <button
+              className="btn btn-primary px-6"
+              onClick={() => saveNewCategory()}
+            >
+              Save
+            </button>
+          </div>
+        </div>
         <h2 className="text-2xl font-semibold">Категория товара</h2>
         <CategorySelected dataSelect={data?.data} isSuccessSelect={isSuccess} />
         <div className="flex w-full gap-x-5">
@@ -440,17 +455,6 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
       </div>
 
       {/* <ErrorText styleClass="mt-20">{errorMessage}</ErrorText> */}
-      <div className="modal-action">
-        <button className="btn btn-ghost" onClick={() => closeModal()}>
-          Cancel
-        </button>
-        <button
-          className="btn btn-primary px-6"
-          onClick={() => saveNewCategory()}
-        >
-          Save
-        </button>
-      </div>
     </div>
   );
 }
