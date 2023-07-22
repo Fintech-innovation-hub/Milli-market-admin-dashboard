@@ -14,6 +14,8 @@ import Editor from "./Editor";
 import { useCountriesQuery } from "../../../services/countryApi";
 import { useBrandsQuery } from "../../../services/brandApi";
 import Steps from "./Steps";
+import DoubleEditor from "./DoubleEditor";
+import DownloadImg from "./DownloadImg";
 // import { addNewLead } from "../leadSlice"
 
 const INITIAL_PRODUCT_TITLE_OBJ = {
@@ -195,13 +197,15 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
   //   setValue(value);
   // };
 
-  const [selectId, setSelectId] = useState();
+  const [showCompound, setShowCompound] = useState(false);
+  const [showInstruction, setShowInstruction] = useState(false);
+  const [showCertificate, setShowCertificate] = useState(false);
 
   return (
     <div className="bg-white rounded-xl py-7 px-14 ">
       <div className="grid grid-cols-1 gap-x-5 gap-y-2 w-full">
         {/* title inputs of product */}
-        <div className="flex">
+        <div className="flex items-center justify-between">
           <Steps />
           <div className="modal-action">
             <button className="btn btn-ghost" onClick={() => closeModal()}>
@@ -215,8 +219,13 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             </button>
           </div>
         </div>
-        <h2 className="text-2xl font-semibold">Категория товара</h2>
-        <CategorySelected dataSelect={data?.data} isSuccessSelect={isSuccess} />
+        <div className="w-7/12">
+          <h2 className="text-2xl font-semibold mb-2">Категория товара</h2>
+          <CategorySelected
+            dataSelect={data?.data}
+            isSuccessSelect={isSuccess}
+          />
+        </div>
         <div className="flex w-full gap-x-5">
           <div className="w-2/3">
             <div className={`form-control w-full mt-3`}>
@@ -333,7 +342,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
           />
           {/* getValue={getValue} */}
         </div>
-        <div className="flex gap-x-5">
+        <div className="flex gap-x-5 items-end">
           <div className={`form-control w-full mt-3`}>
             <label className="label">
               <span className={"label-text text-base-content font-bold "}>
@@ -366,6 +375,12 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
               className="border border-solid border-gray-400 rounded p-2 outline-none  input-bordered w-full  "
             />
           </div>
+          <button
+            className="btn btn-primary px-6"
+            // onClick={() => saveNewCategory()}
+          >
+            Add
+          </button>
           {/* <InputText
             name="attribut_uz"
             type="text"
@@ -385,6 +400,123 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             labelTitle="Attributes ru"
             updateFormValue={updateProductTitleFormValue}
           /> */}
+        </div>
+        <div className="">
+          <div className="mb-6 w-2/3">
+            <h2 className="text-base my-3 font-semibold uppercase">
+              Выбор характеристик
+            </h2>
+            <select
+              onChange={productInfo}
+              name="brand"
+              className="w-full border-2 border-inherit p-2 text-base outline-0"
+              placeholder="Выбрать категорию"
+              data-te-select-init
+              data-te-select-visible-options="3"
+            >
+              {isSuccessBrand &&
+                brand?.data?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.title}
+                  </option>
+                ))}
+            </select>
+          </div>
+          <div className="h-0.5 bg-slate-300"></div>
+          <div className="flex flex-col w-2/3 mb-8">
+            <div className="mb-5">
+              <h2 className="text-base my-3 font-semibold uppercase">
+                Состав на Узбекском
+              </h2>
+              <p className="mb-7">Укажите состав товара</p>
+              <button
+                className="btn btn-success text-white px-6"
+                onClick={() => setShowCompound(!showCompound)}
+              >
+                Добавить
+              </button>
+            </div>
+            {showCompound && (
+              <DoubleEditor
+                productInfo={productInfo}
+                initialValue={descUz}
+                textLabel={"Состав"}
+              />
+            )}
+          </div>
+          <div className="h-0.5 bg-slate-300"></div>
+          <div className="flex flex-col w-2/3 mb-8">
+            <div className="mb-5">
+              <h2 className="text-base my-3 font-semibold uppercase">
+                Инструкция на Узбекском
+              </h2>
+              <p className="mb-7">Укажите состав товара</p>
+              <button
+                className="btn btn-success text-white px-6"
+                onClick={() => setShowInstruction(!showInstruction)}
+              >
+                Добавить
+              </button>
+            </div>
+            {showInstruction && (
+              <DoubleEditor
+                productInfo={productInfo}
+                initialValue={descUz}
+                textLabel={"Инструкция"}
+              />
+            )}
+          </div>
+          <div className="h-0.5 bg-slate-300"></div>
+          <div className="flex flex-col w-2/3 mb-8">
+            <div className="mb-5">
+              <h2 className="text-base my-3 font-semibold uppercase">
+                Сертификаты на Узбекском
+              </h2>
+              <p className="mb-7">Укажите состав товара</p>
+              <button
+                className="btn btn-success text-white px-6"
+                onClick={() => setShowCertificate(!showCertificate)}
+              >
+                Добавить
+              </button>
+            </div>
+            {showCertificate && (
+              <DoubleEditor
+                productInfo={productInfo}
+                initialValue={descUz}
+                textLabel={"Сертификаты"}
+              />
+            )}
+          </div>
+          <div className="h-0.5 bg-slate-300"></div>
+          <div className="">
+            <div className="">
+            <h2 className="text-base my-3 font-semibold uppercase">Загрузить фотографии</h2>
+              <DownloadImg textDownload={"фото"} />
+            </div>
+            <div className="">
+              <h2 className="text-base my-3 font-semibold uppercase">Загрузить видео (размер до 10мб)</h2>
+              <DownloadImg textDownload={"видео"} />
+            </div>
+          </div>
+          <div className="w-2/3">
+            <h2 className="text-base my-3 font-semibold uppercase">Модель</h2>
+            <select
+              onChange={productInfo}
+              name="brand"
+              className="w-full border-2 border-inherit p-2 text-base outline-0"
+              placeholder="Выбрать категорию"
+              data-te-select-init
+              data-te-select-visible-options="3"
+            >
+              {isSuccessBrand &&
+                brand?.data?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.title}
+                  </option>
+                ))}
+            </select>
+          </div>
         </div>
         {/*-------- atributs inputs of product----------- */}
         {/* <div className="flex items-end gap-8 my-2 justify-between w-full col-span-4">
