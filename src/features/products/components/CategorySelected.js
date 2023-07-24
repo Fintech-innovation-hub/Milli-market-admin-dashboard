@@ -20,7 +20,7 @@ const CategorySelected = ({ dataSelect, isSuccessSelect, setCtg }) => {
     useCategoryItemChildDetailsQuery(selectChildId);
 
   const [selectChildChildId, setSelectChildChildId] = useState(isSuccessCategoryChildItem && categoryChildItem[0]?.id);
-  // const { data: childrenCategory, setChilrenCategory } = useCategoryItemChildrenDetailsQuery(selectChildChildId)
+
 
   return (
     <div className="">
