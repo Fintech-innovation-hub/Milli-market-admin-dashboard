@@ -12,7 +12,7 @@ export const countryApi = createApi({
       query: () => ({
         url: "/v1/product/country/",
         headers: {
-          Authorization: `Bearer  ${JSON.parse(localStorage.getItem("access-token"))}`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`,
         },
       }),
       providesTags: ["Country"],

@@ -1,9 +1,8 @@
-import { useReducer, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import InputText from "../../../components/Input/InputText";
-import ErrorText from "../../../components/Typography/ErrorText";
+import { useReducer, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import InputText from '../../../components/Input/InputText';
+import ErrorText from '../../../components/Typography/ErrorText';
 import {
-  useAddCategoryMutation,
   useCategoriesQuery,
 } from "../../../services/categoryApi";
 import { useAddProductMutation } from "../../../services/productApi";
@@ -16,28 +15,19 @@ import { useBrandsQuery } from "../../../services/brandApi";
 import Steps from "./Steps";
 import DoubleEditor from "./DoubleEditor";
 import DownloadImg from "./DownloadImg";
-// import { addNewLead } from "../leadSlice"
+
 
 const INITIAL_PRODUCT_TITLE_OBJ = {
-  title_ln: "",
-  title_kr: "",
-  title_ru: "",
-  title_en: "",
+  title_ln: '',
+  title_ru: '',
 };
-
 const initialValue = {
-  title_ln: "tel",
-  title_kr: "тел",
-  title_ru: "тел",
-  title_en: "phone",
-  attributes_ln: { 0: "samsung chotki" },
-  attributes_kr: { 0: "sam zor" },
-  attributes_ru: { 0: "sam chotkiyy" },
-  attributes_en: { 0: "samsung best" },
-  description_ln: "batafsil",
-  description_kr: "hello batafsil",
-  description_en: "batafsils",
-  description_ru: "podrobni info",
+  title_ln: '',
+  title_ru: '',
+  attributes_ln: {},
+  attributes_ru: {},
+  description_ln: '',
+  description_ru: '',
   category: 1515,
   country: 1,
   brand: 1,
@@ -45,18 +35,17 @@ const initialValue = {
 };
 const reducer = (state, action) => {
   switch (action.type) {
-    case "attribute":
+    case 'attribute':
       const updated = Object.keys(action.payload).reduce((st, attr) => {
         st[attr][Object.keys(st[attr]).length] = action.payload[attr];
         return st;
       }, state);
-      // 0
-      // ["attributes_ln","attributes_kr","attributes_ru","attributes_en"].reduce((a,b)=>state["attbiteus_ln"][0]=ln)
+
       return {
         ...state,
         ...updated,
       };
-    case "title":
+    case 'title':
       return {
         ...state,
         [action.payload.name]: action.payload.value,
@@ -66,25 +55,11 @@ const reducer = (state, action) => {
   }
 };
 
-// const attributeInputs = [
-//   { name: 'attributes_ln', id: 1, labelTitle: 'attributes ln' },
-//   { name: 'attributes_kr', id: 2, labelTitle: 'attributes kr' },
-//   { name: 'attributes_ru', id: 3, labelTitle: 'attributes ru' },
-//   { name: 'attributes_en', id: 4, labelTitle: 'attributes en' },
-// ];
-
 function AddProductModalBody({ closeModal, extraObject, size }) {
-  const [attributesObj, setAttributesObj] = useState({
-    attributes_ln: "",
-    attributes_kr: "",
-    attributes_ru: "",
-    attributes_en: "",
-  });
-  // const [ln, setLn] = useState('');
-  // const [kr, setKr] = useState('');
-  // const [ru, setRu] = useState('');
-  // const [en, setEn] = useState('');
-  // const sets = [setLn, setKr, setRu, setEn];
+  const [ln, setLn] = useState('');
+  const [ru, setRu] = useState('');
+  const [ctg, setCtg] = useState('');
+  const sets = [setLn, setRu];
   const [addProduct] = useAddProductMutation();
   const [productTitleObj, setProductTitleObj] = useState(
     INITIAL_PRODUCT_TITLE_OBJ
@@ -92,76 +67,38 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
 
   const [state, dispatch] = useReducer(reducer, initialValue);
 
-  const handleChange = (e) => {
-    setAttributesObj({
-      ...attributesObj,
-      [e.target.name]: e.target.value,
-    });
-  };
   const updateProductTitleFormValue = ({ updateType, value }) => {
-    setProductTitleObj({ ...productTitleObj, [updateType]: value });
+    dispatch({ type: 'title', payload: { name: updateType, value: value } });
+    // setProductTitleObj({ ...productTitleObj, [updateType]: value });
   };
 
   const addAttributesHandler = (e) => {
     dispatch({
-      type: "attribute",
+      type: 'attribute',
       payload: {
-        attributes_ln: attributesObj["attributes_ln"],
-        attributes_kr: attributesObj["attributes_kr"],
-        attributes_ru: attributesObj["attributes_ru"],
-        attributes_en: attributesObj["attributes_en"],
+        attributes_ln: ln,
+        attributes_ru: ru,
       },
     });
 
-    // sets.forEach((fn) => fn(''));
-    setAttributesObj({
-      attributes_ln: "",
-      attributes_kr: "",
-      attributes_ru: "",
-      attributes_en: "",
-    });
-    console.log(state);
+    sets.forEach((fn) => fn(''));
   };
 
   const saveNewCategory = () => {
-    addProduct(state);
+    // addProduct(state);
+    const newData = {
+      ...state,
+      category: ctg,
+      country: 1,
+      brand: 1,
+      seller: 2,
+    };
+    console.log(newData);
   };
-  // ------------------------------------------------------------
-  // const [errorMessage, setErrorMessage] = useState('');
-
-  // const updateProductTitleFormValue = ({ updateType, value }) => {
-  //   setErrorMessage('');
-  //   setProductTitleObj({ ...productTitleObj, [updateType]: value });
-  // };
-
-  // const saveNewCategory = () => {
-  //   console.log(productTitleObj);
-  //   // if (productTitleObj.title_ln.trim() === '')
-  //   //   return setErrorMessage('Title uz is required!');
-  //   // else if (productTitleObj.title_kr.trim() === '')
-  //   //   return setErrorMessage('Title kr is required!');
-  //   // else if (productTitleObj.title_ru.trim() === '')
-  //   //   return setErrorMessage('Title ru is required!');
-  //   // else if (productTitleObj.title_en.trim() === '')
-  //   //   return setErrorMessage('Title en is required!');
-  //   // else {
-  //   //   alert('form ishladi');
-  //   // let newLeadObj = {
-  //   //   title_ru: productTitleObj.title_ru,
-  //   //   title_ln: productTitleObj.title_ln,
-  //   //   title_kr: productTitleObj.title_kr,
-  //   //   title_en: productTitleObj.title_en,
-  //   //   // "avatar": "https://reqres.in/img/faces/1-image.jpg"
-  //   // };
-  //   // addCategory(newLeadObj);
-  //   // dispatch(showNotification({ message: 'New Category Added!', status: 1 }));
-  //   // closeModal();
-  //   // dispatch(addNewLead({newLeadObj}))
-  // };
-
   // const {data, isSuccess} = useCategoriesQuery();
   const { data, isLoading, isSuccess } = useCategoriesQuery();
   const { data: country, isSuccess: isSuccessCountry } = useCountriesQuery();
+
   const { data: brand, isSuccess: isSuccessBrand } = useBrandsQuery();
   // console.log(brand.data[0].id, "DATA 11");
 
@@ -179,7 +116,6 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
   });
   const { titleUz, titleRu, attributUz, attributRu, descUz, descRu } =
     productMainInfo;
-
   const [title, setTitle] = useState("");
 
   const productInfo = (e) => {
@@ -201,9 +137,23 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
   const [showInstruction, setShowInstruction] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
 
+  const { data: brands, isSuccess: isSuccessBrands } = useBrandsQuery();
+  console.log(country);
+  // console.log(country?.data, 'DATA 11');
+  const [value, setValue] = useState('');
+  const getValue = (value) => {
+    setValue(value);
+  };
+
+  const [selectId, setSelectId] = useState();
+
+  // const { data: categoryItemData } = useCategoryItemChildDetailsQuery(selectId);
+
+
   return (
     <div className="bg-white rounded-xl py-7 px-14 ">
       <div className="grid grid-cols-1 gap-x-5 gap-y-2 w-full">
+
         {/* title inputs of product */}
         <div className="flex items-center justify-between">
           <Steps />
@@ -226,6 +176,14 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             isSuccessSelect={isSuccess}
           />
         </div>
+
+        <h2 className="text-2xl font-semibold">Kategoriya</h2>
+        <CategorySelected
+          setCtg={setCtg}
+          dataSelect={data?.data}
+          isSuccessSelect={isSuccess}
+        />
+
         <div className="flex w-full gap-x-5">
           <div className="w-2/3">
             <div className={`form-control w-full mt-3`}>
@@ -264,26 +222,29 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
               name="title_uz"
               type="text"
               defaultValue={titleUz || ""}
+
+              defaultValue={productTitleObj.title_ln || ''}
+
               updateType="title_ln"
               containerStyle="mt-3"
-              labelTitle="Title uz"
+              labelTitle="TITLE UZ"
               updateFormValue={updateProductTitleFormValue}
             />
 
             <InputText
               name="title_ru"
               type="text"
-              defaultValue={productTitleObj.title_kr || ""}
+              defaultValue={productTitleObj.title_kr || ''}
               updateType="title_ru"
               containerStyle="mt-3"
-              labelTitle="Title ru"
+              labelTitle="TITLE RU"
               updateFormValue={updateProductTitleFormValue}
             /> */}
           </div>
           <div className="w-1/3">
             <div className="">
               <h2 className="text-base my-3 font-semibold uppercase">
-                Страна производства
+                Country
               </h2>
               <select
                 onChange={productInfo}
@@ -304,16 +265,31 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             <div className="">
               <h2 className="text-base my-3 font-semibold uppercase">Бранд</h2>
               <select
+
                 onChange={productInfo}
                 name="brand"
+
+                onChange={(e) => {
+                  setSelectId(e.target.value);
+                  dispatch({
+                    type: 'title',
+                    payload: { name: e.target.name, value: e.target.value },
+                  });
+                }}
+
                 className="w-full border-2 border-inherit p-2 text-base outline-0"
-                placeholder="Выбрать категорию"
+                placeholder="Choose brend"
                 data-te-select-init
                 data-te-select-visible-options="3"
               >
+
                 {isSuccessBrand &&
                   brand?.data?.map((item) => (
                     <option key={item.id} value={item.id}>
+
+                {isSuccessBrands &&
+                  brands?.data?.map((item) => (
+
                       {item.title}
                     </option>
                   ))}
@@ -326,9 +302,15 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             PRODUCT DESCRIPTION IN UZBEK
           </h2>
           <Editor
+
             initialValue={descUz}
             productInfo={productInfo}
             // name="descUz"
+
+            updateProductTitleFormValue={updateProductTitleFormValue}
+            initialValue="description_ln"
+            getValue={getValue}
+
           />
         </div>
         <div className="">
@@ -336,6 +318,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             Описание товара на русском
           </h2>
           <Editor
+
             initialValue={descRu}
             productInfo={productInfo}
             // name="descRu"
@@ -383,21 +366,63 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
           </button>
           {/* <InputText
             name="attribut_uz"
+
+            updateProductTitleFormValue={updateProductTitleFormValue}
+            initialValue="description_ru"
+            getValue={getValue}
+          />
+        </div>
+        <div className="flex gap-x-5 items-end">
+          <label htmlFor="attribute_ln">Latin attribute</label>
+          <input
+            // defaultValue={attributesObj.attributes_ln}
+            onChange={(e) => setLn(e.target.value)}
+            // onChange={handleChange}
+
             type="text"
-            defaultValue={productTitleObj.title_ln || ""}
+            id="attribute_ln"
+            name="attribute_ln"
+            className="border border-slate-800"
+          />
+
+          <label htmlFor="attribute_ru">Russian attribute</label>
+          <input
+            className="border border-slate-800"
+            // defaultValue={attributesObj.attributes_ru}
+            onChange={(e) => setRu(e.target.value)}
+            // onChange={handleChange}
+            type="text"
+            id="attribute_ru"
+            name="attribute_ru"
+          />
+
+          <button
+            onClick={addAttributesHandler}
+            type="button"
+            className="bg-sky-500 p-2 text-lg rounded text-white flex-1 "
+          >
+            add
+          </button>
+          {/* <InputText
+            type="text"
+            defaultValue={productTitleObj.title_ln || ''}
             updateType="title_ln"
-            containerStyle="mt-3"
+            // containerStyle="mt-3"
             labelTitle="Attributes uz"
-            updateFormValue={updateProductTitleFormValue}
+            onChange={(e) => setLn(e.target.value)}
+
+            // updateFormValue={updateProductTitleFormValue}
           />
 
           <InputText
             name="attribut_uz"
             type="text"
-            defaultValue={productTitleObj.title_kr || ""}
+            defaultValue={productTitleObj.title_kr || ''}
             updateType="title_ru"
-            containerStyle="mt-3"
+            onChange={(e) => setRu(e.target.value)}
+            // containerStyle="mt-3"
             labelTitle="Attributes ru"
+
             updateFormValue={updateProductTitleFormValue}
           /> */}
         </div>
@@ -517,6 +542,17 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
                 ))}
             </select>
           </div>
+
+            // updateFormValue={updateProductTitleFormValue}
+          />
+          <button
+            onClick={addAttributesHandler}
+            type="button"
+            className="bg-sky-500 p-2 text-lg rounded text-white flex-1 "
+          >
+            add
+          </button> */}
+
         </div>
         {/*-------- atributs inputs of product----------- */}
         {/* <div className="flex items-end gap-8 my-2 justify-between w-full col-span-4">
@@ -531,17 +567,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             className="border border-slate-800"
           />
 
-          <label htmlFor="attribute_kr">Korean attribute</label>
-          <input
-            className="border border-slate-800"
-            defaultValue={attributesObj.attributes_kr}
-            // onChange={(e) => setKr(e.target.value)}
-            onChange={handleChange}
-            type="text"
-            id="attribute_kr"
-            name="attribute_kr"
-          />
-
+        
           <label htmlFor="attribute_ru">Russian attribute</label>
           <input
             className="border border-slate-800"
@@ -551,17 +577,6 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             type="text"
             id="attribute_ru"
             name="attribute_ru"
-          />
-
-          <label htmlFor="attribute_en">English attribute</label>
-          <input
-            className="border border-slate-800"
-            defaultValue={attributesObj.attributes_en}
-            // onChange={(e) => setEn(e.target.value)}
-            onChange={handleChange}
-            type="text"
-            id="attribute_en"
-            name="attribute_en"
           />
 
           <button

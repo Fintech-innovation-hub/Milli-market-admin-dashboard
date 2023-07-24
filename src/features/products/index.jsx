@@ -81,7 +81,7 @@ function Products() {
       >
         {/* Categories List in table format loaded from slice after api call */}
         <div className="overflow-x-auto w-full">
-          <table className="table w-full">
+          {/* <table className="table w-full">
             <thead>
               <tr>
                 <th>№</th>
@@ -89,8 +89,7 @@ function Products() {
                 <th>Title kr </th>
                 <th>Title ru</th>
                 <th>Title en</th>
-                {/* <th>Assigned To</th>
-                                <th></th> */}
+               
               </tr>
             </thead>
             <tbody>
@@ -104,23 +103,12 @@ function Products() {
                     >
                       <td>
                         {index + 1}
-                        {/* <div className="flex items-center space-x-3">
-                                                    <div className="avatar">
-                                                        <div className="mask mask-squircle w-12 h-12">
-                                                            <img src={l.avatar} alt="Avatar" />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div className="font-bold">{l.first_name}</div>
-                                                        <div className="text-sm opacity-50">{l.last_name}</div>
-                                                    </div>
-                                                </div> */}
+                       
                       </td>
                       <td onClick={() => getCategoryDetailHandler(category.id)}>
                         {category.title.title_ln}
                       </td>
-                      {/* <td>{moment(new Date()).add(-5 * (index + 2), 'days').format("DD MMM YY")}</td> */}
-                      {/* <td>{getDummyStatus(k)}</td> */}
+                     
                       <td>{category.title.title_kr}</td>
                       <td>{category.title.title_ru}</td>
                       <td>{category.title.title_en}</td>
@@ -136,7 +124,7 @@ function Products() {
                   );
                 })}
             </tbody>
-          </table>
+          </table> */}
         </div>
       </TitleCard>
     </>

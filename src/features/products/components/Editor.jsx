@@ -1,7 +1,8 @@
-import React, { useRef } from "react";
-import JoditEditor from "jodit-react";
+import React, { useRef } from 'react';
+import JoditEditor from 'jodit-react';
 
 const config = {
+
   buttons: [
     "bold",
     "italic",
@@ -12,9 +13,11 @@ const config = {
     "image",
     "video",
   ],
+
+
 };
 
-const Editor = ({ initialValue, getValue }) => {
+const Editor = ({ initialValue, getValue, updateProductTitleFormValue }) => {
   const editor = useRef(null);
 
   return (
@@ -24,7 +27,9 @@ const Editor = ({ initialValue, getValue }) => {
       config={config}
       tabIndex={1}
       //   onBlur={(newContent) => getValue(newContent)}
-      onChange={(newContent) => getValue(newContent)}
+      onChange={(newContent) =>
+        updateProductTitleFormValue(initialValue, newContent)
+      }
     />
   );
 };

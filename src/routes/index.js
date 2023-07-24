@@ -19,7 +19,7 @@ const ProfileSettings = lazy(() => import('../pages/protected/ProfileSettings'))
 const GettingStarted = lazy(() => import('../pages/GettingStarted'))
 const DocFeatures = lazy(() => import('../pages/DocFeatures'))
 const DocComponents = lazy(() => import('../pages/DocComponents'))
-const AddProducts = lazy(() => import('../pages/AddProducts'))
+const AddProducts = lazy(() => import('../pages/protected/CreateProduct'))
 
 
 const routes = [

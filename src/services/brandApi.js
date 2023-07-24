@@ -12,7 +12,9 @@ export const brandApi = createApi({
       query: () => ({
         url: "/v1/product/brand/",
         headers: {
+
           Authorization: `Bearer  ${JSON.parse(localStorage.getItem("access-token"))}`,
+
         },
       }),
       providesTags: ["Brand"],

@@ -13,7 +13,7 @@ export const productApi = createApi({
       query: () => ({
         url: '/v1/product/',
         headers: {
-          'Authorization': `Bearer  ${JSON.parse(localStorage.getItem("access-token"))}`
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
         }
       }),
       providesTags: ['Product'],
@@ -24,7 +24,7 @@ export const productApi = createApi({
         method: 'POST',
         body: product,
         headers: {
-          'Authorization': `Bearer  ${JSON.parse(localStorage.getItem("access-token"))}`
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
         }
       }),
 
