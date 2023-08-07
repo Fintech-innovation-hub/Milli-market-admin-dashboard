@@ -1,5 +1,5 @@
 import { useReducer, useRef, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import InputText from '../../../components/Input/InputText';
 import ErrorText from '../../../components/Typography/ErrorText';
 import { useAddProductMutation } from '../../../services/productApi';
@@ -10,9 +10,7 @@ import { useBrandsQuery } from '../../../services/brandApi';
 import Steps from './Steps';
 import DoubleEditor from './DoubleEditor';
 import DownloadImg from './DownloadImg';
-import {
-  useCharacteristicsQuery,
-} from '../../../services/characteristicApi';
+import { useCharacteristicsQuery } from '../../../services/characteristicApi';
 import { productReducer, initialValue } from '../../../reducer/productReducer';
 import ProductCategorySelect from './ProductCategorySelect';
 import ProductFormTop from './ProductFormTop';
@@ -20,7 +18,7 @@ import { useSellersQuery } from '../../../services/sellerApi';
 import { useNavigate } from 'react-router-dom';
 import { useModelsQuery } from '../../../services/modelApi';
 import axios from 'axios';
-import CharacterSection from './CharacterSection';
+import CharacterSection from './CharacteristicsSection/CharacterSection';
 import AddAttributeSection from './AddAttributeSection';
 
 function AddProductModalBody({ closeModal, extraObject, size }) {
@@ -33,8 +31,8 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
   const [showModel, setShowModel] = useState(false);
   const [model, setModel] = useState('');
   const [seller, setSeller] = useState('');
-  const [attributesLn,setAttributesLn]=useState({})
-  const [attributesRu,setAttributesRu]=useState({})
+  const [attributesLn, setAttributesLn] = useState({});
+  const [attributesRu, setAttributesRu] = useState({});
   const [descriptionLn, setDescriptionLn] = useState('');
   const [descriptionRu, setDescriptionRu] = useState('');
   const [sostavUz, setSostavUz] = useState('');
@@ -46,7 +44,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
   const [showCompound, setShowCompound] = useState(false);
   const [showInstruction, setShowInstruction] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
-  const [allCharacters, setAllCharacters] = useState([]);
+  // const [allCharacters, setAllCharacters] = useState([]);
   const { data: brands, isSuccess: isSuccessBrand } = useBrandsQuery();
   const { data: countries, isSuccess: isSuccessCountry } = useCountriesQuery();
   const { data: sellers, isSuccess: isSuccessSellers } = useSellersQuery();
@@ -55,10 +53,9 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
     useCharacteristicsQuery();
   const navigate = useNavigate();
   // const [addProduct, result] = useAddProductMutation();
- 
-  
+  const allCharacters = useSelector((state) => state.product.characteristics);
 
-  const saveNewProduct = () => {
+  const saveNewProduct = (btnName) => {
     const data = {
       category: ctgId,
       seller: seller,
@@ -74,7 +71,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
       sertificate_ln: sertificateUz,
       sertificate_ru: sertificateRu,
       attributes_ln: attributesLn,
-      attributes_ru:attributesRu,
+      attributes_ru: attributesRu,
       characteristics: allCharacters,
     };
     const headers = {
@@ -90,19 +87,20 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
       })
       .then((res) => {
         console.log(res.data.data);
-        navigate(`/app/product/${res?.data?.data?.id}/sku`);
+        if (btnName === 'save') navigate('/app/products/all');
+        if (btnName === 'next') navigate(`/app/product/${res?.data?.data?.id}/sku`);
       })
       .catch((err) => {
         console.log(err);
       });
+      // if (btnName === 'save') navigate('/app/products/all');
+      // if (btnName === 'next') navigate(`/app/product/5/sku`);
   };
   useEffect(() => {
     if (ctgId && titleLn && titleRu && brand && model) {
       setDisabledBtn(false);
     } else setDisabledBtn(true);
   }, [ctgId, titleLn, titleRu, brand, model]);
-
-
 
   return (
     <div className="bg-white rounded-xl py-2 px-8 ">
@@ -268,13 +266,13 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
           </h2>
           <Editor initialValue={descriptionRu} setDess={setDescriptionRu} />
         </div>
-        <AddAttributeSection setAttributesLn={setAttributesLn} setAttributesRu={setAttributesRu}/>
+        <AddAttributeSection
+          setAttributesLn={setAttributesLn}
+          setAttributesRu={setAttributesRu}
+        />
         <div className="">
           {isSuccessCharacteristics && (
-            <CharacterSection
-              setAllCharacters={setAllCharacters}
-              characteristics={characteristics?.data}
-            />
+            <CharacterSection characteristics={characteristics?.data} />
           )}
           <div className="h-0.5 bg-slate-300"></div>
           <div className="flex flex-col w-2/3 mb-8">

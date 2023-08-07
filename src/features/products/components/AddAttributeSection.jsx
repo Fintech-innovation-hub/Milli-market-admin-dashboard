@@ -36,8 +36,6 @@ function AddAttributeSection({ setAttributesLn,setAttributesRu}) {
     attributeRus.map((elem, index) => (atrus[index] = elem));
     setAttributesLn(atlns)
     setAttributesRu(atrus)
-    console.log(atlns)
-    console.log(atrus)
  
   }, [combinedArray]);
 

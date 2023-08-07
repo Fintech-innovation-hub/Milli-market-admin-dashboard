@@ -5,7 +5,9 @@ module.exports = Object.freeze({
         CATEGORY_ADD_NEW : "CATEGORY_ADD_NEW",
         PRODUCT_ADD_NEW : "PRODUCT_ADD_NEW",
         CONFIRMATION : "CONFIRMATION",
+        SELECT_CHARACTER_ITEMS:"SELECT_CHARACTER_ITEMS",
         DEFAULT : "",
+
     },
 
     RIGHT_DRAWER_TYPES : {

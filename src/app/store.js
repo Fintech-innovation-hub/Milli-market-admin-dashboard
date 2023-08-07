@@ -10,12 +10,13 @@ import { brandApi } from '../services/brandApi'
 import { charactericApi } from '../services/characteristicApi'
 import { sellerApi } from '../services/sellerApi'
 import { modelApi } from '../services/modelApi'
-
+import ProductReducer from '../features/products/productSlice'
 
 const combinedReducer = {
   header: headerSlice,
   rightDrawer: rightDrawerSlice,
   modal: modalSlice,
+  product:ProductReducer,
   // category: leadsSlice,
   [categoryApi.reducerPath]: categoryApi.reducer,
   [productApi.reducerPath]: productApi.reducer,

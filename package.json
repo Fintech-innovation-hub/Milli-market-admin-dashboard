@@ -9,6 +9,7 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.16",
     "@heroicons/react": "^2.0.13",
     "@material-tailwind/react": "^2.0.6",
     "@reduxjs/toolkit": "^1.9.0",
