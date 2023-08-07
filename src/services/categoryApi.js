@@ -22,10 +22,7 @@ export const categoryApi = createApi({
     categoryItemDetails: builder.query({
       // query: categoryId => `/v1/product/category/${categoryId}`,
       query: id => ({
-        url: `/v1/product/category/`,
-        params: {
-          parent_id: id || 8,
-        },
+        url: `/v1/product/category/?parent_id=${id}`,
         headers: {
           'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
         },
@@ -36,10 +33,7 @@ export const categoryApi = createApi({
     categoryItemChildDetails: builder.query({
       // query: categoryId => `/v1/product/category/${categoryId}`,
       query: id => ({
-        url: `/v1/product/category/`,
-        params: {
-          parent_id: id || 9,
-        },
+        url: `/v1/product/category/?parent_id=${id}`,
         headers: {
           'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
         },
@@ -75,7 +69,6 @@ export const categoryApi = createApi({
       invalidatesTags: ['Category'],
     }),
     addCategoryChild: builder.mutation({
-
       query: (categoryChild) => ({
         url: '/v1/product/category/',
         method: 'POST',
@@ -118,7 +111,7 @@ export const {
   useCategoriesQuery,
   useCategoryItemDetailsQuery,
   useCategoryItemChildDetailsQuery,
-  useCategoryItemChildrenDetails,
+  useCategoryItemChildrenDetailsQuery,
   useAddCategoryMutation,
   useAddCategoryChildMutation,
   useUpdateCategoryMutation,

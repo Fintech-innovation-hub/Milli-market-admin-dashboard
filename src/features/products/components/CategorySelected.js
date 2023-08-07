@@ -1,103 +1,134 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
-  useCategoriesQuery,
+
   useCategoryItemChildDetailsQuery,
   useCategoryItemChildrenDetailsQuery,
   useCategoryItemDetailsQuery,
 } from "../../../services/categoryApi";
-import { useParams } from "react-router-dom";
+const CategorySelected = ({
+  dataSelect,
+  isSuccessSelect,
+  setCtgId,
+  setParentCtgName1,
+  setParentCtgName2,
+  setParentCtgName3,
+  setParentCtgName4
+}) => {
 
-const CategorySelected = ({ dataSelect, isSuccessSelect, setCtg }) => {
-
-  const [selectId, setSelectId] = useState(
-    isSuccessSelect && dataSelect[0]?.id
-  );
   const [showChildCtg, setShowChildCtg] = useState(false);
   const [showChildItemCtg, setShowChildItemCtg] = useState(false);
+  const [showChildrenItemCtg, setShowChildrenItemCtg] = useState(false);
+  const [selectId, setSelectId] = useState(
+    isSuccessSelect ? dataSelect[0]?.id : ""
+  );
   const { data: categoryItem, isSuccessCategoryItem } = useCategoryItemDetailsQuery(selectId);
-  const [selectChildId, setSelectChildId] = useState(isSuccessCategoryItem && categoryItem[0]?.id);
+  const [selectChildId, setSelectChildId] = useState(isSuccessCategoryItem ? categoryItem[0]?.id : "");
   const { data: categoryChildItem, isSuccessCategoryChildItem } =
     useCategoryItemChildDetailsQuery(selectChildId);
 
   const [selectChildChildId, setSelectChildChildId] = useState(isSuccessCategoryChildItem && categoryChildItem[0]?.id);
-
+  const { data: categoryChildrenItem } = useCategoryItemChildrenDetailsQuery(selectChildChildId)
+  const optRef=useRef()
 
   return (
     <div className="">
       <select
+        // onChange={(value, actionMeta) => console.log(actionMeta.name)}
         onChange={(e) => {
+          
           if (e.target.value) {
             setSelectId(e.target.value);
+            setCtgId(e.target.value)
             setShowChildCtg(true);
+            setParentCtgName1(e.target.selectedOptions[0].label); // or event.target.options[event.target.selectedIndex].text;
+
+
           }
         }}
-        className="w-full border-2 border-inherit p-2 text-base outline-0"
-        placeholder="Выбрать категорию"
+        value={"Choose category"}
+        className="w-full border-2 border-inherit p-2 text-base outline-0 cursor-pointer"
+        placeholder="Choose Category"
         data-te-select-init
         data-te-select-visible-options="3"
+        name="category"
       >
+        <option ref={optRef} value="Choose Category">
+          Choose Category
+        </option>
         {isSuccessSelect &&
           dataSelect.map((item) => (
-            <option key={item.id} value={item.id}>
+            <option key={item.id} label={item.title.title_ln} name="hahahha" value={item.id}>
               {item.title.title_ln}
             </option>
           ))}
       </select>
-      {showChildCtg && categoryItem.data && (
+      {
+        showChildCtg && categoryItem.data && (
+          <select
+            onChange={(e) => {
+              setCtgId(e.target.value)
+              setSelectChildId(e.target.value);
+              setShowChildItemCtg(true)
+              setParentCtgName2(e.target.selectedOptions[0].label); // or event.target.options[event.target.selectedIndex].text;
+
+            }}
+            className="w-full border-2 border-inherit p-2 my-4 text-base outline-0"
+            placeholder="Выбрать категорию"
+            data-te-select-init
+            data-te-select-visible-options="3"
+          >
+            {categoryItem?.data?.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.title.title_ln}
+              </option>
+            ))}
+          </select>
+        )
+      }
+      {
+        (categoryChildItem?.data?.length > 0 && showChildItemCtg) && (
+          <select
+            onChange={(e) => {
+              setCtgId(e.target.value)
+              setSelectChildChildId(e.target.value);
+              setShowChildrenItemCtg(true)
+              setParentCtgName3(e.target.selectedOptions[0].label); // or event.target.options[event.target.selectedIndex].text;
+
+            }}
+            className="w-full border-2 border-inherit p-2 my-4 text-base outline-0"
+            placeholder="Выбрать категорию"
+            data-te-select-init
+            data-te-select-visible-options="3"
+          >
+            {categoryChildItem?.data?.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.title.title_ln}
+              </option>
+            ))}
+          </select>
+        )
+      }
+      {/* {(categoryChildrenItem?.data?.length > 0 && showChildrenItemCtg) && (
         <select
           onChange={(e) => {
-            setSelectChildId(e.target.value);
-            setShowChildItemCtg(true)
-            setCtg(e.target.value)
+            console.log(e.target.value);
+            setCtgId(e.target.value)
+            setParentCtgName4(e.target.selectedOptions[0].label); // or event.target.options[event.target.selectedIndex].text;
+
           }}
           className="w-full border-2 border-inherit p-2 my-4 text-base outline-0"
           placeholder="Выбрать категорию"
           data-te-select-init
           data-te-select-visible-options="3"
         >
-          {categoryItem?.data?.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.title.title_ln}
-            </option>
-          ))}
-        </select>
-      )}
-      {showChildItemCtg && categoryChildItem?.data?.length > 0 && (
-        <select
-          onChange={(e) => {
-            setSelectChildChildId(e.target.value);
-            setCtg(e.target.value)
-          }}
-          className="w-full border-2 border-inherit p-2 my-4 text-base outline-0"
-          placeholder="Выбрать категорию"
-          data-te-select-init
-          data-te-select-visible-options="3"
-        >
-          {categoryChildItem?.data?.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.title.title_ln}
-            </option>
-          ))}
-        </select>
-      )}
-      {/* { childrenCategory?.data?.length > 0 && (
-        <select
-          onChange={(e) => {
-            console.log()(e.target.value);
-          }}
-          className="w-full border-2 border-inherit p-2 my-4 text-base outline-0"
-          placeholder="Выбрать категорию"
-          data-te-select-init
-          data-te-select-visible-options="3"
-        >
-          {categoryChildItem?.data?.map((item) => (
+          {categoryChildrenItem?.data?.map((item) => (
             <option key={item.id} value={item.id}>
               {item.title.title_ln}
             </option>
           ))}
         </select>
       )} */}
-    </div>
+    </div >
   );
 };
 

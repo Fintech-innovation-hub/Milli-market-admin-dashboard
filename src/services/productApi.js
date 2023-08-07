@@ -18,6 +18,15 @@ export const productApi = createApi({
       }),
       providesTags: ['Product'],
     }),
+    productItem:builder.query({
+      query: (productId) => ({
+        url: `/v1/product/${productId}/items/`,
+        headers: {
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
+        }
+      }),
+      providesTags: ['Product'],
+    }),
     addProduct: builder.mutation({
       query: product => ({
         url: '/v1/product/',
@@ -35,6 +44,7 @@ export const productApi = createApi({
 })
 export const {
   useProductsQuery,
+  useProductItemQuery,
   // useCategoryItemDetailsQuery,
   useAddProductMutation,
   // useAddCategoryChildMutation,

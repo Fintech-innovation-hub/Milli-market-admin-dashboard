@@ -1,7 +1,7 @@
 // All components mapping with path for internal routes
 
 import { lazy } from 'react'
-
+const AddProductSku=lazy(()=>import('../pages/protected/AddProductSku'))
 const Dashboard = lazy(() => import('../pages/protected/Dashboard'))
 const Page404 = lazy(() => import('../pages/protected/404'))
 const Welcome = lazy(() => import('../pages/protected/Welcome'))
@@ -16,9 +16,6 @@ const Team = lazy(() => import('../pages/protected/Team'))
 const Transactions = lazy(() => import('../pages/protected/Transactions'))
 const Bills = lazy(() => import('../pages/protected/Bills'))
 const ProfileSettings = lazy(() => import('../pages/protected/ProfileSettings'))
-const GettingStarted = lazy(() => import('../pages/GettingStarted'))
-const DocFeatures = lazy(() => import('../pages/DocFeatures'))
-const DocComponents = lazy(() => import('../pages/DocComponents'))
 const AddProducts = lazy(() => import('../pages/protected/CreateProduct'))
 
 
@@ -42,6 +39,11 @@ const routes = [
   {
     path: '/products/add',
     component: AddProducts,
+  },
+  // /app/products/add
+  {
+    path: '/product/:id/sku',
+    component: AddProductSku,
   },
   // {
   //   path: '/products/:productId',

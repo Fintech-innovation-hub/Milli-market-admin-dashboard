@@ -8,7 +8,6 @@ import axios from 'axios'
 
 function Login() {
     const navigate = useNavigate()
-
     const INITIAL_LOGIN_OBJ = {
         password: "",
         phone_number: ""
@@ -28,16 +27,7 @@ function Login() {
                 navigate('/app/dashboard')
 
             })
-        // setErrorMessage("")
-
-        // if(loginObj.tel.trim() === "")return setErrorMessage("Tel  is required! (use any value)")
-        // if(loginObj.password.trim() === "")return setErrorMessage("Password is required! (use any value)")
-        // else{
-        //     setLoading(true)
-        //     // Call API to check user credentials and save token in localstorage
-        //     localStorage.setItem("token", "DumyTokenHere")
-        //     setLoading(false)
-        // }
+            .catch(err=>setErrorMessage('tel yoki parol xato!'))
     }
 
     const updateFormValue = ({ updateType, value }) => {
@@ -58,9 +48,9 @@ function Login() {
 
                             <div className="mb-4">
 
-                                <InputText type="tel" defaultValue={loginObj.tel} updateType="phone_number" containerStyle="mt-4" labelTitle="Phone number" updateFormValue={updateFormValue} />
+                                <InputText type="tel" defaultValue={loginObj.phone_number} updateType="phone_number" containerStyle="mt-4" labelTitle="Phone number" updateFormValue={updateFormValue} />
 
-                                <InputText defaultValue={loginObj.password} type="password" updateType="password" containerStyle="mt-4" labelTitle="Password" updateFormValue={updateFormValue} />
+                                <InputText  defaultValue={loginObj.password} type="password" updateType="password" containerStyle="mt-4" labelTitle="Password" updateFormValue={updateFormValue} />
 
                             </div>
 

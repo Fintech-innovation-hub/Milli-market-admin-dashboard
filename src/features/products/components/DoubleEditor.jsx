@@ -14,7 +14,13 @@ const config = {
   ],
 };
 
-const DoubleEditor = ({ initialValue, getValue, textLabel }) => {
+const DoubleEditor = ({ 
+  initialValueOne,
+  initialValueTwo,
+   textLabel,
+   setDessOne,
+   setDessTwo,
+   }) => {
   const editor = useRef(null);
   const [deleteAttr, setDeleteAttr] = useState(true);
   const [deleteAttr2, setDeleteAttr2] = useState(true);
@@ -25,11 +31,13 @@ const DoubleEditor = ({ initialValue, getValue, textLabel }) => {
         <div className="">
           <JoditEditor
             ref={editor}
-            value={initialValue}
+            value={initialValueOne}
             config={config}
             tabIndex={1}
             //   onBlur={(newContent) => getValue(newContent)}
-            onChange={(newContent) => getValue(newContent)}
+            onChange={(newContent) =>{
+             setDessOne(newContent)
+            }}
           />
           <button
             className="btn bg-red-500 px-4 mt-8"
@@ -46,11 +54,14 @@ const DoubleEditor = ({ initialValue, getValue, textLabel }) => {
           </h2>
           <JoditEditor
             ref={editor}
-            value={initialValue}
+            value={initialValueTwo}
             config={config}
             tabIndex={1}
-            //   onBlur={(newContent) => getValue(newContent)}
-            onChange={(newContent) => getValue(newContent)}
+            onChange={(newContent) => {
+              setDessTwo(newContent)
+
+            }
+            }
           />
           <button
             className="btn bg-red-500 px-4 mt-8"

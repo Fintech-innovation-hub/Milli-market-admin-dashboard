@@ -5,17 +5,14 @@ import { themeChange } from 'theme-change'
 import checkAuth from './app/auth';
 import initializeApp from './app/init';
 import ProtectedRoutes from './routes/protectedRoutes';
+import updateToken from './utils/updateToken';
 
 // Importing pages
 const Layout = lazy(() => import('./containers/Layout'))
 const Login = lazy(() => import('./pages/Login'))
-const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
-const Register = lazy(() => import('./pages/Register'))
-const Documentation = lazy(() => import('./pages/Documentation'))
 
 
-// Initializing different libraries
-initializeApp()
+// initializeApp()
 
 
 // Check for login and initialize axios
@@ -23,6 +20,9 @@ initializeApp()
 const token = JSON.parse(localStorage.getItem('access-token'));
 function App() {
 
+  setInterval(() => {
+    updateToken()
+  }, 240000)
   useEffect(() => {
     // 👆 daisy UI themes initialization
     themeChange(false)
@@ -34,14 +34,11 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
-          {/* <Route path="/register" element={<Register />} /> */}
-          {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
+
           <Route element={<ProtectedRoutes />}>
-            <Route path="/documentation" element={<Documentation />} />
             <Route path="/app/*" element={<Layout />} />
           </Route>
           <Route path="*" element={<Navigate to={token ? "/app/dashboard" : "/login"} replace />} />
-
         </Routes>
       </Router>
     </>
