@@ -18,7 +18,8 @@ import CurrencyDollarIcon from '@heroicons/react/24/outline/CurrencyDollarIcon'
 import InboxArrowDownIcon from '@heroicons/react/24/outline/InboxArrowDownIcon'
 import UsersIcon from '@heroicons/react/24/outline/UsersIcon'
 import KeyIcon from '@heroicons/react/24/outline/KeyIcon'
-import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon'
+import DocumentDuplicateIcon from '@heroicons/react/24/outline/DocumentDuplicateIcon';
+import { VscRequestChanges } from 'react-icons/vsc'
 
 const iconClasses = `h-6 w-6`
 const submenuIconClasses = `h-5 w-5`
@@ -39,6 +40,11 @@ const routes = [
     path: '/app/products/all', // url
     icon: <ShoppingBagIcon className={iconClasses} />, // icon component
     name: 'Products', // name that appear in Sidebar
+  },
+  {
+    path: '/app/proposals', // url
+    icon: <VscRequestChanges className={iconClasses} />, // icon component
+    name: 'Proposals', // name that appear in Sidebar
   },
   // {
   //   path: '/app/transactions', // url

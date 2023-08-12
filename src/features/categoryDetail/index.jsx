@@ -35,7 +35,7 @@ const TopSideButtons = () => {
         className="btn px-6 btn-sm normal-case btn-primary"
         onClick={() => openAddNewLeadModal()}
       >
-        Add New Category 
+        Add New Category
       </button>
     </div>
   );
@@ -77,34 +77,35 @@ function CategoryDetail() {
     <>
       <TitleCard
         title={
-          (isSuccess && category.status && category?.parent?.title_ln) ||
-          ''
+          (isSuccess && category.status && category?.parent?.title_ln) || ''
         }
         topMargin="mt-2"
         TopSideButtons={<TopSideButtons />}
       >
         {/* CategoryDetail List in table format loaded from slice after api call */}
         <div className="overflow-x-auto w-full">
-                    <table className="table w-full">
-                        <thead>
-                            <tr>
-                                <th>№</th>
-                                <th>Title uz</th>
-                                <th>Title kr </th>
-                                <th>Title ru</th>
-                                <th>Title en</th>
-                                {/* <th>Assigned To</th>
+          <table className="table w-full">
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>Title uz</th>
+
+                {/* <th>Assigned To</th>
                                 <th></th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                isSuccess && category.status && category.data.map((category, index) => {
-                                    return (
-                                        <tr  className="hover:bg-slate-400 duration-500 cursor-pointer" key={category.id}>
-                                            <td  >
-                                                {index + 1}
-                                                {/* <div className="flex items-center space-x-3">
+              </tr>
+            </thead>
+            <tbody>
+              {isSuccess &&
+                category.status &&
+                category.data.map((category, index) => {
+                  return (
+                    <tr
+                      className="hover:bg-slate-400 duration-500 cursor-pointer"
+                      key={category.id}
+                    >
+                      <td>
+                        {index + 1}
+                        {/* <div className="flex items-center space-x-3">
                                                     <div className="avatar">
                                                         <div className="mask mask-squircle w-12 h-12">
                                                             <img src={l.avatar} alt="Avatar" />
@@ -115,21 +116,22 @@ function CategoryDetail() {
                                                         <div className="text-sm opacity-50">{l.last_name}</div>
                                                     </div>
                                                 </div> */}
-                                            </td>
-                                            <td>{category.title.title_ln}</td>
-                                            {/* <td>{moment(new Date()).add(-5 * (index + 2), 'days').format("DD MMM YY")}</td> */}
-                                            {/* <td>{getDummyStatus(k)}</td> */}
-                                            <td>{category.title.title_kr}</td>
-                                            <td>{category.title.title_ru}</td>
-                                            <td>{category.title.title_en}</td>
-                                            <td><button className="btn btn-square btn-ghost" ><TrashIcon className="w-5" /></button></td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                      </td>
+                      <td>{category.title}</td>
+                      {/* <td>{moment(new Date()).add(-5 * (index + 2), 'days').format("DD MMM YY")}</td> */}
+                      {/* <td>{getDummyStatus(k)}</td> */}
+
+                      <td>
+                        <button className="btn btn-square btn-ghost">
+                          <TrashIcon className="w-5" />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+            </tbody>
+          </table>
+        </div>
       </TitleCard>
     </>
   );

@@ -18,7 +18,7 @@ export const productApi = createApi({
       }),
       providesTags: ['Product'],
     }),
-    productItem:builder.query({
+    productItem: builder.query({
       query: (productId) => ({
         url: `/v1/product/${productId}/items/`,
         headers: {
@@ -27,6 +27,20 @@ export const productApi = createApi({
       }),
       providesTags: ['Product'],
     }),
+    patchProductItem: builder.mutation({
+      query: (product) => ({
+        url: `/v1/product/${product.id}/items/`,
+        method: 'PATCH',
+        body: product.data,
+        headers: {
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
+        }
+      }),
+
+      invalidatesTags: ['Product'],
+    }),
+
+
     addProduct: builder.mutation({
       query: product => ({
         url: '/v1/product/',
@@ -39,7 +53,7 @@ export const productApi = createApi({
 
       invalidatesTags: ['Product'],
     }),
-  
+
   }),
 })
 export const {
@@ -47,6 +61,7 @@ export const {
   useProductItemQuery,
   // useCategoryItemDetailsQuery,
   useAddProductMutation,
+  usePatchProductItemMutation,
   // useAddCategoryChildMutation,
   // useUpdateCategoryMutation,
   // useDeleteCategoryMutation,

@@ -3,11 +3,11 @@ import axios from 'axios'
 import { CONFIRMATION_MODAL_CLOSE_TYPES, MODAL_CLOSE_TYPES } from '../../../utils/globalConstantUtil'
 import { deleteLead } from '../../categories/leadSlice'
 import { showNotification } from '../headerSlice'
-import {useDeleteCategoryMutation} from "../../../services/categoryApi"
+import { useDeleteCategoryMutation } from "../../../services/categoryApi"
 
 
-function ConfirmationModalBody({ extraObject, closeModal }) {
-    const [deleteCategory] =useDeleteCategoryMutation()
+function ConfirmationModalBody({ extraObject, closeModal}) {
+    const [deleteCategory] = useDeleteCategoryMutation()
 
 
     const dispatch = useDispatch()

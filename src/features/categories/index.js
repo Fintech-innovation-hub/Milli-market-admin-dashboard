@@ -8,14 +8,16 @@ import { CONFIRMATION_MODAL_CLOSE_TYPES, MODAL_BODY_TYPES } from '../../utils/gl
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon'
 import { showNotification } from '../common/headerSlice'
 import { useCategoriesQuery } from "../../services/categoryApi"
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { Dna } from 'react-loader-spinner';
+
 
 const TopSideButtons = () => {
 
     const dispatch = useDispatch()
 
     const openAddNewCategoryModal = () => {
-        dispatch(openModal({ title: "Add New Category", bodyType: MODAL_BODY_TYPES.CATEGORY_ADD_NEW}))
+        dispatch(openModal({ title: "Add New Category", bodyType: MODAL_BODY_TYPES.CATEGORY_ADD_NEW }))
     }
 
     return (
@@ -55,33 +57,42 @@ function Categories() {
     const getCategoryDetailHandler = (id) => {
         navigate(`/app/categories/${id}`)
     }
-
     return (
         <>
             <TitleCard title="Current Categories" topMargin="mt-2" TopSideButtons={<TopSideButtons />}>
-
+                {isLoading && (
+                    <div className="w-full flex pt-24 h-screen justify-center bg-slate-100 bg-opacity-30">
+                        <Dna
+                            visible={true}
+                            height="200"
+                            width="200"
+                            ariaLabel="dna-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="dna-wrapper"
+                        />
+                    </div>
+                )}
                 {/* Categories List in table format loaded from slice after api call */}
-                <div className="overflow-x-auto w-full">
-                    <table className="table w-full">
-                        <thead>
-                            <tr>
-                                <th>№</th>
-                                <th>Title uz</th>
-                                <th>Title kr </th>
-                                <th>Title ru</th>
-                                <th>Title en</th>
-                                {/* <th>Assigned To</th>
+                {isSuccess && categories.status &&
+                    <div className="overflow-x-auto w-full">
+                        <table className="table w-full">
+                            <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Title uz</th>
+
+                                    {/* <th>Assigned To</th>
                                 <th></th> */}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                isSuccess && categories.status && categories.data.map((category, index) => {
-                                    return (
-                                        <tr className="hover:bg-slate-400 duration-500 cursor-pointer" key={category.id}>
-                                            <td  >
-                                                {index + 1}
-                                                {/* <div className="flex items-center space-x-3">
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    categories.data.map((category, index) => {
+                                        return (
+                                            <tr className="hover:bg-slate-400 duration-500 cursor-pointer" key={category.id}>
+                                                <td  >
+                                                    {index + 1}
+                                                    {/* <div className="flex items-center space-x-3">
                                                     <div className="avatar">
                                                         <div className="mask mask-squircle w-12 h-12">
                                                             <img src={l.avatar} alt="Avatar" />
@@ -92,21 +103,20 @@ function Categories() {
                                                         <div className="text-sm opacity-50">{l.last_name}</div>
                                                     </div>
                                                 </div> */}
-                                            </td>
-                                            <td onClick={() => getCategoryDetailHandler(category.id)}>{category.title.title_ln}</td>
-                                            {/* <td>{moment(new Date()).add(-5 * (index + 2), 'days').format("DD MMM YY")}</td> */}
-                                            {/* <td>{getDummyStatus(k)}</td> */}
-                                            <td>{category.title.title_kr}</td>
-                                            <td>{category.title.title_ru}</td>
-                                            <td>{category.title.title_en}</td>
-                                            <td><button className="btn btn-square btn-ghost" onClick={() => deleteCurrentCategory(category.id)}><TrashIcon className="w-5" /></button></td>
-                                        </tr>
-                                    )
-                                })
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                                                </td>
+                                                <td onClick={() => getCategoryDetailHandler(category.id)}>{category.title}</td>
+                                                {/* <td>{moment(new Date()).add(-5 * (index + 2), 'days').format("DD MMM YY")}</td> */}
+                                                {/* <td>{getDummyStatus(k)}</td> */}
+
+                                                <td><button className="btn btn-square btn-ghost" onClick={() => deleteCurrentCategory(category.id)}><TrashIcon className="w-5" /></button></td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
             </TitleCard>
         </>
     )

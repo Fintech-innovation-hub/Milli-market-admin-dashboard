@@ -1,7 +1,7 @@
 // All components mapping with path for internal routes
 
 import { lazy } from 'react'
-const AddProductSku=lazy(()=>import('../pages/protected/AddProductSku'))
+const AddProductSku = lazy(() => import('../pages/protected/AddProductSku'))
 const Dashboard = lazy(() => import('../pages/protected/Dashboard'))
 const Page404 = lazy(() => import('../pages/protected/404'))
 const Welcome = lazy(() => import('../pages/protected/Welcome'))
@@ -17,6 +17,7 @@ const Transactions = lazy(() => import('../pages/protected/Transactions'))
 const Bills = lazy(() => import('../pages/protected/Bills'))
 const ProfileSettings = lazy(() => import('../pages/protected/ProfileSettings'))
 const AddProducts = lazy(() => import('../pages/protected/CreateProduct'))
+const Proposals = lazy(() => import('../pages/protected/Proposals'))
 
 
 const routes = [
@@ -40,6 +41,10 @@ const routes = [
     path: '/products/add',
     component: AddProducts,
   },
+  {
+    path: '/proposals',
+    component: Proposals,
+  },
   // /app/products/add
   {
     path: '/product/:id/sku',
@@ -53,47 +58,47 @@ const routes = [
   //   path: '/welcome', // the url
   //   component: Welcome, // view rendered
   // },
-// {
-//   path: '/settings-team',
-//   component: Team,
-// },
-// {
-//   path: '/calendar',
-//   component: Calendar,
-// },
-// {
-//   path: '/transactions',
-//   component: Transactions,
-// },
-// {
-//   path: '/settings-profile',
-//   component: ProfileSettings,
-// },
-// {
-//   path: '/settings-billing',
-//   component: Bills,
-// },
-// {
-//   path: '/getting-started',
-//   component: GettingStarted,
-// },
-// {
-//   path: '/features',
-//   component: DocFeatures,
-// },
-// {
-//   path: '/components',
-//   component: DocComponents,
-// },
-// {
-//   path: '/integration',
-//   component: Integration,
-// },
-// {
-//   path: '/charts',
-//   component: Charts,
-// },
-{
+  // {
+  //   path: '/settings-team',
+  //   component: Team,
+  // },
+  // {
+  //   path: '/calendar',
+  //   component: Calendar,
+  // },
+  // {
+  //   path: '/transactions',
+  //   component: Transactions,
+  // },
+  // {
+  //   path: '/settings-profile',
+  //   component: ProfileSettings,
+  // },
+  // {
+  //   path: '/settings-billing',
+  //   component: Bills,
+  // },
+  // {
+  //   path: '/getting-started',
+  //   component: GettingStarted,
+  // },
+  // {
+  //   path: '/features',
+  //   component: DocFeatures,
+  // },
+  // {
+  //   path: '/components',
+  //   component: DocComponents,
+  // },
+  // {
+  //   path: '/integration',
+  //   component: Integration,
+  // },
+  // {
+  //   path: '/charts',
+  //   component: Charts,
+  // },
+  {
     path: '/404',
     component: Page404,
   },

@@ -1,26 +1,23 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "../constants";
 
-export const charactericApi = createApi({
-  reducerPath: "charactericApi",
+export const ikpuApi = createApi({
+  reducerPath: "ikpuApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}`,
   }),
-  tagTypes: ["Characteristics"],
+  tagTypes: ["Ikpu"],
   endpoints: (builder) => ({
-    characteristics: builder.query({
+    ikpus: builder.query({
       query: () => ({
-        url: "/v1/product/character/items",
+        url: "/v1/product/brand/",
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`,
         },
       }),
-
-      providesTags: ["Characteristics"],
+      providesTags: ["Ikpu"],
     }),
   }),
 });
 
-// 
-
-export const { useCharacteristicsQuery, useCharacterItemDetailsQuery } = charactericApi;
+export const { useIkpusQuery } = ikpuApi;

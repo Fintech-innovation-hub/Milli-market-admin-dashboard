@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import AddProductsSku from '../../features/addProductsSku';
 import { setPageTitle } from '../../features/common/headerSlice';
+import Proposals from '../../features/proposals';
 
 function InternalPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setPageTitle({ title: 'Edit Product' }));
+    dispatch(setPageTitle({ title: 'Proposals' }));
   }, []);
 
-  return <AddProductsSku />;
+  return <Proposals />;
 }
 
 export default InternalPage;

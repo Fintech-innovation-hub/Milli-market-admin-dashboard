@@ -11,8 +11,7 @@ function ProductCategorySelect({ setCtgId }) {
 
   const { data, isSuccess } = useCategoriesQuery();
   const addCategory = () => {
-    if(parentCtgName1)
-    setShowCategory(false);
+    if (parentCtgName1) setShowCategory(false);
   };
   const changeCategory = () => {
     setShowCategory(true);
@@ -28,7 +27,8 @@ function ProductCategorySelect({ setCtgId }) {
       {!showCategory && (
         <div className="flex items-center">
           <h3>
-            {parentCtgName1} / {parentCtgName2} / {parentCtgName3} / {parentCtgName4}
+            {parentCtgName1} / {parentCtgName2} /{' '}
+            {parentCtgName3 && `${parentCtgName3} /`} {parentCtgName4}
           </h3>
         </div>
       )}

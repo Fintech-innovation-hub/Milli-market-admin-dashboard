@@ -1,35 +1,24 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useCharacterItemDetailsQuery } from '../../../../services/characteristicApi';
-import { addNewCharacteristic } from '../../productSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addChosenValuesToCharacter } from '../../productSlice';
 import CharacterItemsList from './CharacterItemsList';
 
 function SelectCharacterItemsModalBody({ closeModal, extraObject, size }) {
-  const [items, setItems] = useState({});
+  const allCharItems = useSelector((state) => state.character.allCharItems);
   const dispatch = useDispatch();
-  const {
-    data: characterItems,
-    isSuccess,
-    isLoading,
-  } = useCharacterItemDetailsQuery(extraObject?.charId);
-
   const chooseCharHandler = () => {
-    console.log(items)
-    dispatch(addNewCharacteristic(items))
-    closeModal()
+    const filteredCharItems = allCharItems.filter((item) => item.checked);
+    dispatch(
+      addChosenValuesToCharacter({
+        id: extraObject.charId,
+        values: filteredCharItems,
+      })
+    );
+    closeModal();
   };
 
   return (
     <div className=" p-3 ">
-      {isLoading && <h2 className="text-center font-bold">Loading...</h2>}
-      {isSuccess && (
-        <CharacterItemsList
-          setItems={setItems}
-          charId={extraObject.charId}
-          characterItems={characterItems?.data}
-        />
-      )}
-
+      <CharacterItemsList />
       <div className="w-full p-3 flex items-center justify-between ">
         <button onClick={() => closeModal()} className=" text-black">
           Close

@@ -10,13 +10,17 @@ import { brandApi } from '../services/brandApi'
 import { charactericApi } from '../services/characteristicApi'
 import { sellerApi } from '../services/sellerApi'
 import { modelApi } from '../services/modelApi'
+import { proposalApi } from "../services/proposalApi"
 import ProductReducer from '../features/products/productSlice'
+import CharacterReducer from "../features/products/components/CharacteristicsSection/characterSlice"
+
 
 const combinedReducer = {
   header: headerSlice,
   rightDrawer: rightDrawerSlice,
   modal: modalSlice,
-  product:ProductReducer,
+  product: ProductReducer,
+  character:CharacterReducer,
   // category: leadsSlice,
   [categoryApi.reducerPath]: categoryApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
@@ -25,6 +29,7 @@ const combinedReducer = {
   [charactericApi.reducerPath]: charactericApi.reducer,
   [sellerApi.reducerPath]: sellerApi.reducer,
   [modelApi.reducerPath]: modelApi.reducer,
+  [proposalApi.reducerPath]: proposalApi.reducer,
 }
 
 export default configureStore({
@@ -32,5 +37,5 @@ export default configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(categoryApi.middleware, productApi.middleware,
       countryApi.middleware, brandApi.middleware, sellerApi.middleware,
-      charactericApi.middleware,modelApi.middleware),
+      charactericApi.middleware, modelApi.middleware, proposalApi.middleware),
 })

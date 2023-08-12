@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
 
   useCategoryItemChildDetailsQuery,
@@ -28,14 +28,14 @@ const CategorySelected = ({
 
   const [selectChildChildId, setSelectChildChildId] = useState(isSuccessCategoryChildItem && categoryChildItem[0]?.id);
   const { data: categoryChildrenItem } = useCategoryItemChildrenDetailsQuery(selectChildChildId)
-  const optRef=useRef()
+
 
   return (
     <div className="">
       <select
         // onChange={(value, actionMeta) => console.log(actionMeta.name)}
         onChange={(e) => {
-          
+
           if (e.target.value) {
             setSelectId(e.target.value);
             setCtgId(e.target.value)
@@ -45,20 +45,19 @@ const CategorySelected = ({
 
           }
         }}
-        value={"Choose category"}
-        className="w-full border-2 border-inherit p-2 text-base outline-0 cursor-pointer"
+        className="w-80  border-2 border-inherit p-2 text-base outline-0 cursor-pointer"
         placeholder="Choose Category"
         data-te-select-init
         data-te-select-visible-options="3"
         name="category"
       >
-        <option ref={optRef} value="Choose Category">
+        <option value="">
           Choose Category
         </option>
         {isSuccessSelect &&
           dataSelect.map((item) => (
             <option key={item.id} label={item.title.title_ln} name="hahahha" value={item.id}>
-              {item.title.title_ln}
+              {item.title}
             </option>
           ))}
       </select>
@@ -79,7 +78,7 @@ const CategorySelected = ({
           >
             {categoryItem?.data?.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.title.title_ln}
+                {item.title}
               </option>
             ))}
           </select>
@@ -102,7 +101,7 @@ const CategorySelected = ({
           >
             {categoryChildItem?.data?.map((item) => (
               <option key={item.id} value={item.id}>
-                {item.title.title_ln}
+                {item.title}
               </option>
             ))}
           </select>

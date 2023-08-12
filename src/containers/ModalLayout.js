@@ -34,7 +34,7 @@ function ModalLayout(){
                 {
                     {
                              [MODAL_BODY_TYPES.CATEGORY_ADD_NEW] : <AddCategoryModalBody closeModal={close} size={size} extraObject={extraObject}/>,
-                             [MODAL_BODY_TYPES.PRODUCT_ADD_NEW] : <AddProductModalBody size={size} closeModal={close} extraObject={extraObject}/>,
+                             [MODAL_BODY_TYPES.PRODUCT_ADD_NEW] : <AddProductModalBody size={size}  closeModal={close} extraObject={extraObject}/>,
                              [MODAL_BODY_TYPES.SELECT_CHARACTER_ITEMS] : <SelectCharacterItemsModalBody size={size}  closeModal={close} extraObject={extraObject}/>,
                              [MODAL_BODY_TYPES.CONFIRMATION] : <ConfirmationModalBody extraObject={extraObject} closeModal={close}/>,
                              [MODAL_BODY_TYPES.DEFAULT] : <div></div>

@@ -20,6 +20,7 @@ import { useModelsQuery } from '../../../services/modelApi';
 import axios from 'axios';
 import CharacterSection from './CharacteristicsSection/CharacterSection';
 import AddAttributeSection from './AddAttributeSection';
+import { clearCharacters, filterCharacteristicValues } from '../productSlice';
 
 function AddProductModalBody({ closeModal, extraObject, size }) {
   const [disabledBtn, setDisabledBtn] = useState(true);
@@ -52,10 +53,20 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
   const { data: characteristics, isSuccess: isSuccessCharacteristics } =
     useCharacteristicsQuery();
   const navigate = useNavigate();
-  // const [addProduct, result] = useAddProductMutation();
-  const allCharacters = useSelector((state) => state.product.characteristics);
-
+  const dispatch = useDispatch();
+  const [addProduct, result] = useAddProductMutation();
+  const allCharacters = useSelector(
+    (state) => state.product.chosenCharacteristics
+  );
   const saveNewProduct = (btnName) => {
+    const chosenAllCharacters = allCharacters
+      .filter((item) => item.chosenValues.length > 0)
+      .map((item) => {
+        return {
+          id: item.charId,
+          values: item.chosenValues.map((elem) => elem.id),
+        };
+      });
     const data = {
       category: ctgId,
       seller: seller,
@@ -72,7 +83,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
       sertificate_ru: sertificateRu,
       attributes_ln: attributesLn,
       attributes_ru: attributesRu,
-      characteristics: allCharacters,
+      characteristics: chosenAllCharacters,
     };
     const headers = {
       Authorization: `Bearer ${JSON.parse(
@@ -80,33 +91,35 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
       )}`,
     };
 
-    // addProduct(newProduct);
+    addProduct(data);
     axios
       .post('https://admin.milli.uz/api/v1/product/', data, {
         headers: headers,
       })
       .then((res) => {
         console.log(res.data.data);
+        dispatch(clearCharacters());
         if (btnName === 'save') navigate('/app/products/all');
-        if (btnName === 'next') navigate(`/app/product/${res?.data?.data?.id}/sku`);
+        if (btnName === 'next')
+          navigate(`/app/product/${res?.data?.data?.id}/sku`);
       })
       .catch((err) => {
         console.log(err);
       });
-      // if (btnName === 'save') navigate('/app/products/all');
-      // if (btnName === 'next') navigate(`/app/product/5/sku`);
+  
   };
   useEffect(() => {
     if (ctgId && titleLn && titleRu && brand && model) {
       setDisabledBtn(false);
     } else setDisabledBtn(true);
-  }, [ctgId, titleLn, titleRu, brand, model]);
+    filterCharacteristicValues();
+  }, [ctgId, titleLn, titleRu, brand, model, allCharacters]);
 
   return (
     <div className="bg-white rounded-xl py-2 px-8 ">
       <section className="grid grid-cols-1 gap-x-5 gap-y-2 w-full">
         <div className="flex items-center justify-between">
-          <Steps />
+          <Steps title={'first'} />
           <ProductFormTop
             disabledBtn={disabledBtn}
             closeModal={closeModal}
@@ -129,7 +142,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
                 onChange={(e) => setTitleLn(e.target.value)}
                 placeholder="title ln"
                 name="titleUz"
-                className="border border-solid border-gray-400 rounded p-2 outline-none  input-bordered w-full  "
+                className=" rounded p-2 outline-none  product-input "
               />
             </div>
             <div className={`form-control w-full mt-3`}>
@@ -145,7 +158,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
                 onChange={(e) => setTitleRu(e.target.value)}
                 placeholder="title ru"
                 name="titleRu"
-                className="border border-solid border-gray-400 rounded p-2 outline-none  input-bordered w-full  "
+                className=" product-input rounded p-2 outline-none  input-bordered w-full  "
               />
             </div>
           </div>
