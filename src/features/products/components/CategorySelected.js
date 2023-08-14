@@ -30,6 +30,7 @@ const CategorySelected = ({
   const { data: categoryChildrenItem } = useCategoryItemChildrenDetailsQuery(selectChildChildId)
 
 
+
   return (
     <div className="">
       <select
@@ -41,11 +42,9 @@ const CategorySelected = ({
             setCtgId(e.target.value)
             setShowChildCtg(true);
             setParentCtgName1(e.target.selectedOptions[0].label); // or event.target.options[event.target.selectedIndex].text;
-
-
           }
         }}
-        className="w-80  border-2 border-inherit p-2 text-base outline-0 cursor-pointer"
+        className="w-full  border-2 border-inherit p-2 text-base outline-0 cursor-pointer"
         placeholder="Choose Category"
         data-te-select-init
         data-te-select-visible-options="3"

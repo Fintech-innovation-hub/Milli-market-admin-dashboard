@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { baseUrl } from '../../constants';
 import { usePatchProductItemMutation } from '../../services/productApi';
 import Steps from '../products/components/Steps';
+import ProductFormTop from '../products/components/ProductFormTop';
 
 function AddProductsSku() {
   const [updateProduct, { isLoading }] = usePatchProductItemMutation();
@@ -75,20 +76,8 @@ function AddProductsSku() {
   };
   return (
     <div>
-      <Steps title={'second'} />
-      <section className="bg-white relative flex flex-col items-start rounded-xl w-full py-6  px-4 mb-5 ">
-        <button
-          onClick={saveSkuDatas}
-          className="btn btn-primary px-6 absolute right-4 top-4 cursor-pointer "
-        >
-          Save
-        </button>
-        <button
-          className="btn btn-primary px-6 absolute right-32 top-4 cursor-pointer "
-          onClick={() => navigate(-1)}
-        >
-          Back
-        </button>
+      <section className="bg-white relative flex flex-col items-start rounded-xl w-full py-2  px-4 mb-5 ">
+      <ProductFormTop title='second'/>
         <h1 className="text-2xl font-bolder mb-4">Формирование SKU</h1>
         <p className="w-[800px]">
           SKU — от английского Stock Keeping Unit (идентификатор товарной

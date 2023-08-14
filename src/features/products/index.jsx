@@ -49,7 +49,6 @@ function Products() {
         topMargin="mt-2"
         TopSideButtons={<TopSideButtons />}
       >
-       
         <div className="overflow-x-auto w-full">
           {isLoading && (
             <div className="w-full flex pt-24 h-screen justify-center bg-slate-100 bg-opacity-30">

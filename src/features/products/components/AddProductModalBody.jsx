@@ -21,8 +21,13 @@ import axios from 'axios';
 import CharacterSection from './CharacteristicsSection/CharacterSection';
 import AddAttributeSection from './AddAttributeSection';
 import { clearCharacters, filterCharacteristicValues } from '../productSlice';
+import CountrySelect from './CountrySelect/CountrySelect';
+import BrandSelect from './BrandSelect/BrandSelect';
 
 function AddProductModalBody({ closeModal, extraObject, size }) {
+  const [disabledCountry, setDisabledCountry] = useState(false);
+  const [disabledBrand, setDisabledBrand] = useState(false);
+  const [titleTopBtn, setTitleTopBtn] = useState('first');
   const [disabledBtn, setDisabledBtn] = useState(true);
   const [ctgId, setCtgId] = useState('');
   const [titleLn, setTitleLn] = useState('');
@@ -102,11 +107,11 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
         if (btnName === 'save') navigate('/app/products/all');
         if (btnName === 'next')
           navigate(`/app/product/${res?.data?.data?.id}/sku`);
+        setTitleTopBtn('second');
       })
       .catch((err) => {
         console.log(err);
       });
-  
   };
   useEffect(() => {
     if (ctgId && titleLn && titleRu && brand && model) {
@@ -116,16 +121,16 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
   }, [ctgId, titleLn, titleRu, brand, model, allCharacters]);
 
   return (
-    <div className="bg-white rounded-xl py-2 px-8 ">
+    <div className="bg-white rounded-xl py-2 px-4 ">
+      <ProductFormTop
+        title={titleTopBtn}
+        setTitleTopBtn={setTitleTopBtn}
+        disabledBtn={disabledBtn}
+        closeModal={closeModal}
+        saveNewProduct={saveNewProduct}
+      />
+
       <section className="grid grid-cols-1 gap-x-5 gap-y-2 w-full">
-        <div className="flex items-center justify-between">
-          <Steps title={'first'} />
-          <ProductFormTop
-            disabledBtn={disabledBtn}
-            closeModal={closeModal}
-            saveNewProduct={saveNewProduct}
-          />
-        </div>
         <ProductCategorySelect setCtgId={setCtgId} />
         <div className="flex flex-col w-full gap-y-5 ">
           <div className="w-1/2">
@@ -164,28 +169,6 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
           </div>
           <div className="w-1/2">
             <div className="">
-              <h2 className="text-base my-3 font-semibold uppercase">
-                Country
-              </h2>
-              <select
-                value={country}
-                className="w-full border-2 border-inherit p-2 text-base outline-0 cursor-pointer"
-                onChange={(e) => {
-                  setCountry(Number(e.target.value));
-                }}
-                name="country"
-              >
-                <option disabled value="">
-                  Choose country
-                </option>
-                {countries?.data?.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="">
               <h2 className="text-base my-3 font-semibold uppercase">Seller</h2>
               <select
                 value={seller}
@@ -206,28 +189,23 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
                 ))}
               </select>
             </div>
-            <div className="">
-              <h2 className="text-base my-3 font-semibold uppercase">Бранд</h2>
-              <select
-                name="brand"
-                value={brand}
-                className="w-full border-2 border-inherit p-2 text-base outline-0 cursor-pointer"
-                onChange={(e) => {
-                  setBrand(e.target.value);
-                  setShowModel(true);
-                }}
-              >
-                <option value="" disabled>
-                  Choose brand
-                </option>
-                {isSuccessBrand &&
-                  brands?.data?.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.title}
-                    </option>
-                  ))}
-              </select>
-            </div>
+            <CountrySelect
+              disabledCountry={disabledCountry}
+              setDisabledCountry={setDisabledCountry}
+              country={country}
+              setCountry={setCountry}
+              countries={countries}
+            />
+
+            <BrandSelect
+            disabledBrand={disabledBrand}
+            setDisabledBrand={setDisabledBrand}
+              brand={brand}
+              setBrand={setBrand}
+              setShowModel={setShowModel}
+              brands={isSuccessBrand ? brands.data : []}
+            />
+
             {showModel && (
               <div className="">
                 <h2 className="text-base my-3 font-semibold uppercase">
@@ -239,7 +217,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
                   onChange={(e) => {
                     setModel(e.target.value);
                   }}
-                  className="w-full border-2 border-inherit p-2 text-base outline-0"
+                  className="w-full border-2 border-inherit p-2 text-base outline-0 cursor-pointer"
                   placeholder="Choose model"
                   data-te-select-init
                   data-te-select-visible-options="3"
