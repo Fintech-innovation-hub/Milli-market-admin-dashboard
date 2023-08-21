@@ -10,16 +10,19 @@ import Steps from '../products/components/Steps';
 import ProductFormTop from '../products/components/ProductFormTop';
 
 function AddProductsSku() {
+  const [disabledSku, setDisabledSku] = useState(false);
   const [updateProduct, { isLoading }] = usePatchProductItemMutation();
+  const [itemsDatas, setItemsDatas] = useState([]);
   const navigate = useNavigate();
-  const [inputSku, setInputSku] = useState('');
-  const [errorSku, setErrorSku] = useState('');
   const { id } = useParams();
   const { data: product, isSuccess } = useProductItemQuery(id);
+  const [inputSku, setInputSku] = useState(product?.data?.sku);
+  const [errorSku, setErrorSku] = useState('');
   const addSkuHandler = (e) => {
     setInputSku(e.target.value);
   };
 
+  console.log(product)
   useEffect(() => {
     if (inputSku) {
       axios
@@ -34,50 +37,27 @@ function AddProductsSku() {
           }
         )
         .then((res) => {
-          if (res.data.exists) setErrorSku('Sizda bunday SKU mavjud');
-          else setErrorSku('');
+          if (res.data.exists) setDisabledSku(true);
+          else setDisabledSku(false);
         });
     }
   }, [inputSku]);
-  const saveSkuDatas = () => {
+
+  const saveNewProduct = () => {
     const newdata = {
-      sku: 'dasa',
-      items: [
-        {
-          id: 13,
-          ikpu: 1,
-          price: 10,
-          barcode: 1,
-        },
-        {
-          id: 12,
-          ikpu: 2,
-          price: 3,
-          barcode: 2,
-        },
-        {
-          id: 11,
-          ikpu: 3,
-          price: 1000,
-          barcode: 1,
-        },
-        {
-          id: 10,
-          ikpu: 4,
-          price: 3,
-          barcode: 2,
-        },
-      ],
+      sku: product?.data?.sku || inputSku,
+      items: itemsDatas,
     };
     if (inputSku) {
       updateProduct({ id: id, data: newdata });
       navigate('/app/products/all');
     }
   };
+  
   return (
     <div>
       <section className="bg-white relative flex flex-col items-start rounded-xl w-full py-2  px-4 mb-5 ">
-      <ProductFormTop title='second'/>
+        <ProductFormTop id={id} saveNewProduct={saveNewProduct} title="second" />
         <h1 className="text-2xl font-bolder mb-4">Формирование SKU</h1>
         <p className="w-[800px]">
           SKU — от английского Stock Keeping Unit (идентификатор товарной
@@ -100,10 +80,12 @@ function AddProductsSku() {
             SKU of the product (max 7 letter)
           </label>
           <input
+            disabled={disabledSku}
             value={inputSku}
+            defaultValue={product?.data?.sku}
             onChange={addSkuHandler}
             type="text"
-            className="w-full border-slate-400 uppercase border rounded p-2 outline-none"
+            className={`w-full border-slate-400 ${disabledSku && 'bg-gray-300'} uppercase border rounded p-2 outline-none`}
             maxLength={'7'}
             placeholder="SKU"
           />
@@ -112,7 +94,11 @@ function AddProductsSku() {
       </section>
       <section>
         {isSuccess && inputSku && (
-          <ProductTable inputSku={inputSku} product={product?.data} />
+          <ProductTable
+            setItemsDatas={setItemsDatas}
+            inputSku={inputSku}
+            product={product?.data}
+          />
         )}
       </section>
     </div>

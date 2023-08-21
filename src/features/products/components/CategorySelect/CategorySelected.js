@@ -4,7 +4,7 @@ import {
   useCategoryItemChildDetailsQuery,
   useCategoryItemChildrenDetailsQuery,
   useCategoryItemDetailsQuery,
-} from "../../../services/categoryApi";
+} from "../../../../services/categoryApi";
 const CategorySelected = ({
   dataSelect,
   isSuccessSelect,
@@ -32,7 +32,7 @@ const CategorySelected = ({
 
 
   return (
-    <div className="">
+    <div className="w-1/2 ">
       <select
         // onChange={(value, actionMeta) => console.log(actionMeta.name)}
         onChange={(e) => {

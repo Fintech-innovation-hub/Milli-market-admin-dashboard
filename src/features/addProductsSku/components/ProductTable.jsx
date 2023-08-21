@@ -1,8 +1,22 @@
 import React from 'react';
+import { useEffect } from 'react';
+import { useState } from 'react';
 import SkuTableRow from './SkuTableRow';
 
-function ProductTable({ product, inputSku }) {
-  console.log(product);
+function ProductTable({ product, inputSku, setItemsDatas, itemsDatas }) {
+  const [items, setItems] = useState(product?.items);
+
+  useEffect(() => {
+    const datas=items.map(item=>{
+      return {
+        ikpu:item.ikpu,
+        id:item.id,
+        barcode:item.barcode || 3,
+        price:item.price
+      }
+    })
+    setItemsDatas(datas);
+  }, [items]);
   return (
     <table className="product-table">
       <thead className="">
@@ -16,8 +30,10 @@ function ProductTable({ product, inputSku }) {
         </tr>
       </thead>
       <tbody className="overflow-scroll">
-        {product?.items?.map((item, index) => (
+        {items?.map((item, index, self) => (
           <SkuTableRow
+            self={self}
+            setItems={setItems}
             inputSku={inputSku}
             index={index}
             key={item.id}

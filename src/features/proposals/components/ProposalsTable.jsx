@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { addProposals } from '../proposalSlice';
 import ProposalsTableRow from './ProposalsTableRow';
 
 function ProposalsTable({ proposals }) {
+  const dispatch = useDispatch();
+  const proposalsData = useSelector((state) => state.proposal.proposals);
+  const status = useSelector((state) => state.proposal.status);
+  useEffect(() => {
+    if (status === 'all') {
+      dispatch(addProposals(proposals));
+    } else {
+      const filtered = proposals?.filter((item) => item.status === status);
+      dispatch(addProposals(filtered));
+    }
+  }, [status]);
+  
+
   return (
     <table className="bg-blue-400 w-full product-table">
       <thead>
@@ -18,8 +33,8 @@ function ProposalsTable({ proposals }) {
         </tr>
       </thead>
       <tbody>
-        {proposals?.map((proposal, index) => (
-          <ProposalsTableRow key={proposal.id} index={index} {...proposal} />
+        {proposalsData?.map((proposal, index) => (
+          <ProposalsTableRow key={proposal.id} index={index} proposal={proposal} {...proposal} />
         ))}
       </tbody>
     </table>

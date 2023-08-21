@@ -7,6 +7,7 @@ function InternalPage(){
 
     const dispatch = useDispatch()
 
+    console.log("error 404")
     useEffect(() => {
         dispatch(setPageTitle({ title : ""}))
       }, [])

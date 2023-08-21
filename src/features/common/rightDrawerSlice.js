@@ -7,15 +7,17 @@ export const rightDrawerSlice = createSlice({
         isOpen : false,   // right drawer state management for opening closing
         bodyType : "",   // right drawer content management
         extraObject : {},   
+        size:""
     },
     reducers: {
 
         openRightDrawer: (state, action) => {
-            const {header, bodyType, extraObject} = action.payload
+            const {header, bodyType, extraObject,size} = action.payload
             state.isOpen = true
             state.bodyType = bodyType
             state.header = header
             state.extraObject = extraObject
+            state.size=size
         },
 
         closeRightDrawer: (state, action) => {

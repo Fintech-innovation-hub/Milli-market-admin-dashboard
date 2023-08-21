@@ -7,7 +7,7 @@ import { deleteLead, getLeadsContent } from "./leadSlice"
 import { CONFIRMATION_MODAL_CLOSE_TYPES, MODAL_BODY_TYPES } from '../../utils/globalConstantUtil'
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon'
 import { showNotification } from '../common/headerSlice'
-import { useCategoriesQuery } from "../../services/categoryApi"
+import { useCategoriesQuery, useDeleteCategoryMutation } from "../../services/categoryApi"
 import { useNavigate } from "react-router-dom";
 import { Dna } from 'react-loader-spinner';
 
@@ -33,7 +33,7 @@ function Categories() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { data: categories, isLoading, isSuccess, isError } = useCategoriesQuery()
-
+    const [deleteCategory] = useDeleteCategoryMutation()
     // useEffect(() => {
     //     // dispatch(getLeadsContent())
     // }, [])
@@ -53,6 +53,7 @@ function Categories() {
             title: "Confirmation", bodyType: MODAL_BODY_TYPES.CONFIRMATION,
             extraObject: { message: `Are you sure you want to delete this category?`, type: CONFIRMATION_MODAL_CLOSE_TYPES.LEAD_DELETE, id },
         }))
+            deleteCategory(id)
     }
     const getCategoryDetailHandler = (id) => {
         navigate(`/app/categories/${id}`)

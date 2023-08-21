@@ -11,7 +11,9 @@ import { useDispatch } from 'react-redux';
 import DropdownStatus from './DropdownStatus';
 import { formatDate } from '../../../utils/formatDate';
 import { useUpdateProposalMutation } from '../../../services/proposalApi';
-
+import { changeStatus } from '../proposalSlice';
+import { openRightDrawer } from '../../../features/common/rightDrawerSlice';
+import { RIGHT_DRAWER_TYPES } from '../../../utils/globalConstantUtil';
 function ProposalsTableRow({
   first_name,
   id,
@@ -25,6 +27,7 @@ function ProposalsTableRow({
   created_at,
   update_at,
   inn,
+  proposal
 }) {
   const [statuss, setStatuss] = useState(status || '');
   const dispatch = useDispatch();
@@ -35,10 +38,25 @@ function ProposalsTableRow({
   const handleChange = (e) => {
     setStatuss(e.target.value);
     updatePost({ id, status: e.target.value });
+    dispatch(changeStatus({ id: id, status: e.target.value }));
+  };
+
+  const openRightOffcanvas = () => {
+    dispatch(
+      openRightDrawer({
+        header: 'Product datas',
+        bodyType: RIGHT_DRAWER_TYPES.OFFCANVAS,
+        size: 'long',
+        extraObject: { proposal },
+      })
+    );
   };
 
   return (
-    <tr className="hover:bg-slate-400 duration-500 cursor-pointer">
+    <tr
+      onClick={() => openRightOffcanvas()}
+      className="hover:bg-slate-400 duration-500 cursor-pointer"
+    >
       <td>{index + 1}</td>
       <td>
         {last_name} {first_name}

@@ -5,6 +5,7 @@ import Dashboard from '../../features/dashboard/index'
 
 function InternalPage(){
     const dispatch = useDispatch()
+    // console.log("dashboard")
 
     useEffect(() => {
         dispatch(setPageTitle({ title : "Dashboard"}))

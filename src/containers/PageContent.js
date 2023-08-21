@@ -1,22 +1,19 @@
 import Header from "./Header"
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import routes from '../routes'
 import { Suspense, lazy } from 'react'
 import SuspenseContent from "./SuspenseContent"
 import { useSelector } from 'react-redux'
 import { useEffect, useRef } from "react"
-import ProductFormTop from "../features/products/components/ProductFormTop"
-
-const Page404 = lazy(() => import('../pages/protected/404'))
+const Page404 = lazy(() => import('../pages/protected/404'));
 
 
 function PageContent() {
     const mainContentRef = useRef(null);
     const { pageTitle } = useSelector(state => state.header)
 
-
-    // Scroll back to top on new page load
     useEffect(() => {
+
         mainContentRef.current.scroll({
             top: 0,
             behavior: "smooth"
@@ -26,9 +23,7 @@ function PageContent() {
     return (
         <div className="drawer-content flex flex-col ">
             <Header />
-            {/* <div className="bg-transparent py-2 px-4">
-                <ProductFormTop />
-            </div> */}
+
             <main className="flex-1 overflow-y-auto py-2 px-4  bg-base-200" ref={mainContentRef}>
                 <Suspense fallback={<SuspenseContent />}>
                     <Routes>
@@ -45,7 +40,6 @@ function PageContent() {
                             })
                         }
 
-                        {/* Redirecting unknown url to 404 page */}
                         <Route path="*" element={<Page404 />} />
                     </Routes>
                 </Suspense>

@@ -6,47 +6,87 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
+import { AiFillEdit } from 'react-icons/ai';
 
 import { useDispatch } from 'react-redux';
 
-function ProductTableRow({ title, id, index, seller_name, category_name }) {
+import { openModal } from '../../common/modalSlice';
+import { useDeleteProductMutation } from '../../../services/productApi';
+import { openRightDrawer } from '../../../features/common/rightDrawerSlice';
+import { RIGHT_DRAWER_TYPES } from '../../../utils/globalConstantUtil';
+
+function ProductTableRow({
+  product,
+  title,
+  id,
+  index,
+  seller_name,
+  category_name,
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const deleteCurrentProduct = () => {
-    // dispatch(
-    //   openModal({
-    //     title: 'Confirmation',
-    //     bodyType: MODAL_BODY_TYPES.CONFIRMATION,
-    //     extraObject: {
-    //       message: `Are you sure you want to delete this product?`,
-    //       type: CONFIRMATION_MODAL_CLOSE_TYPES.LEAD_DELETE,
-    //       id,
-    //     },
-    //   })
-    // );
+  const [deleteProduct] = useDeleteProductMutation();
+
+  const deleteCurrentProduct = async (event) => {
+
+    event.stopPropagation(); 
+    dispatch(
+      openModal({
+        title: 'Confirmation',
+        bodyType: MODAL_BODY_TYPES.CONFIRMATION,
+        extraObject: {
+          message: `Are you sure you want to delete this product?`,
+          type: CONFIRMATION_MODAL_CLOSE_TYPES.LEAD_DELETE,
+          id,
+        },
+      })
+    );
+    await deleteProduct(id);
   };
   function sliceStr(str = '') {
     return str.length > 15 ? str.slice(0, 35) + '...' : str;
   }
+  const editCurrentProduct = (event) => {
+    event.stopPropagation(); 
+    navigate(`/app/product/${id}/sku`);
+  };
 
-  const getProductDetailHandler = () => {
-    // navigate(`/app/categories/${id}`);
+  const openRightOffcanvas = () => {
+    dispatch(
+      openRightDrawer({
+        header: 'Product datas',
+        bodyType: RIGHT_DRAWER_TYPES.OFFCANVAS,
+        size: 'long',
+        extraObject: { product },
+      })
+    );
   };
   return (
-    <tr className="hover:bg-slate-400 duration-500 cursor-pointer">
-      <td>{index + 1}</td>
-      <td onClick={getProductDetailHandler}>{title}</td>
-      <td>{seller_name}</td>
-      <td>{sliceStr(category_name)}</td>
-      <td>
-        <button
-          className="btn btn-square btn-ghost"
-          onClick={deleteCurrentProduct}
-        >
-          <TrashIcon className="w-5" />
-        </button>
-      </td>
-    </tr>
+    <>
+      <tr
+        onClick={() => openRightOffcanvas()}
+        className="hover:bg-slate-400 duration-500 cursor-pointer"
+      >
+        <td>{index + 1}</td>
+        <td>{title}</td>
+        <td>{seller_name}</td>
+        <td>{sliceStr(category_name)}</td>
+        <td>
+          <button
+            className="btn btn-square btn-ghost"
+            onClick={deleteCurrentProduct}
+          >
+            <TrashIcon className="w-5" />
+          </button>
+          <button
+            className="btn btn-square btn-ghost"
+            onClick={editCurrentProduct}
+          >
+            <AiFillEdit className="text-2xl" />
+          </button>
+        </td>
+      </tr>
+    </>
   );
 }
 

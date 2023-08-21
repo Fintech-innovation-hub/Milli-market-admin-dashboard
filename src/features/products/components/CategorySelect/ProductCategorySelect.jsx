@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import CategorySelected from './CategorySelected';
-import { useCategoriesQuery } from '../../../services/categoryApi';
+import { useCategoriesQuery } from '../../../../services/categoryApi';
 
-function ProductCategorySelect({ setCtgId }) {
+function ProductCategorySelect({ setCtgId, currentProduct }) {
   const [parentCtgName1, setParentCtgName1] = useState('');
   const [parentCtgName2, setParentCtgName2] = useState('');
   const [parentCtgName3, setParentCtgName3] = useState('');
@@ -22,8 +22,9 @@ function ProductCategorySelect({ setCtgId }) {
   };
 
   return (
-    <div className="w-7/12 flex flex-col gap-3 items-start">
+    <div className="w-full flex flex-col gap-3 items-start">
       <h2 className="text-2xl font-semibold mb-2">Категория товара</h2>
+      <h3>{currentProduct?.category?.title?.ln}</h3>
       {!showCategory && (
         <div className="flex items-center">
           <h3>

@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import headerSlice from '../features/common/headerSlice'
 import modalSlice from '../features/common/modalSlice'
+import offcanvasSlice from '../features/common/offcanvasSlice'
 import rightDrawerSlice from '../features/common/rightDrawerSlice'
 // import leadsSlice from '../features/leads/leadSlice'
 import { categoryApi } from '../services/categoryApi'
@@ -12,6 +13,7 @@ import { sellerApi } from '../services/sellerApi'
 import { modelApi } from '../services/modelApi'
 import { proposalApi } from "../services/proposalApi"
 import ProductReducer from '../features/products/productSlice'
+import ProposalReducer from "../features/proposals/proposalSlice"
 import CharacterReducer from "../features/products/components/CharacteristicsSection/characterSlice"
 
 
@@ -19,7 +21,9 @@ const combinedReducer = {
   header: headerSlice,
   rightDrawer: rightDrawerSlice,
   modal: modalSlice,
+  offcanvas: offcanvasSlice,
   product: ProductReducer,
+  proposal: ProposalReducer,
   character:CharacterReducer,
   // category: leadsSlice,
   [categoryApi.reducerPath]: categoryApi.reducer,

@@ -53,6 +53,16 @@ export const productApi = createApi({
 
       invalidatesTags: ['Product'],
     }),
+    deleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/v1/product/${id}/`,
+        method: "DELETE",
+        headers: {
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
+        }
+      }),
+      invalidatesTags: ["Product"]
+    })
 
   }),
 })
@@ -62,6 +72,7 @@ export const {
   // useCategoryItemDetailsQuery,
   useAddProductMutation,
   usePatchProductItemMutation,
+  useDeleteProductMutation,
   // useAddCategoryChildMutation,
   // useUpdateCategoryMutation,
   // useDeleteCategoryMutation,

@@ -1,6 +1,4 @@
-import moment from 'moment';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+
 import TitleCard from '../../components/Cards/TitleCard';
 import { Dna } from 'react-loader-spinner'
 import ProposalsTable from './components/ProposalsTable';
@@ -10,15 +8,14 @@ import { useProposalsQuery } from '../../services/proposalApi';
 
 
 function Proposals() {
-  // const { leads } = useSelector(state => state.lead)
 
   const { data: proposals, isLoading, isSuccess, isError } = useProposalsQuery();
-
   return (
     <>
       <TitleCard
         title="Current Proposals"
         topMargin="mt-2"
+        name="proposal"
       >
         <div className="overflow-x-auto w-full">
           {isLoading && (

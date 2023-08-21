@@ -4,24 +4,35 @@ import { useEffect } from 'react';
 import { baseUrl } from '../../../constants';
 import { Vortex } from 'react-loader-spinner';
 
-function SkuTableRow({ index, title, inputSku, id, status }) {
+function SkuTableRow({ index, title, inputSku, id, status, setItems, self }) {
   const [showIkpuModal, setShowIkpuModal] = useState(false);
   const [price, setPrice] = useState('');
   const [ikpu, setIkpu] = useState('');
+  const [ikpuId, setIkpuId] = useState('');
   const [barcode, setBarcode] = useState('');
   const [ikpuDatas, setIkpuDatas] = useState(null);
   const [barcodeDatas, setBarcodeDatas] = useState(null);
   const [loading, setLoading] = useState(false);
   const [notfound, setNotfound] = useState('');
-  const handleChange = (e) => {
-    setIkpu(e.target.value);
-  };
-  console.log(ikpuDatas);
+
   const chooseIkpu = (id, title, code) => {
     setIkpu(code);
+    setIkpuId(id);
     setShowIkpuModal(false);
   };
-
+  useEffect(() => {
+    const changed = self.map((item) => {
+      return item.id === id
+        ? {
+            ...item,
+            ikpu: ikpuId,
+            barcode,
+            price,
+          }
+        : item;
+    });
+    setItems(changed);
+  }, [barcode, price, ikpu]);
   useEffect(() => {
     if (barcode.length === 13) {
       axios
@@ -44,10 +55,12 @@ function SkuTableRow({ index, title, inputSku, id, status }) {
     }
   }, [barcode]);
 
-  useEffect(() => {
-    if (ikpu.length >= 2 && ikpu.length < 12) {
+  const ikpuHandler=e=>{
+    setIkpu(e.target.value)
+    if (ikpu.length > 1 && ikpu.length < 13) {
+      setShowIkpuModal(true);
       axios
-        .get(`${baseUrl}/v1/product/ikpu/?q=${ikpu}`, {
+        .get(`${baseUrl}/v1/product/ikpu/?q=${e.target.value}`, {
           headers: {
             Authorization: `Bearer ${JSON.parse(
               localStorage.getItem('access-token')
@@ -55,28 +68,16 @@ function SkuTableRow({ index, title, inputSku, id, status }) {
           },
         })
         .then((res) => {
-          setShowIkpuModal(true);
-          if (res.data?.data?.length === 0) {
-            setLoading(true);
-            setTimeout(() => {
-              setLoading(false);
-              setNotfound('Malumot topilmadi😒');
-            }, 3000);
-            return;
-          }
-          setLoading(false);
-          setNotfound('');
           setIkpuDatas(res.data?.data);
         })
         .catch((err) => console.log(err));
     } else {
       setShowIkpuModal(false);
-      setLoading(false);
-      setNotfound('');
+    
     }
-  }, [ikpu]);
 
-  console.log(barcodeDatas);
+  }
+
   // data:[{code:"",title}]
   return (
     <tr className="hover:bg-slate-400 duration-500 cursor-pointer">
@@ -88,23 +89,26 @@ function SkuTableRow({ index, title, inputSku, id, status }) {
           minLength={13}
           maxLength={13}
           value={barcode}
+          name="barcode"
           onChange={(e) => setBarcode(e.target.value)}
           type="text"
+          className="text-black"
         />
       </td>
       <td className="relative w-96">
         <input
-          className="w-full"
+          className=""
           value={ikpu}
-          type="search"
-          onChange={handleChange}
+          name="ikpu"
+          type="text"
+          onChange={ikpuHandler}
         />
         <div
           className={` ${
             showIkpuModal ? '' : 'hidden'
           } h-80 w-96 bg-white text-black absolute p-3 top-[-320px] left-16 overflow-scroll`}
         >
-          {loading && (
+          {/* {loading && (
             <div className=" h-full w-full flex items-center justify-center">
               <Vortex
                 visible={true}
@@ -116,8 +120,7 @@ function SkuTableRow({ index, title, inputSku, id, status }) {
                 colors={['red', 'green', 'blue', 'yellow', 'orange', 'purple']}
               />
             </div>
-          )}
-          <h1 className="text-lg text-red-500">{!loading && notfound}</h1>
+          )} */}
           {ikpuDatas?.map((item) => (
             <div
               key={item.id}
@@ -132,6 +135,7 @@ function SkuTableRow({ index, title, inputSku, id, status }) {
       </td>
       <td>
         <input
+          name="price"
           onChange={(e) => setPrice(e.target.value)}
           type="number"
           placeholder="price"
