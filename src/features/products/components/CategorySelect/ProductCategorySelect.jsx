@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import CategorySelected from './CategorySelected';
 import { useCategoriesQuery } from '../../../../services/categoryApi';
 
-function ProductCategorySelect({ setCtgId, currentProduct }) {
-  const [parentCtgName1, setParentCtgName1] = useState('');
-  const [parentCtgName2, setParentCtgName2] = useState('');
-  const [parentCtgName3, setParentCtgName3] = useState('');
+function ProductCategorySelect({ setCtgId,  category }) {
+  const [parentCtgName1, setParentCtgName1] = useState(
+    category?.parent?.parent?.title
+  );
+  const [parentCtgName2, setParentCtgName2] = useState(category?.parent?.title);
+  const [parentCtgName3, setParentCtgName3] = useState(category?.title);
   const [parentCtgName4, setParentCtgName4] = useState('');
   const [showCategory, setShowCategory] = useState(true);
 
@@ -24,11 +26,21 @@ function ProductCategorySelect({ setCtgId, currentProduct }) {
   return (
     <div className="w-full flex flex-col gap-3 items-start">
       <h2 className="text-2xl font-semibold mb-2">Категория товара</h2>
-      <h3>{currentProduct?.category?.title?.ln}</h3>
-      {!showCategory && (
+
+      {category && (
         <div className="flex items-center">
           <h3>
-            {parentCtgName1} / {parentCtgName2} /{' '}
+            {parentCtgName1 && `${parentCtgName1} /`}{' '}
+            {parentCtgName2 && `${parentCtgName2} /`}
+            {parentCtgName3 && `${parentCtgName3} /`} {parentCtgName4}
+          </h3>
+        </div>
+      )}
+      {!category && !showCategory && (
+        <div className="flex items-center">
+          <h3>
+            {parentCtgName1 && `${parentCtgName1} /`}
+            {parentCtgName2 && `${parentCtgName2} /`}
             {parentCtgName3 && `${parentCtgName3} /`} {parentCtgName4}
           </h3>
         </div>
@@ -38,6 +50,9 @@ function ProductCategorySelect({ setCtgId, currentProduct }) {
           setCtgId={setCtgId}
           dataSelect={data?.data}
           isSuccessSelect={isSuccess}
+          parentCtgName1={parentCtgName1}
+          parentCtgName2={parentCtgName2}
+          parentCtgName3={parentCtgName3}
           setParentCtgName1={setParentCtgName1}
           setParentCtgName2={setParentCtgName2}
           setParentCtgName3={setParentCtgName3}

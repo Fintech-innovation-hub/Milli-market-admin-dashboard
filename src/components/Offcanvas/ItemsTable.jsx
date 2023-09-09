@@ -2,8 +2,9 @@ import React from 'react';
 import ItemsTableRow from './ItemsTableRow';
 
 function ItemsTable({ items }) {
+
   return (
-    <table className="table">
+    <table className="table w-full">
       <thead className='lowercase'>
         <tr>
           <th>№</th>
@@ -16,7 +17,7 @@ function ItemsTable({ items }) {
       </thead>
       <tbody className='text-sm'>
         {items.map((item, index) => (
-          <ItemsTableRow key={item.id} index={index} {...item} />
+          <ItemsTableRow key={item.id} index={index} item={item} {...item} />
         ))}
       </tbody>
     </table>

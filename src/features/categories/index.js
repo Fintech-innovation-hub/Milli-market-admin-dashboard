@@ -51,9 +51,8 @@ function Categories() {
     const deleteCurrentCategory = (id) => {
         dispatch(openModal({
             title: "Confirmation", bodyType: MODAL_BODY_TYPES.CONFIRMATION,
-            extraObject: { message: `Are you sure you want to delete this category?`, type: CONFIRMATION_MODAL_CLOSE_TYPES.LEAD_DELETE, id },
+            extraObject: { message: `Are you sure you want to delete this category?`, type: CONFIRMATION_MODAL_CLOSE_TYPES.CATEGORY_DELETE, id },
         }))
-            deleteCategory(id)
     }
     const getCategoryDetailHandler = (id) => {
         navigate(`/app/categories/${id}`)
@@ -109,7 +108,10 @@ function Categories() {
                                                 {/* <td>{moment(new Date()).add(-5 * (index + 2), 'days').format("DD MMM YY")}</td> */}
                                                 {/* <td>{getDummyStatus(k)}</td> */}
 
-                                                <td><button className="btn btn-square btn-ghost" onClick={() => deleteCurrentCategory(category.id)}><TrashIcon className="w-5" /></button></td>
+                                                <td><button className="btn btn-square btn-ghost" onClick={(event) => {
+                                                    event.stopPropagation(); 
+                                                deleteCurrentCategory(category.id)
+                                            }}><TrashIcon className="w-5" /></button></td>
                                             </tr>
                                         )
                                     })

@@ -27,6 +27,19 @@ export const productApi = createApi({
       }),
       providesTags: ['Product'],
     }),
+    patchProductDetails: builder.mutation({
+      query: (product) => ({
+
+        url: `/v1/product/${product.id}/`,
+        method: 'PATCH',
+        body: product.data,
+        headers: {
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
+        }
+      }),
+      invalidatesTags: ['Product'],
+
+    }),
     patchProductItem: builder.mutation({
       query: (product) => ({
         url: `/v1/product/${product.id}/items/`,
@@ -72,6 +85,7 @@ export const {
   // useCategoryItemDetailsQuery,
   useAddProductMutation,
   usePatchProductItemMutation,
+  usePatchProductDetailsMutation,
   useDeleteProductMutation,
   // useAddCategoryChildMutation,
   // useUpdateCategoryMutation,

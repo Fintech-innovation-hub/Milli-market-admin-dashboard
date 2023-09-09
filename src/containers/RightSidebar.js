@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import NotificationBodyRightDrawer from '../features/common/components/NotificationBodyRightDrawer'
 import { closeRightDrawer } from '../features/common/rightDrawerSlice'
 import { RIGHT_DRAWER_TYPES } from '../utils/globalConstantUtil'
-import CalendarEventsBodyRightDrawer from '../features/calendar/CalendarEventsBodyRightDrawer'
-import OffcanvasBodyRightDrawer from '../features/common/components/OffcanvasBodyRightDrawer'
+import OffcanvasBodyRightDrawerProduct from '../features/common/components/OffcanvasBodyRightDrawerProduct'
+import OffcanvasBodyRightDrawerProposal from '../features/common/components/OffcanvasBodyRightDrawerProposal'
 
 
 function RightSidebar() {
@@ -27,7 +27,7 @@ function RightSidebar() {
                         <button className="float-left btn btn-circle btn-outline btn-sm" onClick={() => close()}>
                             <XMarkIcon className="h-5 w-5" />
                         </button>
-                        <span className="ml-2 font-bold text-xl">{header}</span>
+                        <span className="ml-2 capitalize font-bold text-xl">{header}</span>
                     </div>
 
 
@@ -38,8 +38,8 @@ function RightSidebar() {
                             {
                                 {
                                     [RIGHT_DRAWER_TYPES.NOTIFICATION]: <NotificationBodyRightDrawer {...extraObject} closeRightDrawer={close} />,
-                                    [RIGHT_DRAWER_TYPES.CALENDAR_EVENTS]: <CalendarEventsBodyRightDrawer {...extraObject} closeRightDrawer={close} />,
-                                    [RIGHT_DRAWER_TYPES.OFFCANVAS]: <OffcanvasBodyRightDrawer {...extraObject} closeRightDrawer={close} />,
+                                    [RIGHT_DRAWER_TYPES.OFFCANVAS]: <OffcanvasBodyRightDrawerProduct {...extraObject} closeRightDrawer={close} />,
+                                    [RIGHT_DRAWER_TYPES.OFFCANVASPROPOSAL]: <OffcanvasBodyRightDrawerProposal {...extraObject} closeRightDrawer={close} />,
                                     [RIGHT_DRAWER_TYPES.DEFAULT]: <div></div>
                                 }[bodyType]
                             }

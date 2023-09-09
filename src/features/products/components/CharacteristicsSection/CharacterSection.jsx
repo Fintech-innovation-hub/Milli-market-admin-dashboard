@@ -1,16 +1,22 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addNewCharacteristic } from '../../productSlice';
+import { MODAL_BODY_TYPES } from '../../../../utils/globalConstantUtil';
+import { openModal } from '../../../common/modalSlice';
+import { addCharacters, addNewCharacteristic } from '../../productSlice';
 import CharacterButtons from './CharacterButtons';
 import CharacterOption from './CharacterOption';
 
-function CharacterSection({ characteristics }) {
+function CharacterSection({ characteristics, characters }) {
   const dispatch = useDispatch();
   const chosenCharacteristics = useSelector(
     (state) => state.product.chosenCharacteristics
   );
+
   const handleSelectChange = (e) => {
     const selectedOption = e.target.options[e.target.selectedIndex];
     const dataInfo = selectedOption.getAttribute('data-value');
+
+  
     const check = chosenCharacteristics.some(
       (item) => item.charId === e.target.value
     );
@@ -22,14 +28,17 @@ function CharacterSection({ characteristics }) {
       chosenValues: [],
     };
     dispatch(addNewCharacteristic(newCharBtn));
+
   };
+ 
 
   return (
     <div className="mb-6 w-2/3">
       <h2 className="text-base my-3 font-semibold uppercase">
         Выбор характеристик
       </h2>
-      <CharacterButtons />
+
+      <CharacterButtons characters={characters} />
       <div className="flex items-center gap-4 ">
         <select
           onChange={handleSelectChange}

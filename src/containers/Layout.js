@@ -17,7 +17,6 @@ function Layout() {
       </div>
       <RightSidebar />
       <ModalLayout />
-
     </>
   )
 }

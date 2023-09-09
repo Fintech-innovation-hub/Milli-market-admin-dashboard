@@ -12,7 +12,10 @@ const CategorySelected = ({
   setParentCtgName1,
   setParentCtgName2,
   setParentCtgName3,
-  setParentCtgName4
+  setParentCtgName4,
+  parentCtgName1,
+  parentCtgName2,
+  parentCtgName3,
 }) => {
 
   const [showChildCtg, setShowChildCtg] = useState(false);
@@ -36,7 +39,6 @@ const CategorySelected = ({
       <select
         // onChange={(value, actionMeta) => console.log(actionMeta.name)}
         onChange={(e) => {
-
           if (e.target.value) {
             setSelectId(e.target.value);
             setCtgId(e.target.value)
@@ -44,6 +46,7 @@ const CategorySelected = ({
             setParentCtgName1(e.target.selectedOptions[0].label); // or event.target.options[event.target.selectedIndex].text;
           }
         }}
+        // value={parentCtgName1}
         className="w-full  border-2 border-inherit p-2 text-base outline-0 cursor-pointer"
         placeholder="Choose Category"
         data-te-select-init
@@ -55,7 +58,7 @@ const CategorySelected = ({
         </option>
         {isSuccessSelect &&
           dataSelect.map((item) => (
-            <option key={item.id} label={item.title.title_ln} name="hahahha" value={item.id}>
+            <option key={item.id} label={item.title}  value={item.id}>
               {item.title}
             </option>
           ))}
@@ -70,13 +73,14 @@ const CategorySelected = ({
               setParentCtgName2(e.target.selectedOptions[0].label); // or event.target.options[event.target.selectedIndex].text;
 
             }}
+            // value={parentCtgName2}
             className="w-full border-2 border-inherit p-2 my-4 text-base outline-0"
             placeholder="Выбрать категорию"
             data-te-select-init
             data-te-select-visible-options="3"
           >
             {categoryItem?.data?.map((item) => (
-              <option key={item.id} value={item.id}>
+              <option key={item.id} label={item.title} value={item.id}>
                 {item.title}
               </option>
             ))}
@@ -86,6 +90,7 @@ const CategorySelected = ({
       {
         (categoryChildItem?.data?.length > 0 && showChildItemCtg) && (
           <select
+          // value={parentCtgName3}
             onChange={(e) => {
               setCtgId(e.target.value)
               setSelectChildChildId(e.target.value);
@@ -99,7 +104,7 @@ const CategorySelected = ({
             data-te-select-visible-options="3"
           >
             {categoryChildItem?.data?.map((item) => (
-              <option key={item.id} value={item.id}>
+              <option key={item.id} label={item.title} value={item.id}>
                 {item.title}
               </option>
             ))}

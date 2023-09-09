@@ -1,13 +1,13 @@
 import React from 'react'
 
-function Titles({titleLn,setTitleLn,titleRu,setTitleRu,currentProduct}) {
-  console.log(currentProduct?.title?.ln)
+function Titles({titleLn,setTitleLn,titleRu,setTitleRu}) {
+ 
   return (
    <div className='w-1/2'>
      <div className={`form-control w-full mt-3`}>
             <label className="label">
               <span className={'label-text text-base-content  '}>
-                Title_uz  <b> ({currentProduct?.title?.ln})</b>
+                Title_uz  
               </span>
             </label>
             <input
@@ -23,7 +23,7 @@ function Titles({titleLn,setTitleLn,titleRu,setTitleRu,currentProduct}) {
           <div className={`form-control w-full mt-3`}>
             <label className="label">
               <span className={'label-text text-base-content  '}>
-                Title_ru  <b> ({currentProduct?.title?.ru})</b>
+                Title_ru  
               </span>
             </label>
             <input

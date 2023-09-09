@@ -24,12 +24,9 @@ function ProposalsTable({ proposals }) {
           <th>№</th>
           <th>F.I</th>
           <th>Tel raqam</th>
-          <th>Korxona nomi</th>
-          <th>Korxona turi</th>
           <th>Inn / Pnfl</th>
           <th>Created </th>
-          <th>Last updated</th>
-          <th>Status</th>
+        
         </tr>
       </thead>
       <tbody>

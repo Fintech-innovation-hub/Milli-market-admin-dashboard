@@ -19,15 +19,21 @@ function Login() {
 
     const submitForm = (e) => {
         e.preventDefault()
+        setLoading(true)
         axios.post(`${baseUrl}/v1/user/token/`, loginObj)
             .then(res => {
+                setLoading(false)
                 localStorage.setItem("access-token", JSON.stringify(res.data.access))
                 localStorage.setItem("refresh-token", JSON.stringify(res.data.refresh))
                 localStorage.setItem("role", JSON.stringify(res.data.role))
                 navigate('/app/dashboard')
 
             })
-            .catch(err=>setErrorMessage('tel yoki parol xato!'))
+            .catch(err => {
+                setErrorMessage('tel yoki parol xato!')
+                setLoading(false)
+            }
+            )
     }
 
     const updateFormValue = ({ updateType, value }) => {
@@ -50,7 +56,7 @@ function Login() {
 
                                 <InputText type="tel" defaultValue={loginObj.phone_number} updateType="phone_number" containerStyle="mt-4" labelTitle="Phone number" updateFormValue={updateFormValue} />
 
-                                <InputText  defaultValue={loginObj.password} type="password" updateType="password" containerStyle="mt-4" labelTitle="Password" updateFormValue={updateFormValue} />
+                                <InputText defaultValue={loginObj.password} type="password" updateType="password" containerStyle="mt-4" labelTitle="Password" updateFormValue={updateFormValue} />
 
                             </div>
 

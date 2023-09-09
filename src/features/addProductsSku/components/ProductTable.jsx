@@ -1,22 +1,24 @@
 import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SkuTableRow from './SkuTableRow';
 
 function ProductTable({ product, inputSku, setItemsDatas, itemsDatas }) {
   const [items, setItems] = useState(product?.items);
 
+  
   useEffect(() => {
-    const datas=items.map(item=>{
+    const datas = items.map((item) => {
       return {
-        ikpu:item.ikpu,
-        id:item.id,
-        barcode:item.barcode || 3,
-        price:item.price
-      }
-    })
+        ikpu: item.ikpu?.id || item.ikpu,
+        id: item.id,
+        barcode: item.barcode?.id || item.barcode,
+        price: item.price,
+      };
+    });
     setItemsDatas(datas);
   }, [items]);
+
+  
   return (
     <table className="product-table">
       <thead className="">
@@ -38,6 +40,7 @@ function ProductTable({ product, inputSku, setItemsDatas, itemsDatas }) {
             index={index}
             key={item.id}
             {...item}
+            item={item}
           />
         ))}
       </tbody>

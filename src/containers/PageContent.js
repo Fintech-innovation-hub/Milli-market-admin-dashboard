@@ -13,17 +13,16 @@ function PageContent() {
     const { pageTitle } = useSelector(state => state.header)
 
     useEffect(() => {
-
         mainContentRef.current.scroll({
             top: 0,
             behavior: "smooth"
         });
     }, [pageTitle])
 
+console.log('page content')
     return (
         <div className="drawer-content flex flex-col ">
             <Header />
-
             <main className="flex-1 overflow-y-auto py-2 px-4  bg-base-200" ref={mainContentRef}>
                 <Suspense fallback={<SuspenseContent />}>
                     <Routes>

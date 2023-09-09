@@ -14,7 +14,6 @@ export const categoryApi = createApi({
         url: '/v1/product/category/',
         headers: {
           'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
-          // 'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg5NjY0ODczLCJpYXQiOjE2ODk1Nzg0NzMsImp0aSI6Ijc3ZGM3OTA0YjM0ZDQ3YjRhMmYzMDc3NTUyYWEyM2IwIiwidXNlcl9pZCI6MX0.Gq84NSDF6gexAJEh_uAf9f5nkFkZ8hsIlsRva4dH7-4`
         }
       }),
       providesTags: ['Category'],
@@ -62,7 +61,7 @@ export const categoryApi = createApi({
         method: 'POST',
         body: category,
         headers: {
-          'Authorization': `Bearer  ${JSON.parse(localStorage.getItem("access-token"))}`
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
         }
       }),
 
@@ -77,7 +76,7 @@ export const categoryApi = createApi({
           parent_id: categoryChild.id
         },
         headers: {
-          'Authorization': `Bearer  ${JSON.parse(localStorage.getItem("access-token"))}`
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
         }
       }),
 
@@ -100,7 +99,7 @@ export const categoryApi = createApi({
         },
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer  ${JSON.parse(localStorage.getItem("access-token"))}`
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
         },
       }),
       invalidatesTags: ['Category'],

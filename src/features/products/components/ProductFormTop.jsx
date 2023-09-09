@@ -2,14 +2,7 @@ import React from 'react';
 import Steps from './Steps';
 import { useNavigate } from 'react-router-dom';
 
-function ProductFormTop({
-  closeModal,
-  id,
-  title,
-  saveNewProduct,
-  disabledBtn,
-  setTitleTopBtn,
-}) {
+function ProductFormTop({ id, title, saveNewProduct, disabledBtn }) {
   const navigate = useNavigate();
   return (
     <div className="flex items-center justify-between  w-full">
@@ -21,7 +14,7 @@ function ProductFormTop({
             disabled={disabledBtn}
             className="btn btn-primary px-6 cursor-pointer"
             onClick={() => {
-              alert(id);
+      
               saveNewProduct('save');
             }}
           >
@@ -43,10 +36,7 @@ function ProductFormTop({
             disabled={disabledBtn}
             className="btn btn-primary px-6 cursor-pointer"
             onClick={() => {
-              alert(id);
               navigate(`/app/products/add/${id}`);
-
-              
             }}
           >
             Prev
@@ -55,7 +45,7 @@ function ProductFormTop({
             disabled={disabledBtn}
             className="btn btn-primary px-6 cursor-pointer"
             onClick={() => {
-              saveNewProduct('next');
+              saveNewProduct('finish');
             }}
           >
             Finish

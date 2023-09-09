@@ -6,28 +6,25 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { baseUrl } from '../../constants';
 import { usePatchProductItemMutation } from '../../services/productApi';
-import Steps from '../products/components/Steps';
 import ProductFormTop from '../products/components/ProductFormTop';
 
-function AddProductsSku() {
+function AddProductsSku({ product, id }) {
+  console.log(product);
   const [disabledSku, setDisabledSku] = useState(false);
   const [updateProduct, { isLoading }] = usePatchProductItemMutation();
   const [itemsDatas, setItemsDatas] = useState([]);
   const navigate = useNavigate();
-  const { id } = useParams();
-  const { data: product, isSuccess } = useProductItemQuery(id);
-  const [inputSku, setInputSku] = useState(product?.data?.sku);
+  const [inputSku, setInputSku] = useState(product?.sku || '');
   const [errorSku, setErrorSku] = useState('');
   const addSkuHandler = (e) => {
     setInputSku(e.target.value);
   };
 
-  console.log(product)
   useEffect(() => {
     if (inputSku) {
       axios
         .get(
-          `${baseUrl}/v1/product/sku/?sku=${inputSku}&seller=${product?.data?.seller_id}`,
+          `${baseUrl}/v1/product/sku/?sku=${inputSku}&seller=${product?.seller_id}`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(
@@ -43,21 +40,39 @@ function AddProductsSku() {
     }
   }, [inputSku]);
 
-  const saveNewProduct = () => {
-    const newdata = {
-      sku: product?.data?.sku || inputSku,
-      items: itemsDatas,
-    };
+  const saveNewProduct = (btnTitle) => {
+    if (!inputSku) {
+      navigate('/app/products/all');
+      return;
+    }
+    const checkIkpus = itemsDatas.every((item) => item.ikpu);
+    const checkPrices = itemsDatas.every((item) => item.price);
+    if (!checkIkpus) {
+      alert('Ikpularni toliq kiriting!');
+      return;
+    }
+    if (!checkPrices) {
+      alert('Narxlarni toliq kiriting!');
+      return;
+    }
     if (inputSku) {
+      const newdata = {
+        sku: inputSku,
+        items: itemsDatas,
+      };
       updateProduct({ id: id, data: newdata });
       navigate('/app/products/all');
     }
   };
-  
+
   return (
     <div>
       <section className="bg-white relative flex flex-col items-start rounded-xl w-full py-2  px-4 mb-5 ">
-        <ProductFormTop id={id} saveNewProduct={saveNewProduct} title="second" />
+        <ProductFormTop
+          id={id}
+          saveNewProduct={saveNewProduct}
+          title="second"
+        />
         <h1 className="text-2xl font-bolder mb-4">Формирование SKU</h1>
         <p className="w-[800px]">
           SKU — от английского Stock Keeping Unit (идентификатор товарной
@@ -85,7 +100,9 @@ function AddProductsSku() {
             defaultValue={product?.data?.sku}
             onChange={addSkuHandler}
             type="text"
-            className={`w-full border-slate-400 ${disabledSku && 'bg-gray-300'} uppercase border rounded p-2 outline-none`}
+            className={`w-full border-slate-400 ${
+              disabledSku && 'bg-gray-300'
+            } uppercase border rounded p-2 outline-none`}
             maxLength={'7'}
             placeholder="SKU"
           />
@@ -93,11 +110,11 @@ function AddProductsSku() {
         </div>
       </section>
       <section>
-        {isSuccess && inputSku && (
+        {inputSku && (
           <ProductTable
             setItemsDatas={setItemsDatas}
             inputSku={inputSku}
-            product={product?.data}
+            product={product}
           />
         )}
       </section>

@@ -11,12 +11,10 @@ import { useState } from 'react'
 
 
 function Charts(){
-
     const [dateValue, setDateValue] = useState({ 
         startDate: new Date(), 
         endDate: new Date() 
     }); 
-    
     const handleDatePickerValueChange = (newValue) => {
         console.log("newValue:", newValue); 
         setDateValue(newValue); 

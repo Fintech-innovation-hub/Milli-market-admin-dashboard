@@ -9,7 +9,8 @@ import {
 } from '../../../../utils/globalConstantUtil';
 import { addNewCharItems, deleteCharItem } from './characterSlice';
 
-function CharacterBtn({ charId, charTitle, values, chosenValues }) {
+function CharacterBtn({ charId, charTitle, values, chosenValues,elem }) {
+  
   const dispatch = useDispatch();
 
   const showCharacterItems = () => {
@@ -40,6 +41,7 @@ function CharacterBtn({ charId, charTitle, values, chosenValues }) {
   return (
     <div className="w-full flex items-center justify-between">
       <div className="w-2/3 flex items-center gap-4">
+      
         <button
           onClick={showCharacterItems}
           className="p-2 border border-opacity-60 border-red-500 cursor-pointer w-2/3 flex justify-start rounded items-center"

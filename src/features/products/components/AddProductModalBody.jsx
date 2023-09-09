@@ -1,24 +1,21 @@
-import { useReducer, useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import InputText from '../../../components/Input/InputText';
-import ErrorText from '../../../components/Typography/ErrorText';
+// import ErrorText from '../../../components/Typography/ErrorText';
+// import { showNotification } from '../../common/headerSlice';
 import {
   useAddProductMutation,
-  useProductItemQuery,
+  usePatchProductDetailsMutation,
 } from '../../../services/productApi';
-import { showNotification } from '../../common/headerSlice';
 import Editor from './Editor';
 import { useCountriesQuery } from '../../../services/countryApi';
 import { useBrandsQuery } from '../../../services/brandApi';
-import Steps from './Steps';
 import DoubleEditor from './DoubleEditor';
 import DownloadImg from './DownloadImg';
 import { useCharacteristicsQuery } from '../../../services/characteristicApi';
-import { productReducer, initialValue } from '../../../reducer/productReducer';
 import ProductCategorySelect from './CategorySelect/ProductCategorySelect';
 import ProductFormTop from './ProductFormTop';
 import { useSellersQuery } from '../../../services/sellerApi';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useModelsQuery } from '../../../services/modelApi';
 import axios from 'axios';
 import CharacterSection from './CharacteristicsSection/CharacterSection';
@@ -31,50 +28,73 @@ import { baseUrl } from '../../../constants';
 import Titles from './Titles';
 import Seller from './Seller';
 
-function AddProductModalBody({ closeModal, extraObject, size }) {
-  const { productId } = useParams();
-  const [currentProduct, setCurrentProduct] = useState(null);
-
-  const [disabledCountry, setDisabledCountry] = useState(false);
-  const [disabledBrand, setDisabledBrand] = useState(false);
-  const [disabledModel, setDisabledModel] = useState(false);
-  const [titleTopBtn, setTitleTopBtn] = useState('first');
+function AddProductModalBody({ currentProduct }) {
+  const [updateProduct] = usePatchProductDetailsMutation();
+  const [addProduct, result] = useAddProductMutation();
   const [disabledBtn, setDisabledBtn] = useState(true);
-  const [ctgId, setCtgId] = useState('');
-  const [titleLn, setTitleLn] = useState('');
-  const [titleRu, setTitleRu] = useState('');
-  const [country, setCountry] = useState('');
-  const [brand, setBrand] = useState(1);
+  const [ctgId, setCtgId] = useState(currentProduct?.category?.id || '');
+  const [titleLn, setTitleLn] = useState(currentProduct?.title?.ln || '');
+  const [titleRu, setTitleRu] = useState(currentProduct?.title?.ru || '');
+  const [seller, setSeller] = useState(currentProduct?.seller?.id || '');
+  const [country, setCountry] = useState(currentProduct?.country?.id || '');
+  const [disabledCountry, setDisabledCountry] = useState(false);
+  const [brand, setBrand] = useState(currentProduct?.brand?.id || '');
+  const [disabledBrand, setDisabledBrand] = useState(false);
+  const [model, setModel] = useState(currentProduct?.model?.id);
   const [showModel, setShowModel] = useState(false);
-  const [model, setModel] = useState('');
-  const [seller, setSeller] = useState('');
-  const [attributesLn, setAttributesLn] = useState({});
-  const [attributesRu, setAttributesRu] = useState({});
-  const [descriptionLn, setDescriptionLn] = useState('');
+  const [disabledModel, setDisabledModel] = useState(false);
+  const [attributesLn, setAttributesLn] = useState(
+    currentProduct?.attributes?.ln
+  );
+  const [attributesRu, setAttributesRu] = useState(
+    currentProduct?.attributes?.ru
+  );
   const [descriptionRu, setDescriptionRu] = useState('');
-  const [sostavUz, setSostavUz] = useState('');
-  const [sostavRu, setSostavRu] = useState('');
-  const [instructionUz, setInstructionUz] = useState('');
-  const [instructionRu, setInstructionRu] = useState('');
-  const [sertificateUz, setSertificateUz] = useState('');
-  const [sertificateRu, setSertificateRu] = useState('');
+  const [descriptionLn, setDescriptionLn] = useState('');
   const [showCompound, setShowCompound] = useState(false);
+  const [sostavUz, setSostavUz] = useState(currentProduct?.composition?.ln);
+  const [sostavRu, setSostavRu] = useState(currentProduct?.composition?.ru);
+  const [instructionUz, setInstructionUz] = useState(
+    currentProduct?.composition?.ln
+  );
+  const [instructionRu, setInstructionRu] = useState(
+    currentProduct?.composition?.ru
+  );
+  const [sertificateUz, setSertificateUz] = useState(
+    currentProduct?.sertificate?.ln
+  );
+  const [sertificateRu, setSertificateRu] = useState(
+    currentProduct?.sertificate?.ru
+  );
   const [showInstruction, setShowInstruction] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
-  // const [allCharacters, setAllCharacters] = useState([]);
-  const { data: brands, isSuccess: isSuccessBrand } = useBrandsQuery();
-  const { data: countries, isSuccess: isSuccessCountry } = useCountriesQuery();
   const { data: sellers, isSuccess: isSuccessSellers } = useSellersQuery();
+  const { data: countries, isSuccess: isSuccessCountry } = useCountriesQuery();
+  const { data: brands, isSuccess: isSuccessBrand } = useBrandsQuery();
   const { data: models, isSuccess: isSuccessModels } = useModelsQuery(brand);
   const { data: characteristics, isSuccess: isSuccessCharacteristics } =
     useCharacteristicsQuery();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const allCharacters = useSelector(
     (state) => state.product.chosenCharacteristics
   );
-  const saveNewProduct = (btnName) => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const refs = useRef(false);
+  useEffect(() => {
+    if (!refs.current) {
+      refs.current = true;
+    } else {
+      if (ctgId && titleLn && titleRu) {
+        setDisabledBtn(false);
+      } else setDisabledBtn(true);
+      filterCharacteristicValues();
+    }
+  }, [ctgId, titleLn, titleRu, allCharacters]);
+
+  const saveNewProduct = async (btnName) => {
     const chosenAllCharacters = allCharacters
       .filter((item) => item.chosenValues.length > 0)
       .map((item) => {
@@ -106,74 +126,46 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
         localStorage.getItem('access-token')
       )}`,
     };
-    axios
-      .post('https://admin.milli.uz/api/v1/product/', data, {
-        headers: headers,
-      })
-      .then((res) => {
-        dispatch(clearCharacters());
-        if (btnName === 'save') navigate('/app/products/all');
-        if (btnName === 'next')
-          navigate(`/app/product/${res?.data?.data?.id}/sku`);
-        setTitleTopBtn('second');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  const refs = useRef(false);
-  useEffect(() => {
-    if (!refs.current) {
-      refs.current = true;
-    } else {
-      if (ctgId && titleLn && titleRu && brand && model) {
-        setDisabledBtn(false);
-      } else setDisabledBtn(true);
-      filterCharacteristicValues();
-    }
-  }, [ctgId, titleLn, titleRu, brand, model, allCharacters]);
 
-  useEffect(() => {
-    const getData = async () => {
-      const headers = {
-        Authorization: `Bearer ${JSON.parse(
-          localStorage.getItem('access-token')
-        )}`,
-      };
+    if (!currentProduct) {
       try {
-        const data = await axios.get(
-          `${baseUrl}/v1/product/?product_id=${productId}`,
-          {
-            headers: headers,
-          }
-        );
-        console.log(data?.data);
-        setCurrentProduct(data?.data);
+        const res = await axios.post(`${baseUrl}/v1/product/`, data, {
+          headers: headers,
+        });
+        if (res?.data?.status) {
+          dispatch(clearCharacters());
+          if (btnName === 'save') navigate('/app/products/all');
+          if (btnName === 'next')
+            navigate(`/app/product/${res?.data?.data?.id}/sku`);
+        }
       } catch (err) {
         console.log(err);
       }
-    };
-    if (productId !== ' new') {
-      getData()
-      console.log("new emas")
+    } else {
+      updateProduct({ id: currentProduct?.id, data });
+      dispatch(clearCharacters());
+      if (btnName === 'save') navigate('/app/products/all');
+      if (btnName === 'next')
+        navigate(`/app/product/${currentProduct?.id}/sku`);
     }
-  }, []);
+  };
 
-  console.log("add product")
-
+  useEffect(() => {
+    if (ctgId && seller && titleLn && titleRu && country && model && brand) {
+      setDisabledBrand(false);
+    }
+  }, [ctgId, seller, titleLn, titleRu, country, model, brand]);
   return (
     <div className="bg-white rounded-xl py-2 px-4 ">
       <ProductFormTop
-        title={titleTopBtn}
-        setTitleTopBtn={setTitleTopBtn}
+        title="first"
         disabledBtn={disabledBtn}
-        closeModal={closeModal}
         saveNewProduct={saveNewProduct}
       />
 
       <ProductCategorySelect
-        currentProduct={currentProduct}
         setCtgId={setCtgId}
+        category={currentProduct?.category}
       />
       <div className="flex flex-col w-full gap-y-5 ">
         <Titles
@@ -187,18 +179,16 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
           <Seller
             seller={seller}
             setSeller={setSeller}
-            sellers={sellers}
-            currentProduct={currentProduct}
+            sellers={isSuccessSellers ? sellers?.data : []}
           />
+
           <CountrySelect
             disabledCountry={disabledCountry}
             setDisabledCountry={setDisabledCountry}
             country={country}
             setCountry={setCountry}
-            countries={countries}
-            currentProduct={currentProduct}
+            countries={isSuccessCountry ? countries?.data : []}
           />
-
           <BrandSelect
             disabledBrand={disabledBrand}
             setDisabledBrand={setDisabledBrand}
@@ -207,14 +197,13 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             setShowModel={setShowModel}
             brands={isSuccessBrand ? brands.data : []}
           />
-
           {showModel && (
             <ModelSelect
               setModel={setModel}
               model={model}
               disabledModel={disabledModel}
               setDisabledModel={setDisabledModel}
-              models={models?.data}
+              models={isSuccessModels ? models?.data : []}
             />
           )}
         </div>
@@ -226,14 +215,15 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
 
         <Editor
           initialValue={descriptionLn}
-          // productInfo={productInfo}
+          setDess={setDescriptionLn}
           name="descUz"
+          // productInfo={productInfo}
           // updateProductTitleFormValue={updateProductTitleFormValue}
 
-          setDess={setDescriptionLn}
           // getValue={getValue}
         />
       </div>
+
       <div className="">
         <h2 className="text-base my-3 font-semibold uppercase">
           Описание товара на русском
@@ -246,7 +236,10 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
       />
       <div className="">
         {isSuccessCharacteristics && (
-          <CharacterSection characteristics={characteristics?.data} />
+          <CharacterSection
+            characters={currentProduct?.characteristics}
+            characteristics={characteristics?.data}
+          />
         )}
         <div className="h-0.5 bg-slate-300"></div>
         <div className="flex flex-col w-2/3 mb-8">
@@ -314,7 +307,7 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             <DoubleEditor
               // productInfo={productInfo}
               setDessOne={setSertificateUz}
-              setDessTwo={setSertificateUz}
+              setDessTwo={setSertificateRu}
               initialValueOne={sertificateUz}
               initialValueTwo={sertificateRu}
               textLabel={'Сертификаты'}
@@ -329,7 +322,6 @@ function AddProductModalBody({ closeModal, extraObject, size }) {
             </h2>
             <DownloadImg textDownload={'фото'} />
           </div>
-        
         </div>
       </div>
     </div>

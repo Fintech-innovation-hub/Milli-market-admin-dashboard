@@ -6,15 +6,17 @@ function ItemsTableRow({
   title,
   status,
   price,
-  barcode_code,
-  ikpu_code,
+  barcode,
+  ikpu,
+  item
 }) {
+  console.log(item)
   return (
     <tr>
-      <td>{index}</td>
+      <td>{index+1}</td>
       <td>{title || "no"}</td>
-      <td>{barcode_code || 'no'}</td>
-      <td>{ikpu_code || 'no'}</td>
+      <td>{barcode?.code || 'no'}</td>
+      <td>{ikpu?.code || 'no'}</td>
       <td>{price}</td>
       <td>{status}</td>
     </tr>

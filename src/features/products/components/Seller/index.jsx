@@ -1,17 +1,11 @@
 import React from 'react';
 
-function Seller({ seller, setSeller, sellers, currentProduct }) {
-  console.log(currentProduct);
+function Seller({ seller, setSeller, sellers }) {
   return (
     <div className="">
       <h2 className="text-base my-3 font-semibold uppercase">
         Seller
-        {currentProduct && (
-          <span className="text-lg ml-3 lowercase">
-            ({currentProduct?.seller?.first_name}-
-            {currentProduct?.seller?.phone_number})
-          </span>
-        )}
+  
       </h2>
       <select
         value={seller}
@@ -24,7 +18,7 @@ function Seller({ seller, setSeller, sellers, currentProduct }) {
         <option disabled value="">
           Choose seller
         </option>
-        {sellers?.data?.map((item) => (
+        {sellers?.map((item) => (
           <option key={item.id} value={item.id}>
             {item.phone_number}
             {item.first_name && ` - ${item.first_name}`}

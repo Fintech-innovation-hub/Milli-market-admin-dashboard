@@ -1,6 +1,6 @@
 import Subtitle from "../Typography/Subtitle"
-import SearchInput from "./SearchInput"
-import StatusSelect from "./StatusSelect"
+import SearchInput from "../Input/SearchInput"
+import FilterSelect from "../Selects/FilterSelect"
 
 
 
@@ -9,7 +9,7 @@ function TitleCard({ title, children, topMargin, TopSideButtons, name }) {
 
   return (
     <div className={"card w-full p-4 bg-base-100 shadow-xl " + (topMargin || "mt-6")}>
-      <div className="w-full flex justify-between items-center">
+      <div className="w-full flex justify-between  items-center">
 
         <Subtitle styleClass={TopSideButtons ? "inline-block" : ""}>
           {title}
@@ -21,12 +21,11 @@ function TitleCard({ title, children, topMargin, TopSideButtons, name }) {
         }
         {name === "proposal" && <SearchInput />
         }
-        {name === "proposal" && <StatusSelect />}
+        {name === "proposal" && <FilterSelect />}
       </div>
 
       <div className="divider mt-2"></div>
 
-      {/** Card Body */}
       <div className='h-full w-full pb-6 bg-base-100'>
         {children}
       </div>

@@ -17,6 +17,15 @@ export const proposalApi = createApi({
       }),
       providesTags: ["Proposal"],
     }),
+    proposalItem: builder.query({
+      query: (proposalId) => ({
+        url: `/v1/proposal/${proposalId}/`,
+        headers: {
+          'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
+        }
+      }),
+      providesTags: ['Proposal'],
+    }),
     updateProposal: builder.mutation({
       query: (proposal) => ({
         url: `/v1/proposal/?proposal_id=${proposal.id}&status=${proposal.status}`,
@@ -31,4 +40,4 @@ export const proposalApi = createApi({
   }),
 });
 
-export const { useProposalsQuery, useUpdateProposalMutation } = proposalApi;
+export const { useProposalsQuery, useProposalItemQuery, useUpdateProposalMutation } = proposalApi;

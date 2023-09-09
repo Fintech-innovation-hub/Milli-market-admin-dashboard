@@ -3,6 +3,7 @@ import { addChosenValuesToCharacter } from '../../productSlice';
 import CharacterItemsList from './CharacterItemsList';
 
 function SelectCharacterItemsModalBody({ closeModal, extraObject, size }) {
+  console.log(extraObject.values)
   const allCharItems = useSelector((state) => state.character.allCharItems);
   const dispatch = useDispatch();
   const chooseCharHandler = () => {

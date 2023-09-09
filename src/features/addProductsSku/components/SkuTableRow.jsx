@@ -3,40 +3,60 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { baseUrl } from '../../../constants';
 import { Vortex } from 'react-loader-spinner';
+import { useRef } from 'react';
 
-function SkuTableRow({ index, title, inputSku, id, status, setItems, self }) {
+function SkuTableRow({
+  index,
+  title,
+  inputSku,
+  ikpu,
+  barcode,
+  id,
+  status,
+  price,
+  setItems,
+  self,
+  item,
+}) {
+  console.log(self);
   const [showIkpuModal, setShowIkpuModal] = useState(false);
-  const [price, setPrice] = useState('');
-  const [ikpu, setIkpu] = useState('');
-  const [ikpuId, setIkpuId] = useState('');
-  const [barcode, setBarcode] = useState('');
+  const [price1, setPrice] = useState(price || '');
+  const [ikpuCode, setIkpuCode] = useState(ikpu?.code || '');
+  const [ikpuId, setIkpuId] = useState(ikpu?.id || '');
+  const [barcodeCode, setBarcodeCode] = useState(barcode?.code || '');
+  const [barcodeId, setBarcodeId] = useState(barcode?.id || "");
   const [ikpuDatas, setIkpuDatas] = useState(null);
   const [barcodeDatas, setBarcodeDatas] = useState(null);
   const [loading, setLoading] = useState(false);
   const [notfound, setNotfound] = useState('');
 
   const chooseIkpu = (id, title, code) => {
-    setIkpu(code);
+    setIkpuCode(code);
     setIkpuId(id);
     setShowIkpuModal(false);
   };
+  const refs = useRef(false);
   useEffect(() => {
+    if (!refs.current) {
+      refs.current = true;
+      return;
+    }
     const changed = self.map((item) => {
       return item.id === id
         ? {
             ...item,
             ikpu: ikpuId,
-            barcode,
-            price,
+            barcode: barcodeId,
+            price: price1,
           }
         : item;
     });
     setItems(changed);
-  }, [barcode, price, ikpu]);
+  }, [barcodeCode, price1, ikpuCode]);
   useEffect(() => {
-    if (barcode.length === 13) {
+    if (barcodeCode.length === 13) {
       axios
-        .get(`${baseUrl}/v1/product/barcode/?code=${barcode}`, {
+        .get(`${baseUrl}/v1/product/barcode/?code=${barcodeCode}`, {
           headers: {
             Authorization: `Bearer ${JSON.parse(
               localStorage.getItem('access-token')
@@ -46,18 +66,18 @@ function SkuTableRow({ index, title, inputSku, id, status, setItems, self }) {
         .then((res) => {
           setBarcodeDatas(res.data);
           if (res.data?.data?.length > 0) {
-            setBarcode(res.data?.data[0].code);
+            setBarcodeId(res.data?.data[0].code);
           } else {
-            setBarcode('');
+            setBarcodeId('');
           }
         })
         .catch((err) => console.log(err));
     }
   }, [barcode]);
 
-  const ikpuHandler=e=>{
-    setIkpu(e.target.value)
-    if (ikpu.length > 1 && ikpu.length < 13) {
+  const ikpuHandler = (e) => {
+    setIkpuCode(e.target.value);
+    if (ikpuCode.length > 1 && ikpuCode.length < 13) {
       setShowIkpuModal(true);
       axios
         .get(`${baseUrl}/v1/product/ikpu/?q=${e.target.value}`, {
@@ -73,10 +93,8 @@ function SkuTableRow({ index, title, inputSku, id, status, setItems, self }) {
         .catch((err) => console.log(err));
     } else {
       setShowIkpuModal(false);
-    
     }
-
-  }
+  };
 
   // data:[{code:"",title}]
   return (
@@ -88,9 +106,9 @@ function SkuTableRow({ index, title, inputSku, id, status, setItems, self }) {
         <input
           minLength={13}
           maxLength={13}
-          value={barcode}
+          value={barcodeCode}
           name="barcode"
-          onChange={(e) => setBarcode(e.target.value)}
+          onChange={(e) => setBarcodeCode(e.target.value)}
           type="text"
           className="text-black"
         />
@@ -98,7 +116,7 @@ function SkuTableRow({ index, title, inputSku, id, status, setItems, self }) {
       <td className="relative w-96">
         <input
           className=""
-          value={ikpu}
+          value={ikpuCode}
           name="ikpu"
           type="text"
           onChange={ikpuHandler}
@@ -135,7 +153,8 @@ function SkuTableRow({ index, title, inputSku, id, status, setItems, self }) {
       </td>
       <td>
         <input
-          name="price"
+          value={price1}
+          name="price1"
           onChange={(e) => setPrice(e.target.value)}
           type="number"
           placeholder="price"

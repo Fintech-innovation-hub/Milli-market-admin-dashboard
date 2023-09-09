@@ -10,42 +10,28 @@ import TrashIcon from '@heroicons/react/24/outline/TrashIcon';
 import { useDispatch } from 'react-redux';
 import DropdownStatus from './DropdownStatus';
 import { formatDate } from '../../../utils/formatDate';
-import { useUpdateProposalMutation } from '../../../services/proposalApi';
 import { changeStatus } from '../proposalSlice';
 import { openRightDrawer } from '../../../features/common/rightDrawerSlice';
 import { RIGHT_DRAWER_TYPES } from '../../../utils/globalConstantUtil';
 function ProposalsTableRow({
   first_name,
-  id,
+
   last_name,
   index,
-  company_name,
-  company_type,
   phone_number,
-  status,
   pnfl,
   created_at,
-  update_at,
-  inn,
-  proposal
-}) {
-  const [statuss, setStatuss] = useState(status || '');
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
-  const [updatePost, { isLoading, isError, error, isSuccess }] =
-    useUpdateProposalMutation();
-  const handleChange = (e) => {
-    setStatuss(e.target.value);
-    updatePost({ id, status: e.target.value });
-    dispatch(changeStatus({ id: id, status: e.target.value }));
-  };
+  inn,
+  proposal,
+}) {
+  const dispatch = useDispatch();
 
   const openRightOffcanvas = () => {
     dispatch(
       openRightDrawer({
-        header: 'Product datas',
-        bodyType: RIGHT_DRAWER_TYPES.OFFCANVAS,
+        header: 'Proposal details',
+        bodyType: RIGHT_DRAWER_TYPES.OFFCANVASPROPOSAL,
         size: 'long',
         extraObject: { proposal },
       })
@@ -62,24 +48,8 @@ function ProposalsTableRow({
         {last_name} {first_name}
       </td>
       <td>{phone_number}</td>
-      <td>{company_name}</td>
-      <td>{company_type}</td>
       <td>{inn ? `INN: ${inn} ` : `PNFL: ${pnfl}`}</td>
       <td>{formatDate(created_at)}</td>
-      <td>{formatDate(update_at)}</td>
-      <td className="relative">
-        <select
-          value={statuss}
-          onChange={handleChange}
-          className="cursor-pointer outline-none rounded px-2 py-1"
-          name="status"
-          id="status"
-        >
-          <option value="new">new</option>
-          <option value="accepted">accepted</option>
-          <option value="rejected">rejected</option>
-        </select>
-      </td>
     </tr>
   );
 }

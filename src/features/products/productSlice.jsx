@@ -9,6 +9,9 @@ export const productSlice = createSlice({
     clearCharacters:(state)=>{
       state.chosenCharacteristics=[]
     },
+    addCharacters:(state,action)=>{
+      state.chosenCharacteristics=action.payload
+    },
     addNewCharacteristic: (state, action) => {
       state.chosenCharacteristics = [
         ...state.chosenCharacteristics,
@@ -51,6 +54,7 @@ export const productSlice = createSlice({
 });
 
 export const {
+  addCharacters,
   clearCharacters,
   addNewCharacteristic,
   deleteCharacter,

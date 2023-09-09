@@ -25,7 +25,6 @@ function ProductTableRow({
 }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [deleteProduct] = useDeleteProductMutation();
 
   const deleteCurrentProduct = async (event) => {
 
@@ -36,12 +35,11 @@ function ProductTableRow({
         bodyType: MODAL_BODY_TYPES.CONFIRMATION,
         extraObject: {
           message: `Are you sure you want to delete this product?`,
-          type: CONFIRMATION_MODAL_CLOSE_TYPES.LEAD_DELETE,
+          type: CONFIRMATION_MODAL_CLOSE_TYPES.PRODUCT_DELETE,
           id,
         },
       })
     );
-    await deleteProduct(id);
   };
   function sliceStr(str = '') {
     return str.length > 15 ? str.slice(0, 35) + '...' : str;
@@ -54,10 +52,10 @@ function ProductTableRow({
   const openRightOffcanvas = () => {
     dispatch(
       openRightDrawer({
-        header: 'Product datas',
+        header: title,
         bodyType: RIGHT_DRAWER_TYPES.OFFCANVAS,
         size: 'long',
-        extraObject: { product },
+        extraObject: { product},
       })
     );
   };
