@@ -8,6 +8,9 @@ const Products = lazy(() => import('../pages/protected/Products'))
 const CategoryDetail = lazy(() => import('../pages/protected/CategoryDetail'))
 const AddProducts = lazy(() => import('../pages/protected/CreateProduct'))
 const Proposals = lazy(() => import('../pages/protected/Proposals'))
+const Banners = lazy(() => import('../pages/protected/Banners'))
+const TopCategory = lazy(() => import('../pages/protected/TopCategory'))
+const TopProduct = lazy(() => import('../pages/protected/TopProduct'))
 
 // const Charts = lazy(() => import('../pages/protected/Charts'))
 // const ProfileSettings = lazy(() => import('../pages/protected/ProfileSettings'))
@@ -44,6 +47,18 @@ const routes = [
   {
     path: '/product/:id/sku',
     component: AddProductSku,
+  },
+  {
+    path: '/banners',
+    component: Banners,
+  },
+  {
+    path: '/topCategory',
+    component: TopCategory,
+  },
+  {
+    path: '/topProduct',
+    component: TopProduct,
   },
   // {
   //   path: '/settings-profile',

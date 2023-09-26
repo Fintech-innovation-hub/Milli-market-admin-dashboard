@@ -80,9 +80,9 @@ function Categories() {
                                 <tr>
                                     <th>№</th>
                                     <th>Title uz</th>
+                                    <th>Actions</th>
 
-                                    {/* <th>Assigned To</th>
-                                <th></th> */}
+                                  
                                 </tr>
                             </thead>
                             <tbody>

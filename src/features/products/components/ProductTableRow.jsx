@@ -11,7 +11,6 @@ import { AiFillEdit } from 'react-icons/ai';
 import { useDispatch } from 'react-redux';
 
 import { openModal } from '../../common/modalSlice';
-import { useDeleteProductMutation } from '../../../services/productApi';
 import { openRightDrawer } from '../../../features/common/rightDrawerSlice';
 import { RIGHT_DRAWER_TYPES } from '../../../utils/globalConstantUtil';
 

@@ -1,44 +1,43 @@
-import { useRef, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useRef, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 // import ErrorText from '../../../components/Typography/ErrorText';
 // import { showNotification } from '../../common/headerSlice';
 import {
   useAddProductMutation,
   usePatchProductDetailsMutation,
-} from '../../../services/productApi';
-import Editor from './Editor';
-import { useCountriesQuery } from '../../../services/countryApi';
-import { useBrandsQuery } from '../../../services/brandApi';
-import DoubleEditor from './DoubleEditor';
-import DownloadImg from './DownloadImg';
-import { useCharacteristicsQuery } from '../../../services/characteristicApi';
-import ProductCategorySelect from './CategorySelect/ProductCategorySelect';
-import ProductFormTop from './ProductFormTop';
-import { useSellersQuery } from '../../../services/sellerApi';
-import { useNavigate } from 'react-router-dom';
-import { useModelsQuery } from '../../../services/modelApi';
-import axios from 'axios';
-import CharacterSection from './CharacteristicsSection/CharacterSection';
-import AddAttributeSection from './AddAttributeSection';
-import { clearCharacters, filterCharacteristicValues } from '../productSlice';
-import CountrySelect from './CountrySelect/CountrySelect';
-import BrandSelect from './BrandSelect/BrandSelect';
-import ModelSelect from './ModalSelect/ModalSelect';
-import { baseUrl } from '../../../constants';
-import Titles from './Titles';
-import Seller from './Seller';
+} from "../../../services/productApi";
+import Editor from "./Editor";
+import { useCountriesQuery } from "../../../services/countryApi";
+import { useBrandsQuery } from "../../../services/brandApi";
+import DoubleEditor from "./DoubleEditor";
+import DownloadImg from "./DownloadImg";
+import { useCharacteristicsQuery } from "../../../services/characteristicApi";
+import ProductCategorySelect from "./CategorySelect/ProductCategorySelect";
+import ProductFormTop from "./ProductFormTop";
+import { useSellersQuery } from "../../../services/sellerApi";
+import { useNavigate } from "react-router-dom";
+import { useModelsQuery } from "../../../services/modelApi";
+import axios from "axios";
+import CharacterSection from "./CharacteristicsSection/CharacterSection";
+import AddAttributeSection from "./AddAttributeSection";
+import { clearCharacters, filterCharacteristicValues } from "../productSlice";
+import CountrySelect from "./CountrySelect/CountrySelect";
+import BrandSelect from "./BrandSelect/BrandSelect";
+import ModelSelect from "./ModalSelect/ModalSelect";
+import { baseUrl } from "../../../constants";
+import Titles from "./Titles";
+import Seller from "./Seller";
 
 function AddProductModalBody({ currentProduct }) {
-  const [updateProduct] = usePatchProductDetailsMutation();
-  const [addProduct, result] = useAddProductMutation();
+  console.log(currentProduct)
   const [disabledBtn, setDisabledBtn] = useState(true);
-  const [ctgId, setCtgId] = useState(currentProduct?.category?.id || '');
-  const [titleLn, setTitleLn] = useState(currentProduct?.title?.ln || '');
-  const [titleRu, setTitleRu] = useState(currentProduct?.title?.ru || '');
-  const [seller, setSeller] = useState(currentProduct?.seller?.id || '');
-  const [country, setCountry] = useState(currentProduct?.country?.id || '');
+  const [ctgId, setCtgId] = useState(currentProduct?.category?.id || "");
+  const [titleLn, setTitleLn] = useState(currentProduct?.title?.ln || "");
+  const [titleRu, setTitleRu] = useState(currentProduct?.title?.ru || "");
+  const [seller, setSeller] = useState(currentProduct?.seller?.id || "");
+  const [country, setCountry] = useState(currentProduct?.country?.id || "");
   const [disabledCountry, setDisabledCountry] = useState(false);
-  const [brand, setBrand] = useState(currentProduct?.brand?.id || '');
+  const [brand, setBrand] = useState(currentProduct?.brand?.id || 1);
   const [disabledBrand, setDisabledBrand] = useState(false);
   const [model, setModel] = useState(currentProduct?.model?.id);
   const [showModel, setShowModel] = useState(false);
@@ -49,8 +48,8 @@ function AddProductModalBody({ currentProduct }) {
   const [attributesRu, setAttributesRu] = useState(
     currentProduct?.attributes?.ru
   );
-  const [descriptionRu, setDescriptionRu] = useState('');
-  const [descriptionLn, setDescriptionLn] = useState('');
+  const [descriptionRu, setDescriptionRu] = useState("");
+  const [descriptionLn, setDescriptionLn] = useState("");
   const [showCompound, setShowCompound] = useState(false);
   const [sostavUz, setSostavUz] = useState(currentProduct?.composition?.ln);
   const [sostavRu, setSostavRu] = useState(currentProduct?.composition?.ru);
@@ -68,12 +67,15 @@ function AddProductModalBody({ currentProduct }) {
   );
   const [showInstruction, setShowInstruction] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
+  const [images, setImages] = useState([]);
   const { data: sellers, isSuccess: isSuccessSellers } = useSellersQuery();
   const { data: countries, isSuccess: isSuccessCountry } = useCountriesQuery();
   const { data: brands, isSuccess: isSuccessBrand } = useBrandsQuery();
   const { data: models, isSuccess: isSuccessModels } = useModelsQuery(brand);
   const { data: characteristics, isSuccess: isSuccessCharacteristics } =
     useCharacteristicsQuery();
+  const [updateProduct] = usePatchProductDetailsMutation();
+  const [addProduct] = useAddProductMutation();
 
   const allCharacters = useSelector(
     (state) => state.product.chosenCharacteristics
@@ -121,32 +123,54 @@ function AddProductModalBody({ currentProduct }) {
       attributes_ru: attributesRu,
       characteristics: chosenAllCharacters,
     };
-    const headers = {
-      Authorization: `Bearer ${JSON.parse(
-        localStorage.getItem('access-token')
-      )}`,
-    };
-
+    const formData = new FormData();
+    images.forEach((image) => {
+      formData.append("file", image);
+    });
+    console.log(formData);
     if (!currentProduct) {
-      try {
-        const res = await axios.post(`${baseUrl}/v1/product/`, data, {
-          headers: headers,
+      addProduct(data)
+        .then((res) => {
+          if (res?.data?.status) {
+            console.log(res);
+            const formData = new FormData();
+            images.forEach((image) => {
+              formData.append("file", image);
+            });
+            axios
+              .post(
+                `${baseUrl}/v1/product/images/${res?.data?.data?.id}/`,
+                formData,
+                {
+                  headers: {
+                    Authorization: `Bearer ${JSON.parse(
+                      localStorage.getItem("access-token")
+                    )}`,
+                    "Content-Type": "multipart/form-data; ",
+                  },
+                }
+              )
+              .then((res) => {
+                dispatch(clearCharacters());
+                if (btnName === "save") navigate("/app/products/all");
+                if (btnName === "next")
+                  navigate(`/app/product/${res?.data?.data?.id}/sku`);
+              });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
         });
-        if (res?.data?.status) {
-          dispatch(clearCharacters());
-          if (btnName === 'save') navigate('/app/products/all');
-          if (btnName === 'next')
-            navigate(`/app/product/${res?.data?.data?.id}/sku`);
-        }
-      } catch (err) {
-        console.log(err);
-      }
     } else {
-      updateProduct({ id: currentProduct?.id, data });
-      dispatch(clearCharacters());
-      if (btnName === 'save') navigate('/app/products/all');
-      if (btnName === 'next')
-        navigate(`/app/product/${currentProduct?.id}/sku`);
+      updateProduct({ id: currentProduct?.id, data })
+        .unwrap()
+        .then((res) => {
+          dispatch(clearCharacters());
+          if (btnName === "save") navigate("/app/products/all");
+          if (btnName === "next")
+            navigate(`/app/product/${currentProduct?.id}/sku`);
+        })
+        .catch((err) => console.log(err));
     }
   };
 
@@ -155,6 +179,7 @@ function AddProductModalBody({ currentProduct }) {
       setDisabledBrand(false);
     }
   }, [ctgId, seller, titleLn, titleRu, country, model, brand]);
+
   return (
     <div className="bg-white rounded-xl py-2 px-4 ">
       <ProductFormTop
@@ -179,7 +204,7 @@ function AddProductModalBody({ currentProduct }) {
           <Seller
             seller={seller}
             setSeller={setSeller}
-            sellers={isSuccessSellers ? sellers?.data : []}
+            sellers={isSuccessSellers ? sellers?.results : []}
           />
 
           <CountrySelect
@@ -187,7 +212,7 @@ function AddProductModalBody({ currentProduct }) {
             setDisabledCountry={setDisabledCountry}
             country={country}
             setCountry={setCountry}
-            countries={isSuccessCountry ? countries?.data : []}
+            countries={isSuccessCountry ? countries?.results : []}
           />
           <BrandSelect
             disabledBrand={disabledBrand}
@@ -195,7 +220,7 @@ function AddProductModalBody({ currentProduct }) {
             brand={brand}
             setBrand={setBrand}
             setShowModel={setShowModel}
-            brands={isSuccessBrand ? brands.data : []}
+            brands={isSuccessBrand ? brands.results : []}
           />
           {showModel && (
             <ModelSelect
@@ -203,7 +228,7 @@ function AddProductModalBody({ currentProduct }) {
               model={model}
               disabledModel={disabledModel}
               setDisabledModel={setDisabledModel}
-              models={isSuccessModels ? models?.data : []}
+              models={isSuccessModels ? models?.results : []}
             />
           )}
         </div>
@@ -261,7 +286,7 @@ function AddProductModalBody({ currentProduct }) {
               setDessTwo={setSostavRu}
               initialValueOne={sostavUz}
               initialValueTwo={sostavRu}
-              textLabel={'Состав'}
+              textLabel={"Состав"}
             />
           )}
         </div>
@@ -285,7 +310,7 @@ function AddProductModalBody({ currentProduct }) {
               setDessTwo={setInstructionRu}
               initialValueOne={instructionUz}
               initialValueTwo={instructionRu}
-              textLabel={'Инструкция'}
+              textLabel={"Инструкция"}
             />
           )}
         </div>
@@ -310,7 +335,7 @@ function AddProductModalBody({ currentProduct }) {
               setDessTwo={setSertificateRu}
               initialValueOne={sertificateUz}
               initialValueTwo={sertificateRu}
-              textLabel={'Сертификаты'}
+              textLabel={"Сертификаты"}
             />
           )}
         </div>
@@ -320,7 +345,11 @@ function AddProductModalBody({ currentProduct }) {
             <h2 className="text-base my-3 font-semibold uppercase">
               Загрузить фотографии
             </h2>
-            <DownloadImg textDownload={'фото'} />
+            <DownloadImg
+              images={images}
+              setImages={setImages}
+              textDownload={"фото"}
+            />
           </div>
         </div>
       </div>

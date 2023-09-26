@@ -19,7 +19,6 @@ function PageContent() {
         });
     }, [pageTitle])
 
-console.log('page content')
     return (
         <div className="drawer-content flex flex-col ">
             <Header />

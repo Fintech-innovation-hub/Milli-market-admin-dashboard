@@ -7,8 +7,7 @@ function CharacterButtons({characters}) {
   const chosenCharacteristics = useSelector(
     (state) => state.product.chosenCharacteristics
   );
-console.log(chosenCharacteristics)
-console.log(characters)
+
   return (
     <div className="w-full my-6  flex flex-col items-start gap-6">
       {chosenCharacteristics.map((elem) => (

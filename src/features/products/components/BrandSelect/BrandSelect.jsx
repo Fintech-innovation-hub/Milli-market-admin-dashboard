@@ -26,7 +26,7 @@ function BrandSelect({
         <option value="" disabled>
           Choose brand
         </option>
-        {brands.map((item) => (
+        {brands?.map((item) => (
           <option key={item.id} value={item.id}>
             {item.title}
           </option>

@@ -1,28 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import DownloadImagesLists from "./DownloadImagesLists";
 // import { AiOutlinePlus } from "react-icons/ai";
 
-const DownloadImg = ({ textDownload }) => {
-  const [images, setImages] = useState([]);
- 
+const DownloadImg = ({ textDownload, images, setImages, extraObject }) => {
+  const [imagess, setImagess] = useState(extraObject?.images || []);
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-    setImages([...images, URL.createObjectURL(file)]);
-    // setSelectedImage(URL.createObjectURL(file));
+    console.log(file.name);
+    setImages([...images, file]);
+    setImagess([...imagess, URL.createObjectURL(file)]);
   };
-
   return (
-    <div className="flex items-start gap-5 ">
-      <div className='flex items-center gap-5'>
-        {images.length > 0 &&
-          images.map((image) => (
-            <img className="h-44 w-40 object-cover rounded" src={image} alt="Uploaded" />
-          ))}
-      </div>
+    <div className="flex flex-col items-start gap-4  ">
       <label
         htmlFor="dropzone-file"
-        className="flex flex-col items-center justify-center  h-44 w-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        className="flex flex-col items-center justify-center  h-36 w-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
       >
-        <div className="flex flex-col items-center justify-center px-6 text-center pt-5 pb-6">
+        <div className="flex flex-col  items-center justify-center px-6 text-center pt-5 pb-6">
           <p className="mb-2 text-2xl font-medium text-gray-500 dark:text-gray-400">
             Добавить {textDownload}
           </p>
@@ -35,6 +29,21 @@ const DownloadImg = ({ textDownload }) => {
           className="hidden"
         />
       </label>
+      <div className="grid grid-cols-1 items-start md:grid-cols-3 gap-1">
+        {imagess.map((image, index) => (
+          <DownloadImagesLists
+            key={index}
+            setImages={setImages}
+            setImagess={setImagess}
+            image={image}
+            index={index}
+            images={images}
+            imagess={imagess}
+            leng={images.length}
+            extraObject={extraObject}
+          />
+        ))}
+      </div>
     </div>
   );
 };

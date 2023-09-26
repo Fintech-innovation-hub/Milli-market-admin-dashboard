@@ -5,11 +5,13 @@ import { CONFIRMATION_MODAL_CLOSE_TYPES } from '../../../utils/globalConstantUti
 import { showNotification } from '../headerSlice'
 import { useDeleteCategoryMutation } from "../../../services/categoryApi"
 import { useDeleteProductMutation } from '../../../services/productApi'
+import { useDeleteTopCategoryMutation } from '../../../services/topCategoryApi'
 
 
 function ConfirmationModalBody({ extraObject, closeModal}) {
     const [deleteCategory] = useDeleteCategoryMutation()
     const [deleteProduct] = useDeleteProductMutation();
+    const [deleteTopCategory]=useDeleteTopCategoryMutation()
 
 
 
@@ -27,6 +29,10 @@ function ConfirmationModalBody({ extraObject, closeModal}) {
         if (type === CONFIRMATION_MODAL_CLOSE_TYPES.PRODUCT_DELETE) {      
             dispatch(showNotification({ message: "Product Deleted!", status: 1 }))
             deleteProduct(id)
+        }
+        if (type === CONFIRMATION_MODAL_CLOSE_TYPES.TOP_CATEGORY_DELETE) {      
+            dispatch(showNotification({ message: "Top Category Deleted!", status: 1 }))
+            deleteTopCategory(id)
         }
         
         closeModal()
