@@ -49,11 +49,6 @@ const routes = [
     name: 'Proposals', // name that appear in Sidebar
   },
   {
-    path: '/app/banners', // url
-    icon: <BanknotesIcon className={iconClasses} />, // icon component
-    name: 'Banners', // name that appear in Sidebar
-  },
-  {
     path: '/app/topCategory', // url
     icon: <DocumentIcon className={iconClasses} />, // icon component
     name: 'Top Category', // name that appear in Sidebar
@@ -63,6 +58,12 @@ const routes = [
     icon: <TrophyIcon className={iconClasses} />, // icon component
     name: 'Top Product', // name that appear in Sidebar
   },
+  {
+    path: '/app/banner', // url
+    icon: <BanknotesIcon className={iconClasses} />, // icon component
+    name: 'Banners', // name that appear in Sidebar
+  },
+  
   // {
   //   path: '/app/transactions', // url
   //   icon: <CurrencyDollarIcon className={iconClasses}/>, // icon component

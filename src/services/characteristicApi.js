@@ -10,7 +10,7 @@ export const charactericApi = createApi({
   endpoints: (builder) => ({
     characteristics: builder.query({
       query: () => ({
-        url: "/v1/product/character/items",
+        url: "/v1/product/character/items/",
         headers: {
           Authorization: `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`,
         },

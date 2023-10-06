@@ -34,10 +34,15 @@ export const topProductApi = createApi({
       invalidatesTags: ["TopProduct"],
     }),
     updateTopProduct: builder.mutation({
-      query: ({ id, formData }) => ({
-        url: `/v1/product/top/${id}`,
+      query: ({ id, ...rest }) => ({
+        url: `/v1/product/top/${id}/`,
         method: "PATCH",
-        body: formData,
+        body: rest,
+        headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("access-token")
+          )}`,
+        },
       }),
 
       invalidatesTags: ["TopProduct"],

@@ -5,6 +5,7 @@ import { MODAL_BODY_TYPES } from "../../utils/globalConstantUtil";
 import TitleCard from "../../components/Cards/TitleCard";
 import { useTopProductsQuery } from "../../services/topProductApi";
 import CardsContainer from "../../components/Cards/CardsContainer";
+import TopProductTable from "./components/TopProductTable";
 
 const TopSideButtons = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const TopSideButtons = () => {
 function TopProduct() {
 
   const { data: topProducts, isLoading, isSuccess } = useTopProductsQuery();
+  
 
   return (
     <>
@@ -54,7 +56,8 @@ function TopProduct() {
           </div>
         )}
         {isSuccess && (
-          <CardsContainer title={"topProduct"} data={topProducts.results} />
+          <TopProductTable title={"topProduct"} data={topProducts.results}/>
+          // <CardsContainer title={"topProduct"} data={topProducts.results} />
         )}
       </TitleCard>
     </>

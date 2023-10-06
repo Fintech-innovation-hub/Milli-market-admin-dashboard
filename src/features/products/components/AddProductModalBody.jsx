@@ -76,7 +76,7 @@ function AddProductModalBody({ currentProduct }) {
     useCharacteristicsQuery();
   const [updateProduct] = usePatchProductDetailsMutation();
   const [addProduct] = useAddProductMutation();
-
+console.log('chars',characteristics)
   const allCharacters = useSelector(
     (state) => state.product.chosenCharacteristics
   );
@@ -263,7 +263,7 @@ function AddProductModalBody({ currentProduct }) {
         {isSuccessCharacteristics && (
           <CharacterSection
             characters={currentProduct?.characteristics}
-            characteristics={characteristics?.data}
+            characteristics={characteristics?.results}
           />
         )}
         <div className="h-0.5 bg-slate-300"></div>

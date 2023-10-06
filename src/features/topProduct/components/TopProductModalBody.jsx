@@ -13,7 +13,6 @@ function TopProductModalBody({ closeModal, extraObject }) {
   const { data: products, isSuccess } = useProductsQuery();
   const [addTopProduct] = useAddTopProductMutation();
   const [updateTopProduct] = useUpdateTopProductMutation();
-  console.log(productID);
 
   const addTopProductHandler = async (e) => {
     e.preventDefault();
@@ -21,10 +20,15 @@ function TopProductModalBody({ closeModal, extraObject }) {
       alert("select product!");
       return;
     }
-    closeModal();
 
+    e.preventDefault();
+    const productt = {
+    product:productID,
+    id: extraObject?.id,
+    };
+    console.log(productt)
     await (extraObject
-      ? updateTopProduct({ id: extraObject?.id, product: productID })
+      ? updateTopProduct(productt)
       : addTopProduct({ product: productID })
     )
       .unwrap()

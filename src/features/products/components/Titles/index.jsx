@@ -4,7 +4,7 @@ function Titles({titleLn,setTitleLn,titleRu,setTitleRu}) {
  
   return (
    <div className='w-1/2'>
-     <div className={`form-control w-full mt-3`}>
+     <div className={`form-control w-full mt-2`}>
             <label className="label">
               <span className={'label-text text-base-content  '}>
                 Title_uz  
@@ -20,7 +20,7 @@ function Titles({titleLn,setTitleLn,titleRu,setTitleRu}) {
               className=" rounded p-2 outline-none  product-input "
             />
           </div>
-          <div className={`form-control w-full mt-3`}>
+          <div className={`form-control w-full mt-2`}>
             <label className="label">
               <span className={'label-text text-base-content  '}>
                 Title_ru  

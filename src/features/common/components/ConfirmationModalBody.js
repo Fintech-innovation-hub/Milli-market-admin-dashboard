@@ -6,12 +6,16 @@ import { showNotification } from '../headerSlice'
 import { useDeleteCategoryMutation } from "../../../services/categoryApi"
 import { useDeleteProductMutation } from '../../../services/productApi'
 import { useDeleteTopCategoryMutation } from '../../../services/topCategoryApi'
+import { useDeleteTopProductMutation } from '../../../services/topProductApi'
+import { useDeleteBannerMutation } from '../../../services/bannerApi'
 
 
 function ConfirmationModalBody({ extraObject, closeModal}) {
     const [deleteCategory] = useDeleteCategoryMutation()
     const [deleteProduct] = useDeleteProductMutation();
     const [deleteTopCategory]=useDeleteTopCategoryMutation()
+    const [deleteTopProduct]=useDeleteTopProductMutation()
+    const [deleteBanner]=useDeleteBannerMutation()
 
 
 
@@ -33,6 +37,14 @@ function ConfirmationModalBody({ extraObject, closeModal}) {
         if (type === CONFIRMATION_MODAL_CLOSE_TYPES.TOP_CATEGORY_DELETE) {      
             dispatch(showNotification({ message: "Top Category Deleted!", status: 1 }))
             deleteTopCategory(id)
+        }
+        if (type === CONFIRMATION_MODAL_CLOSE_TYPES.TOP_PRODUCT_DELETE) {      
+            dispatch(showNotification({ message: "Top Product Deleted!", status: 1 }))
+            deleteTopProduct(id)
+        }
+        if (type === CONFIRMATION_MODAL_CLOSE_TYPES.BANNER_DELETE) {      
+            dispatch(showNotification({ message: "Banner Deleted!", status: 1 }))
+            deleteBanner(id)
         }
         
         closeModal()

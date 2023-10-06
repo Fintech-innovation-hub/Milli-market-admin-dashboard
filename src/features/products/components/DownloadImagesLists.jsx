@@ -10,10 +10,12 @@ function DownloadImagesLists({
   imagess,
   images,
   extraObject,
-  leng
+  leng,
 }) {
   const [showDeleteIcon, setShowDeleteIcon] = useState(false);
+  console.log(imagess);
 
+  console.log(leng);
   return (
     <div
       onMouseOver={() => setShowDeleteIcon(true)}
@@ -22,7 +24,7 @@ function DownloadImagesLists({
     >
       <img
         className="h-40 w-full object-cover rounded"
-        src={extraObject   ? `data:image/jpeg;base64,${image}` : image}
+        src={image}
         alt="Uploaded"
       />
       <TrashIcon
@@ -32,7 +34,8 @@ function DownloadImagesLists({
         }}
         className={` ${
           showDeleteIcon ? "inline-block" : "hidden"
-        } absolute h-6 w-6 cursor-pointer top-4 right-3 text-white font-bold`}
+        } absolute h-6 w-6 cursor-pointer top-4 right-3 
+         text-white font-bold`}
       />
     </div>
   );

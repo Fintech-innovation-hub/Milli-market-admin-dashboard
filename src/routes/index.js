@@ -49,7 +49,7 @@ const routes = [
     component: AddProductSku,
   },
   {
-    path: '/banners',
+    path: '/banner',
     component: Banners,
   },
   {

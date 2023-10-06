@@ -5,6 +5,7 @@ import {  MODAL_BODY_TYPES } from "../../utils/globalConstantUtil";
 import TitleCard from "../../components/Cards/TitleCard";
 import { useTopCategoriesQuery } from "../../services/topCategoryApi";
 import CardsContainer from "../../components/Cards/CardsContainer";
+import TopCategoryTable from "./components/TopCategoryTable"
 
 
 const TopSideButtons = () => {
@@ -26,7 +27,7 @@ function TopCategory() {
 
    
     const { data: topCategories, isLoading, isSuccess } = useTopCategoriesQuery()
-  
+  console.log(topCategories)
   
     return (
         <>
@@ -43,7 +44,8 @@ function TopCategory() {
                         />
                     </div>
                 )}
-               {isSuccess && <CardsContainer title={"topCategory"} data={topCategories.results}/>}
+                  {isSuccess && <TopCategoryTable title={"topCategory"} data={topCategories.results} />}
+               {/* {isSuccess && <CardsContainer title={"topCategory"} data={topCategories.results}/>} */}
             </TitleCard>
         </>
     )

@@ -5,12 +5,13 @@ import {
   useAddTopCategoryMutation,
   useUpdateTopCategoryMutation,
 } from "../../../services/topCategoryApi";
+import DownloadImage from "../../../components/Images/DownloadImage";
 
 function TopCategoryModalBody({ closeModal, extraObject }) {
   console.log(extraObject);
 
   const [ctgId, setCtgId] = useState(extraObject?.category?.id || "");
-  const [images, setImages] = useState(extraObject?.images || []);
+  const [image, setImage] = useState(extraObject?.image || "");
   const [url, setUrl] = useState(extraObject?.url || "");
   const [error, setError] = useState("");
   const [addTopCategory] = useAddTopCategoryMutation();
@@ -18,18 +19,16 @@ function TopCategoryModalBody({ closeModal, extraObject }) {
 
   const addTopCategoryHandler = async (e) => {
     e.preventDefault();
-    if(!ctgId || images.length===0){
-      alert("malumotlarni to'liq kiriting!")
+    if (!ctgId || !image) {
+      alert("malumotlarni to'liq kiriting!");
       return;
     }
     const formData = new FormData();
     formData.append("category", ctgId);
     formData.append("url", url);
-    images.forEach((image) => {
-      formData.append("file", image);
-    });
+    formData.append("file", image);
 
-   await (extraObject
+    await (extraObject
       ? editTopCategory({ id: extraObject?.id, formData })
       : addTopCategory(formData)
     )
@@ -65,12 +64,7 @@ function TopCategoryModalBody({ closeModal, extraObject }) {
         />
       </div>
 
-      <DownloadImg
-        extraObject={extraObject}
-        images={images}
-        setImages={setImages}
-        textDownload={"фото"}
-      />
+      <DownloadImage image={image} setImage={setImage} textDownload={"Image"} />
       {error && <h1 className="font-bold text-lg text-red-500">{error}</h1>}
       <button className="bg-blue-600 text-white p-2 rounded">
         {extraObject ? "Edit" : "Add"} Top Category
