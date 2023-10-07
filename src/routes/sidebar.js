@@ -59,6 +59,11 @@ const routes = [
     name: 'Top Product', // name that appear in Sidebar
   },
   {
+    path: '/app/adsProduct', // url
+    icon: <TrophyIcon className={iconClasses} />, // icon component
+    name: 'Ads Product', // name that appear in Sidebar
+  },
+  {
     path: '/app/banner', // url
     icon: <BanknotesIcon className={iconClasses} />, // icon component
     name: 'Banners', // name that appear in Sidebar

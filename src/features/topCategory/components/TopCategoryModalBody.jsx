@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ProductCategorySelect from "../../products/components/CategorySelect/ProductCategorySelect";
-import DownloadImg from "../../products/components/DownloadImg";
 import {
   useAddTopCategoryMutation,
   useUpdateTopCategoryMutation,

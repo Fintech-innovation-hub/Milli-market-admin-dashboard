@@ -15,6 +15,7 @@ import { modelApi } from "../services/modelApi";
 import { proposalApi } from "../services/proposalApi";
 import { topCategoryApi } from "../services/topCategoryApi";
 import { topProductApi } from "../services/topProductApi";
+import { adsProductApi } from "../services/adsProductApi";
 import { bannerApi } from "../services/bannerApi";
 import ProductReducer from "../features/products/productSlice";
 import ProposalReducer from "../features/proposals/proposalSlice";
@@ -38,6 +39,7 @@ const combinedReducer = {
   [proposalApi.reducerPath]: proposalApi.reducer,
   [topCategoryApi.reducerPath]: topCategoryApi.reducer,
   [topProductApi.reducerPath]: topProductApi.reducer,
+  [adsProductApi.reducerPath]: adsProductApi.reducer,
   [bannerApi.reducerPath]: bannerApi.reducer,
 };
 
@@ -56,6 +58,7 @@ export default configureStore({
       proposalApi.middleware,
       topCategoryApi.middleware,
       topProductApi.middleware,
+      adsProductApi.middleware,
       bannerApi.middleware,
     ),
 });

@@ -4,6 +4,8 @@ import DownloadImagesLists from "./DownloadImagesLists";
 
 const DownloadImg = ({ textDownload, images, setImages, extraObject }) => {
   const [imagess, setImagess] = useState(extraObject?.images || []);
+  
+  console.log(extraObject);
   console.log(images);
   console.log(imagess);
   const handleImageChange = (event) => {

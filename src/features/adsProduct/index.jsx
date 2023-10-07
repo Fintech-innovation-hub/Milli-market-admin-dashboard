@@ -1,12 +1,11 @@
 import { useDispatch } from "react-redux";
 import { openModal } from "../common/modalSlice";
-
 import { Dna } from "react-loader-spinner";
 import { MODAL_BODY_TYPES } from "../../utils/globalConstantUtil";
 import TitleCard from "../../components/Cards/TitleCard";
-import { useBannersQuery } from "../../services/bannerApi";
-// import CardsContainer from "../../components/Cards/CardsContainer";
-import BannerTable from "./components/BannerTable";
+import { useAdsProductsQuery } from "../../services/adsProductApi";
+import TopProductTable from "../topProduct/components/TopProductTable";
+
 
 const TopSideButtons = () => {
   const dispatch = useDispatch();
@@ -14,8 +13,9 @@ const TopSideButtons = () => {
   const openAddNewCategoryModal = () => {
     dispatch(
       openModal({
-        title: "Add New Banner",
-        bodyType: MODAL_BODY_TYPES.BANNER_ADD_NEW,
+        title: "Add ads product",
+        bodyType: MODAL_BODY_TYPES.TOP_PRODUCT_ADD_NEW,
+        extraObject:{pageTitle:"Ads Product"}
       })
     );
   };
@@ -26,22 +26,21 @@ const TopSideButtons = () => {
         className="btn px-6 btn-sm normal-case btn-primary"
         onClick={() => openAddNewCategoryModal()}
       >
-        Add New Banner
+        Add New Ads Product
       </button>
     </div>
   );
 };
 
-function Banner() {
-  // const { leads } = useSelector(state => state.lead)
+function AdsProduct() {
 
-  const { data: banners, isLoading, isSuccess} = useBannersQuery();
-  console.log(banners)
+  const { data: adsProducts, isLoading, isSuccess } = useAdsProductsQuery()
+  
 
   return (
     <>
       <TitleCard
-        title="Current Banners"
+        title="Ads Product"
         topMargin="mt-2"
         TopSideButtons={<TopSideButtons />}
       >
@@ -58,14 +57,11 @@ function Banner() {
           </div>
         )}
         {isSuccess && (
-          <BannerTable title="banner" data={banners?.results}/>
+          <TopProductTable title={"Ads Product"} data={adsProducts.results}/>
         )}
-        {/* {isSuccess && (
-          <CardsContainer title={"banner"} data={banners.results} />
-        )} */}
       </TitleCard>
     </>
   );
 }
 
-export default Banner;
+export default AdsProduct;

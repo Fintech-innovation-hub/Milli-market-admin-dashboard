@@ -15,6 +15,7 @@ const TopSideButtons = () => {
       openModal({
         title: "Add top product",
         bodyType: MODAL_BODY_TYPES.TOP_PRODUCT_ADD_NEW,
+        extraObject:{pageTitle:"Top Product"}
       })
     );
   };
@@ -56,8 +57,7 @@ function TopProduct() {
           </div>
         )}
         {isSuccess && (
-          <TopProductTable title={"topProduct"} data={topProducts.results}/>
-          // <CardsContainer title={"topProduct"} data={topProducts.results} />
+          <TopProductTable title={"Top Product"} data={topProducts.results}/>
         )}
       </TitleCard>
     </>

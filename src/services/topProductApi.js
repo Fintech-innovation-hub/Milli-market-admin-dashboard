@@ -20,10 +20,10 @@ export const topProductApi = createApi({
       providesTags: ["TopProduct"],
     }),
     addTopProduct: builder.mutation({
-      query: (topCategory) => ({
+      query: (topProduct) => ({
         url: "/v1/product/top/",
         method: "POST",
-        body: topCategory,
+        body: topProduct,
         headers: {
           Authorization: `Bearer ${JSON.parse(
             localStorage.getItem("access-token")

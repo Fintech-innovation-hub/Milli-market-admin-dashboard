@@ -1,29 +1,29 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "../constants";
 
-export const bannerApi = createApi({
-  reducerPath: "bannerApi",
+export const adsProductApi = createApi({
+  reducerPath: "adsProductApi",
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}`,
   }),
-  tagTypes: ["Banner"],
+  tagTypes: ["AdsProduct"],
   endpoints: (builder) => ({
-    banners: builder.query({
+    adsProducts: builder.query({
       query: () => ({
-        url: "/v1/product/main-banner/",
+        url: "/v1/product/ads/",
         headers: {
           Authorization: `Bearer ${JSON.parse(
             localStorage.getItem("access-token")
           )}`,
         },
       }),
-      providesTags: ["Banner"],
+      providesTags: ["AdsProduct"],
     }),
-    addBanner: builder.mutation({
-      query: (banner) => ({
-        url: "/v1/product/main-banner/",
+    addAdsProduct: builder.mutation({
+      query: (adsProduct) => ({
+        url: "/v1/product/ads/",
         method: "POST",
-        body: banner,
+        body: adsProduct,
         headers: {
           Authorization: `Bearer ${JSON.parse(
             localStorage.getItem("access-token")
@@ -31,13 +31,13 @@ export const bannerApi = createApi({
         },
       }),
 
-      invalidatesTags: ["Banner"],
+      invalidatesTags: ["AdsProduct"],
     }),
-    updateBanner: builder.mutation({
-      query: ({ id,formData}) => ({
-        url: `/v1/product/main-banner/${id}/`,
+    updateAdsProduct: builder.mutation({
+      query: ({ id, ...rest }) => ({
+        url: `/v1/product/ads/${id}/`,
         method: "PATCH",
-        body: formData,
+        body: rest,
         headers: {
           Authorization: `Bearer ${JSON.parse(
             localStorage.getItem("access-token")
@@ -45,11 +45,11 @@ export const bannerApi = createApi({
         },
       }),
 
-      invalidatesTags: ["Banner"],
+      invalidatesTags: ["AdsProduct"],
     }),
-    deleteBanner: builder.mutation({
+    deleteAdsProduct: builder.mutation({
       query: (id) => ({
-        url: `/v1/product/main-banner/${id}/`,
+        url: `/v1/product/ads/${id}/`,
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${JSON.parse(
@@ -57,14 +57,14 @@ export const bannerApi = createApi({
           )}`,
         },
       }),
-      invalidatesTags: ["Banner"],
+      invalidatesTags: ["AdsProduct"],
     }),
   }),
 });
 
 export const {
-  useBannersQuery,
-  useAddBannerMutation,
-  useUpdateBannerMutation,
-  useDeleteBannerMutation,
-} = bannerApi;
+  useAdsProductsQuery,
+  useAddAdsProductMutation,
+  useUpdateAdsProductMutation,
+  useDeleteAdsProductMutation,
+} = adsProductApi;

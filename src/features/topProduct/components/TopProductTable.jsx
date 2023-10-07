@@ -3,7 +3,7 @@ import { DragDropContext,  Droppable } from "react-beautiful-dnd";
 import TopProductTableRow from "./TopProductTableRow";
 
 
-function TopProductTable({data}) {
+function TopProductTable({data,title}) {
   console.log(data)
   const [datas, setDatas] = useState(data); // Your table data
   const onDragEnd = (result) => {
@@ -27,6 +27,7 @@ function TopProductTable({data}) {
             <th>№</th>
             <th>Image</th>
             <th>Title</th>
+            <th>Price</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -38,7 +39,7 @@ function TopProductTable({data}) {
               {...provided.droppableProps}
             >
               {datas?.map((item, index) => (
-                <TopProductTableRow key={item.id} item={item} index={index} {...item} />
+                <TopProductTableRow key={item.id} title={title} item={item} index={index} {...item} />
               ))}
               {provided.placeholder}
             </tbody>

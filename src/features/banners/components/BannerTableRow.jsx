@@ -7,7 +7,7 @@ import { CONFIRMATION_MODAL_CLOSE_TYPES, MODAL_BODY_TYPES } from "../../../utils
 import { useDispatch } from "react-redux";
 import parse from 'html-react-parser';
 
-function BannerTableRow({ index, title_ln,title_ru,images,item, id, description_ln }) {
+function BannerTableRow({ index, title_ln,title_ru,image,item, id, description_ln }) {
   const dispatch = useDispatch();
 
   const deleteCurrentBanner = () => {
@@ -49,7 +49,7 @@ function BannerTableRow({ index, title_ln,title_ru,images,item, id, description_
           <td className=" flex justify-center items-center">
             <img
             className="h-12 w-12 object-cover bg-slate-500"
-              src={`data:image/jpeg;base64,${images[0]?.image}`}
+              src={image}
               alt={title_ln}
             />
           </td>

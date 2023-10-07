@@ -2,19 +2,20 @@ import React, { useState } from "react";
 
 import Titles from "../../products/components/Titles";
 import Editor from "../../products/components/Editor";
-import DownloadImg from "../../products/components/DownloadImg";
 import {
   useAddBannerMutation,
   useUpdateBannerMutation,
 } from "../../../services/bannerApi";
+import DownloadImage from "../../../components/Images/DownloadImage";
 
 function BannerModalBody({ closeModal, extraObject }) {
+  console.log(extraObject)
   const [error, setError] = useState("");
-  const [titleLn, setTitleLn] = useState("");
-  const [titleRu, setTitleRu] = useState("");
-  const [descriptionLn, setDescriptionLn] = useState("");
-  const [descriptionRu, setDescriptionRu] = useState("");
-  const [images, setImages] = useState([]);
+  const [titleLn, setTitleLn] = useState(extraObject?.title_ln || "");
+  const [titleRu, setTitleRu] = useState(extraObject?.title_ru ||"");
+  const [descriptionLn, setDescriptionLn] = useState(extraObject?.description_ln || "");
+  const [descriptionRu, setDescriptionRu] = useState(extraObject?.description_ru || "");
+  const [image, setImage] = useState(extraObject?.image || "");
 
   const [addBanner] = useAddBannerMutation();
   const [updateBanner] = useUpdateBannerMutation();
@@ -26,27 +27,18 @@ function BannerModalBody({ closeModal, extraObject }) {
       !titleRu ||
       !descriptionLn ||
       !descriptionRu ||
-      images.length === 0
+      !image
     ) {
       alert("Malumotlarni to'liq kiriting!");
       return;
     }
-    // const data = {
-    //   title_ln: titleLn,
-    //   title_ru: titleRu,
-    //   description_ln: descriptionLn,
-    //   description_ru: descriptionRu,
-    //   url: "https://milli.uz",
-    //   file: images[0],
-    // };
-    // console.log(data);
     const formData = new FormData();
     formData.append("title_ln", titleLn);
     formData.append("title_ru", titleRu);
     formData.append("description_ln", descriptionLn);
     formData.append("description_ru", descriptionRu);
     formData.append("url", "https://milli.uz");
-    formData.append("file", images[0]);
+    formData.append("file", image);
     await (extraObject
       ? updateBanner({ id: extraObject?.id, formData })
       : addBanner(formData)
@@ -92,11 +84,8 @@ function BannerModalBody({ closeModal, extraObject }) {
         </h2>
         <Editor initialValue={descriptionRu} setDess={setDescriptionRu} />
       </div>
-      <DownloadImg
-        images={images}
-        setImages={setImages}
-        textDownload={"фото"}
-      />
+      <DownloadImage image={image} setImage={setImage} textDownload={"Image"} />
+
       {error && <h1 className="font-bold text-lg text-red-500">{error}</h1>}
       <button className="bg-blue-600 text-white p-2 rounded">
         {extraObject ? "Edit" : "Add"} banner
