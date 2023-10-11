@@ -33,6 +33,7 @@ function Dashboard(){
         // Dashboard range changed, write code to refresh your values
         dispatch(showNotification({message : `Period updated to ${newRange.startDate} to ${newRange.endDate}`, status : 1}))
     }
+  
 
     return(
         <>

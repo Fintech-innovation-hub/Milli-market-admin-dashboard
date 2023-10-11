@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-import logger from "redux-logger";
 
 import headerSlice from "../features/common/headerSlice";
 import modalSlice from "../features/common/modalSlice";

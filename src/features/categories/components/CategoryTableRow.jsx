@@ -2,7 +2,7 @@ import React from 'react'
 import TrashIcon from "@heroicons/react/24/outline/TrashIcon";
 import { AiFillEdit } from "react-icons/ai";
 
-function CategoryTableRow({ getCategoryDetailHandler, deleteCurrentCategory, editCurrentCategory, index, title, id }) {
+function CategoryTableRow({ getCategoryDetailHandler, deleteCurrentCategory, editCurrentCategory, index, title, id,children }) {
     return (
         <tr className="hover:bg-slate-400 duration-500 cursor-pointer">
             <td  >
@@ -10,7 +10,7 @@ function CategoryTableRow({ getCategoryDetailHandler, deleteCurrentCategory, edi
 
             </td>
             <td onClick={() => {
-                getCategoryDetailHandler(id)
+                getCategoryDetailHandler(id,children)
             }
             }>{title}</td>
             <td><button className="btn btn-square btn-ghost" onClick={(event) => {

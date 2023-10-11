@@ -22,16 +22,19 @@ function CategoryTable({ categories }) {
           })
         );
       };
-      const getCategoryDetailHandler = (id) => {
+      console.log(categories)
+      const getCategoryDetailHandler = (id,hasChildren) => {
+        if(!hasChildren){
+          alert("Kategoriya ichida boshqa kategoriyalar mavjud emas!");
+          return;
+        }
         dispatch(chooseCategoryId(id))
         navigate(`/app/categories/${id}`);
       };
       const editCurrentCategory = (id) => {
         alert(id);
       };
-      if(categories?.data?.length===0){
-        return <h1 className='text-xl  font-bold'>Bunday Categoriyalar mavjud emas.</h1>
-      }
+   
     return (
         <table className="product-table w-full">
             <thead>

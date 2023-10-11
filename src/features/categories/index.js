@@ -16,6 +16,9 @@ const TopSideButtons = () => {
       openModal({
         title: "Add New Category",
         bodyType: MODAL_BODY_TYPES.CATEGORY_ADD_NEW,
+        extraObject:{
+            categoryType:"parent"
+        }
       })
     );
   };

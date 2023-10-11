@@ -4,7 +4,7 @@ import { Dna } from "react-loader-spinner";
 import TitleCard from "../../../components/Cards/TitleCard";
 import { openModal } from "../../common/modalSlice";
 import { MODAL_BODY_TYPES } from "../../../utils/globalConstantUtil";
-import {  useCategoryItemDetailsQuery } from "../../../services/categoryApi";
+import { useCategoryItemDetailsQuery } from "../../../services/categoryApi";
 import CategoryTable from "./CategoryTable";
 import { useSelector } from "react-redux";
 
@@ -16,6 +16,9 @@ const TopSideButtons = () => {
       openModal({
         title: "Add New Child Category",
         bodyType: MODAL_BODY_TYPES.CATEGORY_ADD_NEW,
+        extraObject: {
+          categoryType: "child"
+        }
       })
     );
   };
@@ -33,14 +36,14 @@ const TopSideButtons = () => {
 };
 
 function ChildCategoryUi() {
-  const categoryId=useSelector(state=>state.categories.categoryId)
+  const categoryId = useSelector(state => state.categories.categoryId)
   const { data: childCategories, isLoading, isSuccess } = useCategoryItemDetailsQuery(categoryId);
   console.log(childCategories)
-  
+
   return (
     <>
       <TitleCard
-        title="Child Categories"
+        title={`${childCategories?.parent?.title_ln}` || ""}
         topMargin="mt-2"
         TopSideButtons={<TopSideButtons />}
       >
@@ -57,7 +60,7 @@ function ChildCategoryUi() {
           </div>
         )}
         {isSuccess && childCategories.status && (
-          <CategoryTable  categories={childCategories} />
+          <CategoryTable categories={childCategories} />
         )}
       </TitleCard>
     </>

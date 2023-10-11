@@ -71,16 +71,14 @@ export const categoryApi = createApi({
       invalidatesTags: ['Category'],
     }),
     addCategoryChild: builder.mutation({
-      query: ({id,...rest}) => ({
-        url: `/v1/product/category/?parent_id=${id}`,
+      query: (childCategory) => ({
+        url: `/v1/product/category/`,
         method: 'POST',
-        body: rest,
-      
+        body: childCategory,
         headers: {
           'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
         }
       }),
-
       invalidatesTags: ['Category'],
     }),
     updateCategory: builder.mutation({

@@ -12,12 +12,9 @@ export const headerSlice = createSlice({
         setPageTitle: (state, action) => {
             state.pageTitle = action.payload.title
         },
-
-
         removeNotificationMessage: (state, action) => {
             state.newNotificationMessage = ""
         },
-
         showNotification: (state, action) => {
             state.newNotificationMessage = action.payload.message
             state.newNotificationStatus = action.payload.status
