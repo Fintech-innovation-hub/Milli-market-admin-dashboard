@@ -5,7 +5,7 @@ const Dashboard = lazy(() => import('../pages/protected/Dashboard'))
 const Page404 = lazy(() => import('../pages/protected/404'))
 const Categories = lazy(() => import('../pages/protected/Categories'))
 const Products = lazy(() => import('../pages/protected/Products'))
-const CategoryDetail = lazy(() => import('../pages/protected/CategoryDetail'))
+const ChildCategory = lazy(() => import('../pages/protected/ChildCategory'))
 const AddProducts = lazy(() => import('../pages/protected/CreateProduct'))
 const Proposals = lazy(() => import('../pages/protected/Proposals'))
 const Banners = lazy(() => import('../pages/protected/Banners'))
@@ -30,7 +30,7 @@ const routes = [
   },
   {
     path: '/categories/:categoryId',
-    component: CategoryDetail,
+    component: ChildCategory,
   },
   {
     path: '/products/all',

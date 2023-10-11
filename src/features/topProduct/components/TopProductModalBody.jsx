@@ -107,7 +107,7 @@ function TopProductModalBody({ closeModal, extraObject }) {
           <div
             className={`${
               showDatas ? "block" : "hidden"
-            } w-full  absolute  h-52 border border-slate-500 bg-white overflow-y-scroll`}
+            } w-full  absolute  max-h-52 border border-slate-500 bg-white overflow-y-scroll`}
           >
             {searchResults.map((item) => (
               <div

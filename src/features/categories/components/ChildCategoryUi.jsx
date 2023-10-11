@@ -1,12 +1,12 @@
 import { useDispatch } from "react-redux";
-import TitleCard from "../../components/Cards/TitleCard";
-import { openModal } from "../common/modalSlice";
-import {
-  MODAL_BODY_TYPES,
-} from "../../utils/globalConstantUtil";
-import { useCategoriesQuery } from "../../services/categoryApi";
+
 import { Dna } from "react-loader-spinner";
-import CategoryTable from "./components/CategoryTable";
+import TitleCard from "../../../components/Cards/TitleCard";
+import { openModal } from "../../common/modalSlice";
+import { MODAL_BODY_TYPES } from "../../../utils/globalConstantUtil";
+import {  useCategoryItemDetailsQuery } from "../../../services/categoryApi";
+import CategoryTable from "./CategoryTable";
+import { useSelector } from "react-redux";
 
 const TopSideButtons = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ const TopSideButtons = () => {
   const openAddNewCategoryModal = () => {
     dispatch(
       openModal({
-        title: "Add New Category",
+        title: "Add New Child Category",
         bodyType: MODAL_BODY_TYPES.CATEGORY_ADD_NEW,
       })
     );
@@ -26,20 +26,21 @@ const TopSideButtons = () => {
         className="btn px-6 btn-sm normal-case btn-primary"
         onClick={() => openAddNewCategoryModal()}
       >
-        Add New Category
+        Add New Child Category
       </button>
     </div>
   );
 };
 
-function Categories() {
-
-  const { data: categories, isLoading, isSuccess } = useCategoriesQuery();
-
+function ChildCategoryUi() {
+  const categoryId=useSelector(state=>state.categories.categoryId)
+  const { data: childCategories, isLoading, isSuccess } = useCategoryItemDetailsQuery(categoryId);
+  console.log(childCategories)
+  
   return (
     <>
       <TitleCard
-        title="Current Categories"
+        title="Child Categories"
         topMargin="mt-2"
         TopSideButtons={<TopSideButtons />}
       >
@@ -55,12 +56,12 @@ function Categories() {
             />
           </div>
         )}
-        {isSuccess && categories.status && (
-          <CategoryTable categories={categories} />
+        {isSuccess && childCategories.status && (
+          <CategoryTable  categories={childCategories} />
         )}
       </TitleCard>
     </>
   );
 }
 
-export default Categories;
+export default ChildCategoryUi;

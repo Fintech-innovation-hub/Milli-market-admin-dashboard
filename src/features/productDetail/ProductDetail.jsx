@@ -5,12 +5,16 @@ import { formatDate } from '../../utils/formatDate';
 
 function ProductDetail({ productDetail, product }) {
   console.log(productDetail);
-  console.log(product);
+
 
   return (
     <div className="flex flex-col gap-y-5 items-start ">
       <div className="flex items-center gap-4">
-        <img className="h-64 w-80 object-cover" src={Product} alt="" />
+        <div className='flex flex-col items-start gap-4'>
+          {productDetail?.images && productDetail?.images.map((rasm, index) => (
+            <img key={index} className="h-64 w-80 rounded-lg object-cover" src={rasm} alt="" />
+          ))}
+        </div>
         <div className="flex flex-col items-start gap-5">
           <h1 className="text-xl">
             Title: <b className="capitalize">{product?.title}</b>

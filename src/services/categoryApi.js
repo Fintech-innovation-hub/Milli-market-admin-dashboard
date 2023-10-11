@@ -27,6 +27,8 @@ export const categoryApi = createApi({
         },
         method: 'GET',
       }),
+      providesTags: ['Category'],
+
 
     }),
     categoryItemChildDetails: builder.query({
@@ -38,6 +40,7 @@ export const categoryApi = createApi({
         },
         method: 'GET',
       }),
+      providesTags: ['Category'],
 
     }),
     categoryItemChildrenDetails: builder.query({
@@ -52,7 +55,7 @@ export const categoryApi = createApi({
         },
         method: 'GET',
       }),
-
+      providesTags: ['Category'],
     }),
 
     addCategory: builder.mutation({
@@ -68,13 +71,11 @@ export const categoryApi = createApi({
       invalidatesTags: ['Category'],
     }),
     addCategoryChild: builder.mutation({
-      query: (categoryChild) => ({
-        url: '/v1/product/category/',
+      query: ({id,...rest}) => ({
+        url: `/v1/product/category/?parent_id=${id}`,
         method: 'POST',
-        body: categoryChild.body,
-        params: {
-          parent_id: categoryChild.id
-        },
+        body: rest,
+      
         headers: {
           'Authorization': `Bearer ${JSON.parse(localStorage.getItem("access-token"))}`
         }

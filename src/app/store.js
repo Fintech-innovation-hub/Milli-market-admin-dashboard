@@ -20,6 +20,7 @@ import { bannerApi } from "../services/bannerApi";
 import ProductReducer from "../features/products/productSlice";
 import ProposalReducer from "../features/proposals/proposalSlice";
 import CharacterReducer from "../features/products/components/CharacteristicsSection/characterSlice";
+import CategoryReducer from "../features/categories/categorySlice"
 
 const combinedReducer = {
   header: headerSlice,
@@ -29,6 +30,7 @@ const combinedReducer = {
   product: ProductReducer,
   proposal: ProposalReducer,
   character: CharacterReducer,
+  categories: CategoryReducer,
   [categoryApi.reducerPath]: categoryApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
   [countryApi.reducerPath]: countryApi.reducer,
