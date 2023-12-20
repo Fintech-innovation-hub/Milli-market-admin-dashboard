@@ -1,12 +1,11 @@
 import { useDispatch } from "react-redux";
 import TitleCard from "../../components/Cards/TitleCard";
 import { openModal } from "../common/modalSlice";
-import {
-  MODAL_BODY_TYPES,
-} from "../../utils/globalConstantUtil";
+import { MODAL_BODY_TYPES } from "../../utils/globalConstantUtil";
 import { useCategoriesQuery } from "../../services/categoryApi";
 import { Dna } from "react-loader-spinner";
 import CategoryTable from "./components/CategoryTable";
+import LoadingModal from "../../components/Loading";
 
 const TopSideButtons = () => {
   const dispatch = useDispatch();
@@ -16,9 +15,9 @@ const TopSideButtons = () => {
       openModal({
         title: "Add New Category",
         bodyType: MODAL_BODY_TYPES.CATEGORY_ADD_NEW,
-        extraObject:{
-            categoryType:"parent"
-        }
+        extraObject: {
+          categoryType: "parent",
+        },
       })
     );
   };
@@ -36,7 +35,6 @@ const TopSideButtons = () => {
 };
 
 function Categories() {
-
   const { data: categories, isLoading, isSuccess } = useCategoriesQuery();
 
   return (

@@ -39,7 +39,13 @@ function TopProductModalBody({ closeModal, extraObject }) {
     setLoading(true);
     setIsSuccess(false);
     axios
-      .get(`${baseUrl}/v1/product/items/?q=${searchItem}`)
+      .get(`${baseUrl}/v1/product/items/?q=${searchItem}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("access-token")
+          )}`,
+        }
+      })
       .then((res) => {
         setLoading(false);
         setSearchResults(res?.data?.results);
@@ -77,8 +83,8 @@ function TopProductModalBody({ closeModal, extraObject }) {
         ? updateAdsProduct({ id: extraObject?.id, ...productt })
         : updateTopProduct({ id: extraObject?.id, ...productt })
       : extraObject.pageTitle === "Ads Product"
-      ? addAdsProduct(productt)
-      : addTopProduct(productt)
+        ? addAdsProduct(productt)
+        : addTopProduct(productt)
     )
       .unwrap()
       .then((res) => {
@@ -105,9 +111,8 @@ function TopProductModalBody({ closeModal, extraObject }) {
         </form>
         {searchResults?.length > 0 && isSuccess ? (
           <div
-            className={`${
-              showDatas ? "block" : "hidden"
-            } w-full  absolute  max-h-52 border border-slate-500 bg-white overflow-y-scroll`}
+            className={`${showDatas ? "block" : "hidden"
+              } w-full  absolute  max-h-52 border border-slate-500 bg-white overflow-y-scroll`}
           >
             {searchResults.map((item) => (
               <div

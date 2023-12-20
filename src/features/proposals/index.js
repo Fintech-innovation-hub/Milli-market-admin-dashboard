@@ -31,7 +31,7 @@ function Proposals() {
               />
             </div>
           )}
-          {isSuccess && <ProposalsTable proposals={proposals?.data} />}
+          {isSuccess && <ProposalsTable proposals={proposals?.results} />}
         </div>
       </TitleCard>
     </>

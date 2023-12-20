@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useReducer } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import ErrorText from '../../../components/Typography/ErrorText';
 // import { showNotification } from '../../common/headerSlice';
@@ -27,9 +27,13 @@ import ModelSelect from "./ModalSelect/ModalSelect";
 import { baseUrl } from "../../../constants";
 import Titles from "./Titles";
 import Seller from "./Seller";
+import LoadingModal from "../../../components/Loading";
+import { fetchDataReducer, initStateFetchData } from "../../../reducer/fetchDataReducer/fetchDataReducer";
+import { isErrorAction, isLoadingAction, isSuccessAction } from "../../../reducer/fetchDataReducer/action";
 
 function AddProductModalBody({ currentProduct }) {
   console.log(currentProduct)
+  const [state, dispatchLoadingModal] = useReducer(fetchDataReducer, initStateFetchData)
   const [disabledBtn, setDisabledBtn] = useState(true);
   const [ctgId, setCtgId] = useState(currentProduct?.category?.id || "");
   const [titleLn, setTitleLn] = useState(currentProduct?.title?.ln || "");
@@ -67,7 +71,7 @@ function AddProductModalBody({ currentProduct }) {
   );
   const [showInstruction, setShowInstruction] = useState(false);
   const [showCertificate, setShowCertificate] = useState(false);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState(currentProduct?.images || []);
   const { data: sellers, isSuccess: isSuccessSellers } = useSellersQuery();
   const { data: countries, isSuccess: isSuccessCountry } = useCountriesQuery();
   const { data: brands, isSuccess: isSuccessBrand } = useBrandsQuery();
@@ -76,7 +80,6 @@ function AddProductModalBody({ currentProduct }) {
     useCharacteristicsQuery();
   const [updateProduct] = usePatchProductDetailsMutation();
   const [addProduct] = useAddProductMutation();
-console.log('chars',characteristics)
   const allCharacters = useSelector(
     (state) => state.product.chosenCharacteristics
   );
@@ -127,7 +130,8 @@ console.log('chars',characteristics)
     images.forEach((image) => {
       formData.append("file", image);
     });
-    console.log(formData);
+    dispatchLoadingModal(isLoadingAction())
+    console.log('current product', currentProduct)
     if (!currentProduct) {
       addProduct(data)
         .then((res) => {
@@ -150,16 +154,19 @@ console.log('chars',characteristics)
                   },
                 }
               )
-              .then((res) => {
+              .then((responce) => {
                 dispatch(clearCharacters());
+                dispatchLoadingModal(isSuccessAction())
                 if (btnName === "save") navigate("/app/products/all");
-                if (btnName === "next")
+                else if (btnName === "next") {
                   navigate(`/app/product/${res?.data?.data?.id}/sku`);
+                }
               });
           }
         })
         .catch((err) => {
           console.log(err);
+          dispatchLoadingModal(isErrorAction())
         });
     } else {
       updateProduct({ id: currentProduct?.id, data })
@@ -179,6 +186,9 @@ console.log('chars',characteristics)
       setDisabledBrand(false);
     }
   }, [ctgId, seller, titleLn, titleRu, country, model, brand]);
+  if (state.isLoading) {
+    return <LoadingModal />
+  }
 
   return (
     <div className="bg-white rounded-xl py-2 px-4 ">
@@ -187,7 +197,7 @@ console.log('chars',characteristics)
         disabledBtn={disabledBtn}
         saveNewProduct={saveNewProduct}
       />
-
+      {state.isError && <h1>Something went wrong!</h1>}
       <ProductCategorySelect
         setCtgId={setCtgId}
         category={currentProduct?.category}
@@ -242,10 +252,10 @@ console.log('chars',characteristics)
           initialValue={descriptionLn}
           setDess={setDescriptionLn}
           name="descUz"
-          // productInfo={productInfo}
-          // updateProductTitleFormValue={updateProductTitleFormValue}
+        // productInfo={productInfo}
+        // updateProductTitleFormValue={updateProductTitleFormValue}
 
-          // getValue={getValue}
+        // getValue={getValue}
         />
       </div>
 
@@ -349,6 +359,7 @@ console.log('chars',characteristics)
               images={images}
               setImages={setImages}
               textDownload={"фото"}
+              currentProduct={currentProduct}
             />
           </div>
         </div>

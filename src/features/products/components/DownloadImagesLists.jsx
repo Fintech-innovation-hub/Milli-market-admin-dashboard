@@ -13,9 +13,7 @@ function DownloadImagesLists({
   leng,
 }) {
   const [showDeleteIcon, setShowDeleteIcon] = useState(false);
-  console.log(imagess);
 
-  console.log(leng);
   return (
     <div
       onMouseOver={() => setShowDeleteIcon(true)}
@@ -35,7 +33,7 @@ function DownloadImagesLists({
         className={` ${
           showDeleteIcon ? "inline-block" : "hidden"
         } absolute h-6 w-6 cursor-pointer top-4 right-3 
-         text-white font-bold`}
+         text-black font-bold`}
       />
     </div>
   );

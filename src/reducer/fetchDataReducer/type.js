@@ -1,0 +1,4 @@
+const IS_LOADING = "IS_LOADING";
+const IS_SUCCESS = "IS_SUCCESS";
+const IS_ERROR = "IS_ERROR";
+export { IS_LOADING, IS_SUCCESS, IS_ERROR };
