@@ -12,6 +12,7 @@ const Banners = lazy(() => import('../pages/protected/Banners'))
 const TopCategory = lazy(() => import('../pages/protected/TopCategory'))
 const TopProduct = lazy(() => import('../pages/protected/TopProduct'))
 const AdsProduct = lazy(() => import('../pages/protected/AdsProduct'))
+const Orders = lazy(() => import('../pages/protected/Orders'))
 
 // const Charts = lazy(() => import('../pages/protected/Charts'))
 // const ProfileSettings = lazy(() => import('../pages/protected/ProfileSettings'))
@@ -64,6 +65,10 @@ const routes = [
   {
     path: '/banner',
     component: Banners,
+  },
+  {
+    path: '/orders',
+    component: Orders,
   },
   // {
   //   path: '/settings-profile',

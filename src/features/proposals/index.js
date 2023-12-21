@@ -9,7 +9,7 @@ import { useProposalsQuery } from '../../services/proposalApi';
 
 function Proposals() {
 
-  const { data: proposals, isLoading, isSuccess, isError } = useProposalsQuery();
+  const { data: proposals, isLoading, isSuccess} = useProposalsQuery();
   console.log(proposals)
   return (
     <>

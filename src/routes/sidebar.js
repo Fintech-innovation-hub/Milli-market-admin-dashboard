@@ -21,7 +21,9 @@ import Squares2X2Icon from '@heroicons/react/24/outline/Squares2X2Icon'
 import InboxArrowDownIcon from '@heroicons/react/24/outline/InboxArrowDownIcon'
 import BanknotesIcon from '@heroicons/react/24/outline/BanknotesIcon'
 import TrophyIcon from '@heroicons/react/24/outline/TrophyIcon'
+import ShoppingCartIcon from '@heroicons/react/24/outline/ShoppingCartIcon'
 import { VscRequestChanges } from 'react-icons/vsc'
+
 
 const iconClasses = `h-6 w-6`
 // const submenuIconClasses = `h-5 w-5`
@@ -67,6 +69,11 @@ const routes = [
     path: '/app/banner', // url
     icon: <BanknotesIcon className={iconClasses} />, // icon component
     name: 'Banners', // name that appear in Sidebar
+  },
+  {
+    path: '/app/orders', // url
+    icon: <ShoppingCartIcon className={iconClasses} />, // icon component
+    name: 'Orders', // name that appear in Sidebar
   },
   
   // {
